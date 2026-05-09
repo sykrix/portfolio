@@ -14,6 +14,7 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
 
     <style>
         :root {
@@ -63,6 +64,23 @@
 
         .hidden {
             display: none !important;
+        }
+
+        .offline-banner {
+            background: var(--danger-color);
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1100;
+            display: none;
+        }
+
+        .offline-banner.active {
+            display: block;
         }
 
         .success {
@@ -755,6 +773,10 @@
 
 <body>
 
+    <div id="offline-banner" class="offline-banner">
+        <i class="fa-solid fa-cloud-slash"></i> عذراً، أنت في وضع عدم الاتصال. يتم عرض البيانات من الذاكرة المحلية فقط.
+    </div>
+
     <div id="main-app" class="app-container">
         <!-- Header -->
         <header class="header-glass">
@@ -887,21 +909,25 @@
         </div>
     </div>
 
-    <!-- Password Modal -->
+    <!-- Password Modal (Login) -->
     <div id="password-modal" class="modal-overlay hidden">
         <div class="modal-content glass-card small-modal">
             <div class="modal-header">
-                <h3>المصادقة مطلوبة</h3>
+                <h3>تسجيل الدخول للمسؤول</h3>
                 <button class="close-password-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.95rem;">الرجاء إدخال الرمز السري
-                    للمتابعة وإجراء التعديلات.</p>
+                <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.95rem;">يرجى تسجيل الدخول لتتمكن من إجراء التعديلات.</p>
                 <div class="form-group">
-                    <input type="password" id="salary-password" placeholder="أدخل الرمز السري">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="admin-email" placeholder="example@mail.com" style="direction: ltr;">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="admin-password" placeholder="******" style="direction: ltr;">
                 </div>
                 <div class="modal-actions">
-                    <button id="confirm-password-btn" class="btn-primary">تأكيد</button>
+                    <button id="confirm-password-btn" class="btn-primary">تسجيل الدخول</button>
                     <button class="btn-secondary close-password-btn">إلغاء</button>
                 </div>
             </div>
@@ -961,9 +987,11 @@
         const closeDeleteBtns = document.querySelectorAll('.close-delete-btn');
 
         const passwordModal = document.getElementById('password-modal');
-        const passwordInput = document.getElementById('salary-password');
+        const adminEmailInput = document.getElementById('admin-email');
+        const adminPasswordInput = document.getElementById('admin-password');
         const confirmPasswordBtn = document.getElementById('confirm-password-btn');
         const closePasswordBtns = document.querySelectorAll('.close-password-btn');
+        const offlineBanner = document.getElementById('offline-banner');
 
         const expenseModal = document.getElementById('expense-modal');
         const expenseForm = document.getElementById('expense-form');
@@ -993,10 +1021,15 @@
         let pendingAction = null;
 
         function requirePassword(callback) {
+            if (firebase.auth().currentUser) {
+                callback();
+                return;
+            }
             pendingAction = callback;
-            passwordInput.value = '';
+            adminEmailInput.value = '';
+            adminPasswordInput.value = '';
             passwordModal.classList.remove('hidden');
-            setTimeout(() => passwordInput.focus(), 100);
+            setTimeout(() => adminEmailInput.focus(), 100);
         }
 
         closePasswordBtns.forEach(btn => btn.addEventListener('click', () => {
@@ -1004,17 +1037,43 @@
             pendingAction = null;
         }));
 
-        confirmPasswordBtn.addEventListener('click', () => {
-            if (passwordInput.value === "1234") {
+        confirmPasswordBtn.addEventListener('click', async () => {
+            const email = adminEmailInput.value;
+            const password = adminPasswordInput.value;
+            
+            if (!email || !password) {
+                alert("يرجى إدخال البريد الإلكتروني وكلمة المرور");
+                return;
+            }
+
+            try {
+                confirmPasswordBtn.disabled = true;
+                confirmPasswordBtn.textContent = "جاري التحقق...";
+                await firebase.auth().signInWithEmailAndPassword(email, password);
                 passwordModal.classList.add('hidden');
                 if (pendingAction) {
                     pendingAction();
                     pendingAction = null;
                 }
-            } else {
-                alert("الرمز السري غير صحيح!");
+            } catch (error) {
+                console.error("Login Error:", error);
+                alert("فشل تسجيل الدخول: " + error.message);
+            } finally {
+                confirmPasswordBtn.disabled = false;
+                confirmPasswordBtn.textContent = "تسجيل الدخول";
             }
         });
+
+        // مراقبة حالة الاتصال بـ Firebase
+        if (db) {
+            db.enableNetwork().catch(err => console.error("Enable Network Error", err));
+            
+            // مراقبة حالة الاتصال بالإنترنت
+            window.addEventListener('online', () => offlineBanner.classList.remove('active'));
+            window.addEventListener('offline', () => offlineBanner.classList.add('active'));
+            
+            if (!navigator.onLine) offlineBanner.classList.add('active');
+        }
 
         // --- Init & Sync ---
         function initializeMonths() {
@@ -1289,7 +1348,8 @@
             }
 
             const now = new Date();
-            const timestamp = `${now.toLocaleDateString('ar-SA')} ${now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}`;
+            // استخدام en-GB للحصول على تاريخ ميلادي وأرقام إنجليزية في المعاملات
+            const timestamp = `${now.toLocaleDateString('en-GB')} ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
 
             if (!cat.transactions) cat.transactions = [];
 
@@ -1397,7 +1457,8 @@
         }
 
         function formatCurrency(amount) {
-            return new Intl.NumberFormat('ar-OM', { style: 'currency', currency: 'OMR' }).format(amount);
+            // استخدام en-OM للحصول على أرقام إنجليزية مع سياق العملة العمانية
+            return new Intl.NumberFormat('en-OM', { style: 'currency', currency: 'OMR' }).format(amount);
         }
 
         function updateLastModified(dateString) {
@@ -1405,7 +1466,8 @@
             if (dateString) {
                 date = new Date(dateString);
             }
-            lastUpdated.textContent = `آخر تحديث: ${date.toLocaleDateString('ar-SA')} ${date.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })}`;
+            // استخدام en-GB للحصول على تاريخ ميلادي وأرقام إنجليزية
+            lastUpdated.textContent = `آخر تحديث: ${date.toLocaleDateString('en-GB')} ${date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
         }
 
         // Start
