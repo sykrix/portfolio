@@ -770,7 +770,7 @@
             <div class="salary-input-section">
                 <label for="total-salary">الراتب الثابت للشهر (عماني):</label>
                 <div class="input-wrapper">
-                    <input type="number" id="total-salary" readonly value="529" step="any" min="0">
+                    <input type="number" inputmode="decimal" id="total-salary" readonly value="529" step="any" min="0">
                     <button id="edit-salary-btn" class="btn-secondary" title="فتح القفل للتعديل"><i
                             class="fa-solid fa-lock"></i></button>
                     <button id="save-salary-btn" class="btn-primary hidden">حفظ التعديل</button>
@@ -833,7 +833,7 @@
                     <input type="hidden" id="expense-cat-id">
                     <div class="form-group">
                         <label for="expense-amount">المبلغ (عماني)</label>
-                        <input type="number" id="expense-amount" required min="0" step="any" placeholder="مثال: 50">
+                        <input type="number" inputmode="decimal" id="expense-amount" required min="0" step="any" placeholder="مثال: 50">
                     </div>
                     <div class="form-group">
                         <label for="expense-note">ملاحظة عن المصروف (اختياري)</label>
@@ -862,7 +862,7 @@
                     </div>
                     <div class="form-group">
                         <label for="cat-allocated">المبلغ المخصص (عماني)</label>
-                        <input type="number" id="cat-allocated" required min="0" step="any" placeholder="مثال: 150">
+                        <input type="number" inputmode="decimal" id="cat-allocated" required min="0" step="any" placeholder="مثال: 150">
                     </div>
                     <button type="submit" class="btn-primary full-width">حفظ القسم</button>
                 </form>
