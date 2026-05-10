@@ -130,6 +130,8 @@
             flex-direction: column;
             gap: 20px;
             transition: background-color 0.4s ease, border-color 0.4s ease;
+            position: relative;
+            z-index: 2000;
         }
 
         .header-top {
@@ -856,6 +858,186 @@
             pointer-events: all;
             margin-top: 5px;
         }
+        /* Notifications */
+        .notif-container {
+            position: relative;
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger-color);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .notif-panel {
+            position: absolute;
+            top: calc(100% + 15px);
+            left: 0;
+            width: 340px;
+            max-height: 500px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius-lg);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform-origin: top left;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px) scale(0.95);
+        }
+
+        body.light-mode .notif-panel {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .notif-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .notif-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .notif-header h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .notif-header button {
+            background: transparent;
+            border: none;
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        .notif-header button:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .notif-list {
+            overflow-y: auto;
+            flex: 1;
+            padding: 5px 0;
+        }
+
+        .notif-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--card-border);
+            transition: var(--transition);
+            cursor: default;
+        }
+
+        .notif-item:last-child {
+            border-bottom: none;
+        }
+
+        .notif-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .notif-item.unread {
+            background: rgba(59, 130, 246, 0.08);
+            border-right: 3px solid var(--primary-color);
+        }
+
+        .notif-item-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .notif-type {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .type-add { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .type-edit { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .type-delete { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+        .notif-item-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .notif-item-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4px;
+            line-height: 1.5;
+        }
+
+        .notif-item-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notif-item-meta i {
+            width: 16px;
+            color: var(--primary-color);
+            opacity: 0.7;
+        }
+
+        .notif-empty {
+            padding: 50px 30px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .notif-panel {
+                position: fixed;
+                top: 80px;
+                left: 15px;
+                right: 15px;
+                width: auto;
+                max-height: 75vh;
+                transform-origin: top center;
+            }
+        }
     </style>
 </head>
 
@@ -872,6 +1054,20 @@
                 <h1><i class="fa-solid fa-wallet"></i> تقسيم الراتب</h1>
                 <div class="header-actions">
                     <button id="theme-toggle-btn" class="icon-btn" title="تبديل الوضع"><i class="fa-solid fa-moon"></i></button>
+                    <div class="notif-container">
+                        <button id="notif-btn" class="icon-btn" title="الإشعارات">
+                            <i class="fa-solid fa-bell"></i>
+                            <span id="notif-badge" class="notif-badge hidden">0</span>
+                        </button>
+                        <div id="notif-panel" class="notif-panel">
+                            <div class="notif-header">
+                                <h3>سجل النشاطات</h3>
+                            </div>
+                            <div id="notif-list" class="notif-list">
+                                <!-- سيتم حقن الإشعارات هنا -->
+                            </div>
+                        </div>
+                    </div>
                     <select id="month-selector" class="month-selector"></select>
                 </div>
             </div>
@@ -1094,6 +1290,10 @@
         const confirmPasswordBtn = document.getElementById('confirm-password-btn');
         const closePasswordBtns = document.querySelectorAll('.close-password-btn');
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        const notifBtn = document.getElementById('notif-btn');
+        const notifPanel = document.getElementById('notif-panel');
+        const notifBadge = document.getElementById('notif-badge');
+        const notifList = document.getElementById('notif-list');
         const offlineBanner = document.getElementById('offline-banner');
 
         const expenseModal = document.getElementById('expense-modal');
@@ -1157,6 +1357,105 @@
         });
 
         initTheme();
+
+        // --- Activity Logging System ---
+        let userIP = "جاري التحميل...";
+        fetch('https://api.ipify.org?format=json')
+            .then(r => r.json())
+            .then(d => userIP = d.ip)
+            .catch(() => userIP = "غير متوفر");
+
+        function getDeviceInfo() {
+            const ua = navigator.userAgent;
+            let device = "كمبيوتر";
+            if (/tablet|ipad|playbook|silk/i.test(ua)) device = "تابلت";
+            else if (/mobile|iphone|ipod|android|blackberry|opera mini|windows phone/i.test(ua)) device = "هاتف";
+
+            let browser = "متصفح غير معروف";
+            if (ua.includes("Chrome")) browser = "Chrome";
+            else if (ua.includes("Firefox")) browser = "Firefox";
+            else if (ua.includes("Safari") && !ua.includes("Chrome")) browser = "Safari";
+            else if (ua.includes("Edge")) browser = "Edge";
+
+            return `${device} (${browser})`;
+        }
+
+        function logAction(type, name, section) {
+            let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+            const newLog = {
+                id: Date.now(),
+                type, // 'add', 'edit', 'delete'
+                name,
+                section,
+                time: new Date().toLocaleString('en-GB'),
+                device: getDeviceInfo(),
+                ip: userIP,
+                unread: true
+            };
+            logs.unshift(newLog);
+            if (logs.length > 100) logs = logs.slice(0, 100);
+            localStorage.setItem('activity_logs', JSON.stringify(logs));
+            updateNotifUI();
+        }
+
+        function updateNotifUI() {
+            const logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+            const unreadCount = logs.filter(l => l.unread).length;
+            
+            if (unreadCount > 0) {
+                notifBadge.textContent = unreadCount;
+                notifBadge.classList.remove('hidden');
+            } else {
+                notifBadge.classList.add('hidden');
+            }
+
+            if (logs.length === 0) {
+                notifList.innerHTML = '<div class="notif-empty">لا توجد نشاطات مسجلة بعد.</div>';
+                return;
+            }
+
+            const typeLabels = { 'add': 'إضافة', 'edit': 'تعديل', 'delete': 'حذف' };
+            const typeIcons = { 'add': 'fa-plus-circle', 'edit': 'fa-pen-to-square', 'delete': 'fa-trash-can' };
+
+            notifList.innerHTML = logs.map(log => `
+                <div class="notif-item ${log.unread ? 'unread' : ''}">
+                    <div class="notif-item-header">
+                        <span class="notif-type type-${log.type}"><i class="fa-solid ${typeIcons[log.type]}"></i> ${typeLabels[log.type]}</span>
+                        <span class="notif-item-name">${log.name}</span>
+                    </div>
+                    <div class="notif-item-meta">
+                        <span><i class="fa-solid fa-folder-tree"></i> ${log.section}</span>
+                        <span><i class="fa-solid fa-clock"></i> ${log.time}</span>
+                        <span><i class="fa-solid fa-laptop-mobile"></i> ${log.device}</span>
+                        <span><i class="fa-solid fa-network-wired"></i> IP: ${log.ip}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        notifBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notifPanel.classList.toggle('active');
+            if (notifPanel.classList.contains('active')) {
+                // Mark all as read when opening
+                let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+                logs.forEach(l => l.unread = false);
+                localStorage.setItem('activity_logs', JSON.stringify(logs));
+                updateNotifUI();
+            }
+        });
+
+        document.addEventListener('click', () => {
+            notifPanel.classList.remove('active');
+        });
+
+        notifPanel.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent closing when clicking inside
+        });
+
+
+
+        updateNotifUI();
 
         // --- Password System ---
         let pendingAction = null;
@@ -1233,7 +1532,8 @@
 
         async function loadData() {
             const month = monthSelector.value;
-            isEditableMonth = (month === currentFinancialMonth);
+            // السماح بالتعديل للشهر الحالي والأشهر المستقبلية (للتخطيط)
+            isEditableMonth = (month >= currentFinancialMonth);
 
             // تحديث حالة الأزرار العامة بناءً على التاريخ
             if (!isEditableMonth) {
@@ -1371,12 +1671,14 @@
         });
 
         saveSalaryBtn.addEventListener('click', () => {
+            const oldSalary = totalSalary;
             totalSalary = parseFloat(totalSalaryInput.value || 0);
             syncData();
             updateUI();
             totalSalaryInput.setAttribute('readonly', 'true');
             saveSalaryBtn.classList.add('hidden');
             editSalaryBtn.classList.remove('hidden');
+            logAction('edit', `من ${oldSalary} إلى ${totalSalary}`, 'تعديل الراتب');
         });
 
         window.requestEditCategory = (id) => {
@@ -1405,9 +1707,12 @@
                 if (confirm("هل أنت متأكد من حذف هذه العملية من السجل؟")) {
                     const cat = categories.find(c => c.id === catId);
                     if (cat && cat.transactions) {
+                        const trans = cat.transactions.find(t => t.id === transId);
+                        const transName = trans ? `${trans.note} (${trans.amount})` : 'عملية';
                         cat.transactions = cat.transactions.filter(t => t.id !== transId);
                         syncData();
                         updateUI();
+                        logAction('delete', transName, `قسم ${cat.name}`);
                     }
                 }
             });
@@ -1418,10 +1723,13 @@
         // --- Safe Operations (No Password Required) ---
 
         addCategoryBtn.addEventListener('click', () => {
-            categoryForm.reset();
-            catIdInput.value = '';
-            modalTitle.textContent = 'إضافة قسم جديد';
-            categoryModal.classList.remove('hidden');
+            requirePassword(() => {
+                categoryForm.reset();
+                catIdInput.value = '';
+                if (catIconInput) catIconInput.value = 'auto';
+                modalTitle.textContent = 'إضافة قسم جديد';
+                categoryModal.classList.remove('hidden');
+            });
         });
 
         window.openExpenseModal = (id) => {
@@ -1453,8 +1761,10 @@
                 categories[index].name = catData.name;
                 categories[index].allocated = catData.allocated;
                 categories[index].icon = catData.icon;
+                logAction('edit', catData.name, 'إدارة الأقسام');
             } else {
                 categories.push({ id: Date.now().toString(), ...catData });
+                logAction('add', catData.name, 'إدارة الأقسام');
             }
 
             syncData();
@@ -1464,11 +1774,14 @@
 
         confirmDeleteBtn.addEventListener('click', () => {
             if (categoryToDelete) {
+                const cat = categories.find(c => c.id === categoryToDelete);
+                const name = cat ? cat.name : 'قسم';
                 categories = categories.filter(c => c.id !== categoryToDelete);
                 syncData();
                 updateUI();
                 deleteModal.classList.add('hidden');
                 categoryToDelete = null;
+                logAction('delete', name, 'إدارة الأقسام');
             }
         });
 
@@ -1505,6 +1818,7 @@
             syncData();
             updateUI();
             expenseModal.classList.add('hidden');
+            logAction('add', `${expenseNoteInput.value || 'بدون ملاحظة'} (${newAmount})`, `قسم ${cat.name}`);
         });
 
         // --- UI & Math ---
@@ -1626,7 +1940,7 @@
                             <button class="cat-btn" style="color: var(--success-color);" title="إضافة مصروف (معاملة جديدة)" onclick="openExpenseModal('${cat.id}')"><i class="fa-solid fa-plus"></i></button>
                             <button class="cat-btn edit" title="تعديل اسم أو مخصص القسم" onclick="requestEditCategory('${cat.id}')"><i class="fa-solid fa-pen"></i></button>
                             <button class="cat-btn delete" title="حذف القسم بالكامل" onclick="requestDeleteCategory('${cat.id}')"><i class="fa-solid fa-trash"></i></button>
-                            ` : `<span style="font-size: 0.7rem; color: var(--text-muted); border: 1px solid; padding: 2px 5px; border-radius: 4px;">${monthSelector.value > currentFinancialMonth ? 'مخطط مستقبلي' : 'مؤرشف'}</span>`}
+                            ` : `<span style="font-size: 0.7rem; color: var(--text-muted); border: 1px solid; padding: 2px 5px; border-radius: 4px;">مؤرشف</span>`}
                         </div>
                     </div>
                     <div class="cat-body">
