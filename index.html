@@ -1374,17 +1374,45 @@
         // --- Theme System ---
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
-            if (savedTheme === 'light') {
-                document.body.classList.add('light-mode');
-                themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            applyTheme(savedTheme);
+
+            // Sync theme from Firebase
+            if (db) {
+                db.collection('budgets').doc("my_budget").collection('system').doc('config').onSnapshot(snap => {
+                    if (snap.exists && snap.data().theme) {
+                        applyTheme(snap.data().theme);
+                        localStorage.setItem('theme', snap.data().theme);
+                    }
+                });
             }
         }
 
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-mode');
-            const isLight = document.body.classList.contains('light-mode');
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
-            themeToggleBtn.innerHTML = isLight ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        function applyTheme(theme) {
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            } else {
+                document.body.classList.remove('light-mode');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', async () => {
+            const isLight = !document.body.classList.contains('light-mode');
+            const newTheme = isLight ? 'light' : 'dark';
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            if (db) {
+                try {
+                    await db.collection('budgets').doc("my_budget").collection('system').doc('config').set({
+                        theme: newTheme,
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                } catch (e) {
+                    console.error("Failed to sync theme:", e);
+                }
+            }
         });
 
         initTheme();
@@ -1405,25 +1433,60 @@
             return `${device} (${browser})`;
         }
 
-        function logAction(type, name, section) {
-            let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+        async function logAction(type, name, section) {
             const newLog = {
-                id: Date.now(),
                 type, // 'add', 'edit', 'delete', 'login'
                 name,
                 section,
                 time: new Date().toLocaleString('en-GB'),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 device: getDeviceInfo(),
                 unread: true
             };
-            logs.unshift(newLog);
-            if (logs.length > 100) logs = logs.slice(0, 100);
+
+            // Save locally as backup
+            let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+            logs.unshift({ ...newLog, timestamp: Date.now() });
+            if (logs.length > 50) logs = logs.slice(0, 50);
             localStorage.setItem('activity_logs', JSON.stringify(logs));
-            updateNotifUI();
+
+            // Sync to Firebase
+            if (db) {
+                try {
+                    await db.collection('budgets').doc("my_budget").collection('logs').add(newLog);
+                } catch (e) {
+                    console.error("Failed to sync log:", e);
+                }
+            }
+
+            // updateNotifUI will be triggered by Firebase listener
         }
 
-        function updateNotifUI() {
-            const logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+        let unsubscribeLogs = null;
+        function initLogsSync() {
+            if (!db) {
+                const logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+                updateNotifUI(logs);
+                return;
+            }
+
+            if (unsubscribeLogs) unsubscribeLogs();
+
+            unsubscribeLogs = db.collection('budgets').doc("my_budget").collection('logs')
+                .orderBy('timestamp', 'desc')
+                .limit(50)
+                .onSnapshot(snap => {
+                    const logs = [];
+                    snap.forEach(doc => logs.push({ id: doc.id, ...doc.data() }));
+                    updateNotifUI(logs);
+                    localStorage.setItem('activity_logs', JSON.stringify(logs));
+                }, err => {
+                    console.error("Logs sync error:", err);
+                    updateNotifUI(JSON.parse(localStorage.getItem('activity_logs') || '[]'));
+                });
+        }
+
+        function updateNotifUI(logs = []) {
             const unreadCount = logs.filter(l => l.unread).length;
             
             if (unreadCount > 0) {
@@ -1463,7 +1526,6 @@
                 sessionStorage.setItem('site_entry_logged', 'true');
             }, 1000);
         }
-
         // تحديث الوقت واليوم
         function updateLiveInfo() {
             const now = new Date();
@@ -1481,17 +1543,25 @@
         setInterval(updateLiveInfo, 1000);
         updateLiveInfo();
 
-        notifBtn.addEventListener('click', (e) => {
+        notifBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
             notifPanel.classList.toggle('active');
             notifOverlay.classList.toggle('active');
             header.classList.toggle('active-notif');
             if (notifPanel.classList.contains('active')) {
-                // Mark all as read when opening
-                let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-                logs.forEach(l => l.unread = false);
-                localStorage.setItem('activity_logs', JSON.stringify(logs));
-                updateNotifUI();
+                // Mark visible logs as read in Firebase
+                if (db) {
+                    const snap = await db.collection('budgets').doc("my_budget").collection('logs')
+                        .where('unread', '==', true).limit(20).get();
+                    const batch = db.batch();
+                    snap.forEach(doc => batch.update(doc.ref, { unread: false }));
+                    await batch.commit();
+                } else {
+                    let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+                    logs.forEach(l => l.unread = false);
+                    localStorage.setItem('activity_logs', JSON.stringify(logs));
+                    updateNotifUI(logs);
+                }
             }
         });
 
@@ -1515,7 +1585,7 @@
 
 
 
-        updateNotifUI();
+        initLogsSync();
 
         // --- Password System ---
         let pendingAction = null;
