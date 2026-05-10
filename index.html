@@ -599,6 +599,159 @@
             color: var(--text-main);
         }
 
+        /* New Navigation Tabs */
+        .main-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .nav-tab {
+            flex: 1;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 12px;
+            border-radius: var(--border-radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .nav-tab i {
+            font-size: 1.2rem;
+        }
+
+        .nav-tab.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .nav-tab:not(.active):hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+        }
+
+        /* Debt Stat Style */
+        .debt-line {
+            font-size: 0.75rem;
+            color: var(--danger-color);
+            margin-top: 2px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            justify-content: center;
+        }
+
+        /* Shopping List Styles */
+        .shopping-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .shopping-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--card-bg);
+            padding: 12px 16px;
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+        }
+
+        .shopping-item.checked {
+            opacity: 0.6;
+        }
+
+        .shopping-item.checked .item-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .checkbox-wrapper {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--primary-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .shopping-item.checked .checkbox-wrapper {
+            background: var(--primary-color);
+        }
+
+        .checkbox-wrapper i {
+            color: white;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .shopping-item.checked .checkbox-wrapper i {
+            display: block;
+        }
+
+        .item-text {
+            flex: 1;
+            font-size: 1rem;
+        }
+
+        /* Debt List Styles */
+        .debt-card {
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .debt-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .debt-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .debt-amount {
+            color: var(--danger-color);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .debt-note {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .debt-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--card-border);
+            padding-top: 10px;
+        }
+
+        .debt-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -1113,11 +1266,15 @@
             </div>
         </header>
 
-        <section class="stats-section glass-card">
+        <div id="stats-card" class="stats-section glass-card">
             <div class="stats-grid">
-                <div class="stat-box highlight">
+                <div class="stat-box">
                     <span class="stat-label">المخصص للأقسام</span>
                     <span id="stat-allocated" class="stat-value">OMR 0.000</span>
+                    <div id="stat-debt-container" class="debt-line hidden">
+                        <span>الدين</span>
+                        <span id="stat-debt-value">- OMR 0.000</span>
+                    </div>
                 </div>
                 <div class="stat-box">
                     <span class="stat-label">إجمالي المصروفات</span>
@@ -1138,19 +1295,100 @@
                     <div id="progress-bar-fill" class="progress-bar-fill"></div>
                 </div>
             </div>
-            <div id="budget-alert" class="alert hidden">
-                <i class="fa-solid fa-triangle-exclamation"></i> لقد تجاوزت قيمة الراتب!
-            </div>
-        </section>
+        </div>
 
-        <!-- Categories -->
-        <main>
-            <div class="section-header">
-                <h2><i class="fa-solid fa-layer-group"></i> الأقسام والمصروفات</h2>
-                <button id="add-category-btn" class="btn-primary"><i class="fa-solid fa-plus"></i> إضافة قسم</button>
+        <!-- Main Navigation -->
+        <nav class="main-nav">
+            <div class="nav-tab active" data-section="categories-section">
+                <i class="fa-solid fa-layer-group"></i>
+                <span>الأقسام</span>
             </div>
-            <div id="categories-grid" class="categories-grid"></div>
+            <div class="nav-tab" data-section="debts-section">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <span>الديون</span>
+            </div>
+            <div class="nav-tab" data-section="shopping-section">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>المشتريات</span>
+            </div>
+        </nav>
+
+        <!-- Main Sections -->
+        <main>
+            <!-- Categories & Expenses Section -->
+            <section id="categories-section" class="main-section">
+                <div class="section-header">
+                    <h2>الأقسام والمصروفات</h2>
+                    <button id="add-category-btn" class="btn-primary">
+                        <i class="fa-solid fa-plus"></i>
+                        إضافة قسم
+                    </button>
+                </div>
+                <div id="categories-grid" class="categories-grid">
+                    <!-- Categories will be injected here -->
+                </div>
+            </section>
+
+            <!-- Debts Section -->
+            <section id="debts-section" class="main-section hidden">
+                <div class="section-header">
+                    <h2>الديون المستحقة</h2>
+                    <button id="add-debt-btn" class="btn-primary">
+                        <i class="fa-solid fa-plus"></i>
+                        تسجيل دين
+                    </button>
+                </div>
+                <div id="debts-list" class="categories-grid">
+                    <!-- Debts will be injected here -->
+                </div>
+            </section>
+
+            <!-- Shopping Section -->
+            <section id="shopping-section" class="main-section hidden">
+                <div class="section-header">
+                    <h2>قائمة المشتريات</h2>
+                </div>
+                <div class="glass-card" style="padding: 20px; margin-bottom: 20px;">
+                    <form id="shopping-form" class="input-wrapper">
+                        <input type="text" id="shopping-input" placeholder="ماذا تريد أن تشتري؟" required>
+                        <button type="submit" class="btn-primary">إضافة</button>
+                    </form>
+                </div>
+                <div id="shopping-list" class="shopping-list">
+                    <!-- Shopping items will be injected here -->
+                </div>
+            </section>
         </main>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Debt Modal -->
+    <div id="debt-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="debt-modal-title">تسجيل دين جديد</h3>
+                <button class="close-debt-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="debt-form">
+                    <input type="hidden" id="debt-id">
+                    <div class="form-group">
+                        <label for="debt-person">اسم الشخص أو الجهة</label>
+                        <input type="text" id="debt-person" required placeholder="مثال: أحمد أو البنك">
+                    </div>
+                    <div class="form-group">
+                        <label for="debt-amount">مبلغ الدين (عماني)</label>
+                        <input type="number" inputmode="decimal" id="debt-amount" required min="0" step="any" placeholder="مثال: 100">
+                    </div>
+                    <div class="form-group">
+                        <label for="debt-note">ملاحظة (اختياري)</label>
+                        <input type="text" id="debt-note" placeholder="مثال: سلفة السيارة">
+                    </div>
+                    <button type="submit" class="btn-primary full-width">حفظ الدين</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Modals -->
@@ -1339,6 +1577,27 @@
         const catAllocatedInput = document.getElementById('cat-allocated');
         const catIconInput = document.getElementById('cat-icon');
 
+        // New DOM Elements for Debts and Shopping
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const mainSections = document.querySelectorAll('.main-section');
+        const statDebtContainer = document.getElementById('stat-debt-container');
+        const statDebtValue = document.getElementById('stat-debt-value');
+
+        const debtsList = document.getElementById('debts-list');
+        const addDebtBtn = document.getElementById('add-debt-btn');
+        const debtModal = document.getElementById('debt-modal');
+        const debtForm = document.getElementById('debt-form');
+        const closeDebtBtns = document.querySelectorAll('.close-debt-btn');
+        const debtIdInput = document.getElementById('debt-id');
+        const debtPersonInput = document.getElementById('debt-person');
+        const debtAmountInput = document.getElementById('debt-amount');
+        const debtNoteInput = document.getElementById('debt-note');
+        const debtModalTitle = document.getElementById('debt-modal-title');
+
+        const shoppingList = document.getElementById('shopping-list');
+        const shoppingForm = document.getElementById('shopping-form');
+        const shoppingInput = document.getElementById('shopping-input');
+
         // منع كتابة الحروف والرموز (e, -, +) في حقول الأرقام
         document.querySelectorAll('input[type="number"]').forEach(input => {
             input.addEventListener('keydown', function(e) {
@@ -1350,6 +1609,8 @@
 
         let totalSalary = 529;
         let categories = [];
+        let debts = [];
+        let shoppingItems = [];
         let categoryToDelete = null;
 
         // --- Financial Month Logic ---
@@ -1487,7 +1748,25 @@
         }
 
         function updateNotifUI(logs = []) {
-            const unreadCount = logs.filter(l => l.unread).length;
+            const threeDaysInMs = 3 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+
+            // Filter logs older than 3 days
+            const activeLogs = logs.filter(log => {
+                let logTime;
+                if (log.timestamp && typeof log.timestamp.toMillis === 'function') {
+                    logTime = log.timestamp.toMillis();
+                } else if (typeof log.timestamp === 'number') {
+                    logTime = log.timestamp;
+                } else {
+                    // Try to parse string time if timestamp is null
+                    try { logTime = new Date(log.time).getTime(); }
+                    catch(e) { logTime = 0; }
+                }
+                return (now - logTime) < threeDaysInMs;
+            });
+
+            const unreadCount = activeLogs.filter(l => l.unread).length;
             
             if (unreadCount > 0) {
                 notifBadge.textContent = unreadCount;
@@ -1496,7 +1775,7 @@
                 notifBadge.classList.add('hidden');
             }
 
-            if (logs.length === 0) {
+            if (activeLogs.length === 0) {
                 notifList.innerHTML = '<div class="notif-empty">لا توجد نشاطات مسجلة بعد.</div>';
                 return;
             }
@@ -1504,7 +1783,7 @@
             const typeLabels = { 'add': 'إضافة', 'edit': 'تعديل', 'delete': 'حذف', 'login': 'دخول' };
             const typeIcons = { 'add': 'fa-plus-circle', 'edit': 'fa-pen-to-square', 'delete': 'fa-trash-can', 'login': 'fa-right-to-bracket' };
 
-            notifList.innerHTML = logs.map(log => `
+            notifList.innerHTML = activeLogs.map(log => `
                 <div class="notif-item ${log.unread ? 'unread' : ''}">
                     <div class="notif-item-header">
                         <span class="notif-type type-${log.type}"><i class="fa-solid ${typeIcons[log.type]}"></i> ${typeLabels[log.type]}</span>
@@ -1586,6 +1865,26 @@
 
 
         initLogsSync();
+
+        // --- Tab Switching Logic ---
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetSectionId = tab.getAttribute('data-section');
+                
+                // Update active tab
+                navTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show target section
+                mainSections.forEach(section => {
+                    if (section.id === targetSectionId) {
+                        section.classList.remove('hidden');
+                    } else {
+                        section.classList.add('hidden');
+                    }
+                });
+            });
+        });
 
         // --- Password System ---
         let pendingAction = null;
@@ -1669,10 +1968,14 @@
             if (!isEditableMonth) {
                 editSalaryBtn.classList.add('hidden');
                 addCategoryBtn.classList.add('hidden');
+                addDebtBtn.classList.add('hidden');
+                shoppingForm.classList.add('hidden');
                 saveSalaryBtn.classList.add('hidden');
             } else {
                 editSalaryBtn.classList.remove('hidden');
                 addCategoryBtn.classList.remove('hidden');
+                addDebtBtn.classList.remove('hidden');
+                shoppingForm.classList.remove('hidden');
             }
 
             if (unsubscribeFirebase) {
@@ -1691,6 +1994,8 @@
                             const data = snap.data();
                             totalSalary = data.totalSalary || 529;
                             categories = data.categories || [];
+                            debts = data.debts || [];
+                            shoppingItems = data.shoppingItems || [];
                             totalSalaryInput.value = totalSalary;
                             updateLastModified(data.lastUpdated);
                             updateUI();
@@ -1729,11 +2034,23 @@
                     { id: "3", name: "البنزين", allocated: 60, transactions: [] },
                     { id: "4", name: "الراشن", allocated: 70, transactions: [] }
                 ];
-                syncData();
             } else {
                 try { categories = JSON.parse(localStorage.getItem(key)); }
                 catch (e) { categories = []; }
             }
+
+            // Load Debts and Shopping locally
+            const debtsKey = `debts_${month}`;
+            if (localStorage.getItem(debtsKey)) {
+                try { debts = JSON.parse(localStorage.getItem(debtsKey)); }
+                catch (e) { debts = []; }
+            } else { debts = []; }
+
+            const shoppingKey = `shopping_${month}`;
+            if (localStorage.getItem(shoppingKey)) {
+                try { shoppingItems = JSON.parse(localStorage.getItem(shoppingKey)); }
+                catch (e) { shoppingItems = []; }
+            } else { shoppingItems = []; }
 
             // Migrate old data structure (used -> transactions)
             let migrated = false;
@@ -1768,6 +2085,8 @@
             const month = monthSelector.value;
             // Always save locally
             localStorage.setItem(`categories_${month}`, JSON.stringify(categories));
+            localStorage.setItem(`debts_${month}`, JSON.stringify(debts));
+            localStorage.setItem(`shopping_${month}`, JSON.stringify(shoppingItems));
             localStorage.setItem(`salary_${month}`, totalSalary);
 
             // Sync to Firebase if connected
@@ -1777,6 +2096,8 @@
                     await docRef.set({
                         totalSalary: totalSalary,
                         categories: categories,
+                        debts: debts,
+                        shoppingItems: shoppingItems,
                         lastUpdated: new Date().toISOString()
                     });
                 } catch (e) {
@@ -1969,6 +2290,17 @@
                 totalUsed += catUsed;
             });
 
+            // Calculate Total Debts for stats card
+            let totalDebtsAmount = 0;
+            debts.forEach(d => totalDebtsAmount += parseFloat(d.amount || 0));
+
+            if (totalDebtsAmount > 0) {
+                statDebtContainer.classList.remove('hidden');
+                statDebtValue.textContent = `- ${formatCurrency(totalDebtsAmount)}`;
+            } else {
+                statDebtContainer.classList.add('hidden');
+            }
+
             const remainingFromSalary = totalSalary - totalUsed;
             let percentage = totalSalary > 0 ? Math.round((totalUsed / totalSalary) * 100) : 0;
 
@@ -1983,19 +2315,174 @@
             if (percentage >= 100) {
                 progressBarFill.style.background = "var(--danger-color)";
                 statRemaining.className = "stat-value danger";
-                budgetAlert.classList.remove('hidden');
             } else if (percentage >= 80) {
                 progressBarFill.style.background = "var(--warning-color)";
                 statRemaining.className = "stat-value warning";
-                budgetAlert.classList.add('hidden');
             } else {
                 progressBarFill.style.background = "linear-gradient(90deg, var(--success-color), var(--primary-color))";
                 statRemaining.className = "stat-value success";
-                budgetAlert.classList.add('hidden');
             }
 
             renderCategories();
+            renderDebts();
+            renderShoppingItems();
         }
+
+        // --- Debt Management ---
+        function renderDebts() {
+            debtsList.innerHTML = '';
+            if (debts.length === 0) {
+                debtsList.innerHTML = '<div class="glass-card" style="padding: 30px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">لا توجد ديون مسجلة.</div>';
+                return;
+            }
+
+            debts.forEach(debt => {
+                const card = document.createElement('div');
+                card.className = 'glass-card debt-card';
+                card.innerHTML = `
+                    <div class="debt-info">
+                        <span class="debt-name">${debt.person}</span>
+                        <span class="debt-amount">${formatCurrency(debt.amount)}</span>
+                    </div>
+                    ${debt.note ? `<div class="debt-note">${debt.note}</div>` : ''}
+                    <div class="debt-footer">
+                        <span class="debt-date"><i class="fa-solid fa-clock"></i> ${debt.date}</span>
+                        ${isEditableMonth ? `
+                        <div class="cat-actions">
+                            <button class="cat-btn edit" onclick="requestEditDebt('${debt.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button class="cat-btn delete" onclick="requestDeleteDebt('${debt.id}')"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                        ` : '<span style="font-size: 0.7rem; color: var(--text-muted);">مؤرشف</span>'}
+                    </div>
+                `;
+                debtsList.appendChild(card);
+            });
+        }
+
+        addDebtBtn.addEventListener('click', () => {
+            requirePassword(() => {
+                debtForm.reset();
+                debtIdInput.value = '';
+                debtModalTitle.textContent = 'تسجيل دين جديد';
+                debtModal.classList.remove('hidden');
+                setTimeout(() => debtPersonInput.focus(), 100);
+            });
+        });
+
+        closeDebtBtns.forEach(btn => btn.addEventListener('click', () => debtModal.classList.add('hidden')));
+
+        debtForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = debtIdInput.value;
+            const now = new Date();
+            const dateStr = `${now.toLocaleDateString('en-GB')} ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+
+            const debtData = {
+                person: debtPersonInput.value,
+                amount: parseFloat(debtAmountInput.value || 0),
+                note: debtNoteInput.value,
+                date: dateStr
+            };
+
+            if (id) {
+                const index = debts.findIndex(d => d.id === id);
+                if (index !== -1) {
+                    debts[index] = { ...debts[index], ...debtData, date: debts[index].date }; 
+                    logAction('edit', `${debtData.person} (${debtData.amount})`, 'الديون');
+                }
+            } else {
+                debts.push({ id: Date.now().toString(), ...debtData });
+                logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون');
+            }
+
+            syncData();
+            updateUI();
+            debtModal.classList.add('hidden');
+        });
+
+        window.requestEditDebt = (id) => {
+            requirePassword(() => {
+                const debt = debts.find(d => d.id === id);
+                if (debt) {
+                    debtIdInput.value = debt.id;
+                    debtPersonInput.value = debt.person;
+                    debtAmountInput.value = debt.amount;
+                    debtNoteInput.value = debt.note || '';
+                    debtModalTitle.textContent = 'تعديل بيانات الدين';
+                    debtModal.classList.remove('hidden');
+                }
+            });
+        };
+
+        window.requestDeleteDebt = (id) => {
+            requirePassword(() => {
+                if (confirm("هل أنت متأكد من حذف هذا الدين؟")) {
+                    const debt = debts.find(d => d.id === id);
+                    const name = debt ? debt.person : 'دين';
+                    debts = debts.filter(d => d.id !== id);
+                    syncData();
+                    updateUI();
+                    logAction('delete', name, 'الديون');
+                }
+            });
+        };
+
+        // --- Shopping Management ---
+        function renderShoppingItems() {
+            shoppingList.innerHTML = '';
+            if (shoppingItems.length === 0) {
+                shoppingList.innerHTML = '<div class="glass-card" style="padding: 30px; text-align: center; color: var(--text-muted);">قائمة المشتريات فارغة.</div>';
+                return;
+            }
+
+            shoppingItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = `shopping-item ${item.checked ? 'checked' : ''}`;
+                div.innerHTML = `
+                    <div class="checkbox-wrapper" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <span class="item-text" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">${item.text}</span>
+                    ${isEditableMonth ? `
+                    <button class="cat-btn delete" onclick="deleteShoppingItem('${item.id}')">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                    ` : ''}
+                `;
+                shoppingList.appendChild(div);
+            });
+        }
+
+        shoppingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = shoppingInput.value.trim();
+            if (!text) return;
+
+            shoppingItems.push({
+                id: Date.now().toString(),
+                text: text,
+                checked: false
+            });
+
+            shoppingInput.value = '';
+            syncData();
+            updateUI();
+        });
+
+        window.toggleShoppingItem = (id) => {
+            const item = shoppingItems.find(i => i.id === id);
+            if (item) {
+                item.checked = !item.checked;
+                syncData();
+                updateUI();
+            }
+        };
+
+        window.deleteShoppingItem = (id) => {
+            shoppingItems = shoppingItems.filter(i => i.id !== id);
+            syncData();
+            updateUI();
+        };
 
         function getCategoryIcon(name) {
             const icons = {
