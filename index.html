@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ميزانيتي</title>
+    <title>تقسيم الراتب</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,10 +29,23 @@
             --danger-color: #ef4444;
             --danger-hover: #dc2626;
             --warning-color: #f59e0b;
+            --input-bg: rgba(15, 23, 42, 0.6);
             --border-radius-lg: 16px;
             --border-radius-md: 12px;
             --border-radius-sm: 8px;
-            --transition: all 0.3s ease;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --glass-blur: blur(12px);
+        }
+
+        body.light-mode {
+            --bg-color: #f1f5f9;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --card-border: rgba(0, 0, 0, 0.08);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary-color: #2563eb;
+            --input-bg: #ffffff;
+            --glass-blur: blur(8px);
         }
 
         * {
@@ -40,26 +53,29 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
-            background-image: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15), transparent 25%);
+            background-image: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.08), transparent 25%);
             background-attachment: fixed;
-            padding-bottom: 120px;
+            padding-bottom: 60px;
             overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
         .glass-card {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--card-border);
             border-radius: var(--border-radius-lg);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+            transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .hidden {
@@ -106,13 +122,14 @@
 
         .header-glass {
             background: var(--card-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: var(--glass-blur);
             border: 1px solid var(--card-border);
             border-radius: var(--border-radius-lg);
             padding: 24px;
             display: flex;
             flex-direction: column;
             gap: 20px;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
         .header-top {
@@ -177,7 +194,7 @@
 
         input {
             flex: 1;
-            background: rgba(15, 23, 42, 0.6);
+            background: var(--input-bg);
             border: 1px solid var(--card-border);
             color: var(--text-main);
             padding: 12px 16px;
@@ -189,7 +206,7 @@
 
         input:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
         button {
@@ -408,10 +425,30 @@
         }
 
         .cat-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             word-break: break-word;
             flex: 1;
+        }
+
+        .cat-title i {
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            background: rgba(59, 130, 246, 0.1);
+            min-width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius-sm);
+            transition: var(--transition);
+        }
+
+        body.light-mode .cat-title i {
+            background: rgba(37, 99, 235, 0.08);
         }
 
         .cat-actions {
@@ -645,15 +682,16 @@
             border-radius: 4px;
         }
 
-        /* Responsive Design */
         /* Tablet & Large Mobile */
         @media (max-width: 768px) {
             .app-container {
-                padding: 15px;
+                padding: 12px;
+                gap: 16px;
             }
 
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
             }
 
             .stat-box.highlight {
@@ -661,7 +699,8 @@
             }
 
             .categories-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                grid-template-columns: 1fr;
+                gap: 16px;
             }
         }
 
@@ -669,71 +708,67 @@
         @media (max-width: 600px) {
             .app-container {
                 padding: 10px;
-                padding-bottom: 120px;
+                padding-bottom: 100px;
             }
 
             .header-glass,
             .stats-section,
             .category-card {
                 padding: 16px;
+                border-radius: var(--border-radius-md);
             }
 
             .header-top {
                 flex-direction: column;
-                align-items: stretch;
+                align-items: center;
                 gap: 15px;
+                text-align: center;
+            }
+
+            .header-top h1 {
+                font-size: 1.5rem;
             }
 
             .header-actions {
-                justify-content: space-between;
+                justify-content: center;
                 width: 100%;
-                flex-wrap: nowrap;
+                gap: 12px;
             }
 
             .month-selector {
                 margin-left: 0;
                 flex: 1;
+                max-width: 200px;
             }
 
-            .input-wrapper {
-                flex-direction: column;
+            .salary-input-section label {
+                font-size: 1rem;
+                text-align: center;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-box.highlight {
-                grid-column: span 1;
+            .stat-value {
+                font-size: 1.3rem;
             }
 
             .section-header {
                 flex-direction: column;
-                align-items: stretch;
+                gap: 12px;
+                text-align: center;
             }
 
-            .section-header button {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .cat-header {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .cat-actions {
-                width: 100%;
-                justify-content: flex-end;
-            }
-
-            .modal-actions {
-                flex-direction: column;
-                gap: 10px;
+            .section-header h2 {
+                font-size: 1.2rem;
             }
 
             .modal-content {
                 padding: 20px;
+                margin: 10px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .stat-box {
+                padding: 12px;
             }
         }
 
@@ -768,6 +803,59 @@
                 align-items: center;
             }
         }
+        /* Collapsible Transactions */
+        .toggle-trans-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            padding: 10px;
+            border-radius: var(--border-radius-sm);
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .toggle-trans-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-main);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .toggle-trans-btn .btn-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toggle-trans-btn i.chevron {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.8rem;
+        }
+
+        .toggle-trans-btn.active i.chevron {
+            transform: rotate(180deg);
+        }
+
+        .transactions-wrapper {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .transactions-wrapper.expanded {
+            max-height: 2000px; /* Safe limit for many transactions */
+            opacity: 1;
+            pointer-events: all;
+            margin-top: 5px;
+        }
     </style>
 </head>
 
@@ -781,16 +869,15 @@
         <!-- Header -->
         <header class="header-glass">
             <div class="header-top">
-                <h1><i class="fa-solid fa-wallet"></i> ميزانيتي</h1>
+                <h1><i class="fa-solid fa-wallet"></i> تقسيم الراتب</h1>
                 <div class="header-actions">
+                    <button id="theme-toggle-btn" class="icon-btn" title="تبديل الوضع"><i class="fa-solid fa-moon"></i></button>
                     <select id="month-selector" class="month-selector"></select>
-                    <button id="reset-data-btn" class="icon-btn" title="تصفير المصروفات"><i
-                            class="fa-solid fa-rotate-right"></i></button>
                 </div>
             </div>
 
             <div class="salary-input-section">
-                <label for="total-salary">الراتب الثابت للشهر (عماني):</label>
+                <label for="total-salary">الراتب بالريال العماني:</label>
                 <div class="input-wrapper">
                     <input type="number" inputmode="decimal" id="total-salary" readonly value="529" step="any" min="0">
                     <button id="edit-salary-btn" class="btn-secondary" title="فتح القفل للتعديل"><i
@@ -834,7 +921,7 @@
         <!-- Categories -->
         <main>
             <div class="section-header">
-                <h2>الأقسام والمصروفات</h2>
+                <h2><i class="fa-solid fa-layer-group"></i> الأقسام والمصروفات</h2>
                 <button id="add-category-btn" class="btn-primary"><i class="fa-solid fa-plus"></i> إضافة قسم</button>
             </div>
             <div id="categories-grid" class="categories-grid"></div>
@@ -886,6 +973,29 @@
                         <label for="cat-allocated">المبلغ المخصص (عماني)</label>
                         <input type="number" inputmode="decimal" id="cat-allocated" required min="0" step="any" placeholder="مثال: 150">
                     </div>
+                    <div class="form-group">
+                        <label for="cat-icon">أيقونة القسم</label>
+                        <select id="cat-icon" class="month-selector" style="width: 100%; height: 45px; border-radius: var(--border-radius-md);">
+                            <option value="auto">تلقائي (حسب الاسم)</option>
+                            <option value="fa-house">🏠 سكن / إيجار</option>
+                            <option value="fa-wifi">🌐 إنترنت</option>
+                            <option value="fa-gas-pump">⛽ بنزين</option>
+                            <option value="fa-cart-shopping">🛒 راشن / بقالة</option>
+                            <option value="fa-bolt">⚡ كهرباء</option>
+                            <option value="fa-droplet">💧 ماء</option>
+                            <option value="fa-heart-pulse">🏥 صحة</option>
+                            <option value="fa-graduation-cap">🎓 تعليم</option>
+                            <option value="fa-clapperboard">🎬 ترفيه</option>
+                            <option value="fa-utensils">🍽️ مطاعم</option>
+                            <option value="fa-bag-shopping">🛍️ تسوق</option>
+                            <option value="fa-car">🚗 سيارة</option>
+                            <option value="fa-mobile-screen">📱 هاتف / رصيد</option>
+                            <option value="fa-hand-holding-dollar">💰 ديون / أقساط</option>
+                            <option value="fa-plane">✈️ سفر</option>
+                            <option value="fa-gift">🎁 هدايا</option>
+                            <option value="fa-folder-open">📁 أخرى</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn-primary full-width">حفظ القسم</button>
                 </form>
             </div>
@@ -909,25 +1019,21 @@
         </div>
     </div>
 
-    <!-- Password Modal (Login) -->
+    <!-- Password Modal (Static Code) -->
     <div id="password-modal" class="modal-overlay hidden">
         <div class="modal-content glass-card small-modal">
             <div class="modal-header">
-                <h3>تسجيل الدخول للمسؤول</h3>
+                <h3>تأكيد الرمز السري</h3>
                 <button class="close-password-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.95rem;">يرجى تسجيل الدخول لتتمكن من إجراء التعديلات.</p>
+                <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.95rem;">يرجى إدخال الرمز السري لتتمكن من إجراء التعديلات.</p>
                 <div class="form-group">
-                    <label>البريد الإلكتروني</label>
-                    <input type="email" id="admin-email" placeholder="example@mail.com" style="direction: ltr;">
-                </div>
-                <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" id="admin-password" placeholder="******" style="direction: ltr;">
+                    <label>الرمز السري</label>
+                    <input type="password" id="admin-password" placeholder="****" style="direction: ltr; text-align: center; letter-spacing: 5px;">
                 </div>
                 <div class="modal-actions">
-                    <button id="confirm-password-btn" class="btn-primary">تسجيل الدخول</button>
+                    <button id="confirm-password-btn" class="btn-primary">تأكيد</button>
                     <button class="btn-secondary close-password-btn">إلغاء</button>
                 </div>
             </div>
@@ -962,7 +1068,6 @@
         const totalSalaryInput = document.getElementById('total-salary');
         const saveSalaryBtn = document.getElementById('save-salary-btn');
         const editSalaryBtn = document.getElementById('edit-salary-btn');
-        const resetDataBtn = document.getElementById('reset-data-btn');
 
         const statAllocated = document.getElementById('stat-allocated');
         const statUsed = document.getElementById('stat-used');
@@ -985,10 +1090,10 @@
         const closeDeleteBtns = document.querySelectorAll('.close-delete-btn');
 
         const passwordModal = document.getElementById('password-modal');
-        const adminEmailInput = document.getElementById('admin-email');
         const adminPasswordInput = document.getElementById('admin-password');
         const confirmPasswordBtn = document.getElementById('confirm-password-btn');
         const closePasswordBtns = document.querySelectorAll('.close-password-btn');
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const offlineBanner = document.getElementById('offline-banner');
 
         const expenseModal = document.getElementById('expense-modal');
@@ -1001,6 +1106,7 @@
         const catIdInput = document.getElementById('cat-id');
         const catNameInput = document.getElementById('cat-name');
         const catAllocatedInput = document.getElementById('cat-allocated');
+        const catIconInput = document.getElementById('cat-icon');
 
         // منع كتابة الحروف والرموز (e, -, +) في حقول الأرقام
         document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -1015,19 +1121,56 @@
         let categories = [];
         let categoryToDelete = null;
 
+        // --- Financial Month Logic ---
+        function getFinancialMonth(date = new Date()) {
+            let y = date.getFullYear();
+            let m = date.getMonth(); // 0-11
+            let d = date.getDate();
+
+            if (d >= 22) {
+                m++;
+                if (m > 11) {
+                    m = 0;
+                    y++;
+                }
+            }
+            return `${y}-${(m + 1).toString().padStart(2, '0')}`;
+        }
+
+        const currentFinancialMonth = getFinancialMonth();
+        let isEditableMonth = true;
+
+        // --- Theme System ---
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            themeToggleBtn.innerHTML = isLight ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+        });
+
+        initTheme();
+
         // --- Password System ---
         let pendingAction = null;
+        let isAuthorized = false;
 
         function requirePassword(callback) {
-            if (firebase.auth().currentUser) {
+            if (isAuthorized) {
                 callback();
                 return;
             }
             pendingAction = callback;
-            adminEmailInput.value = '';
             adminPasswordInput.value = '';
             passwordModal.classList.remove('hidden');
-            setTimeout(() => adminEmailInput.focus(), 100);
+            setTimeout(() => adminPasswordInput.focus(), 100);
         }
 
         closePasswordBtns.forEach(btn => btn.addEventListener('click', () => {
@@ -1035,30 +1178,20 @@
             pendingAction = null;
         }));
 
-        confirmPasswordBtn.addEventListener('click', async () => {
-            const email = adminEmailInput.value;
+        confirmPasswordBtn.addEventListener('click', () => {
             const password = adminPasswordInput.value;
             
-            if (!email || !password) {
-                alert("يرجى إدخال البريد الإلكتروني وكلمة المرور");
-                return;
-            }
-
-            try {
-                confirmPasswordBtn.disabled = true;
-                confirmPasswordBtn.textContent = "جاري التحقق...";
-                await firebase.auth().signInWithEmailAndPassword(email, password);
+            if (password === '1234') {
+                isAuthorized = true;
                 passwordModal.classList.add('hidden');
                 if (pendingAction) {
                     pendingAction();
                     pendingAction = null;
                 }
-            } catch (error) {
-                console.error("Login Error:", error);
-                alert("فشل تسجيل الدخول: " + error.message);
-            } finally {
-                confirmPasswordBtn.disabled = false;
-                confirmPasswordBtn.textContent = "تسجيل الدخول";
+            } else {
+                alert("الرمز السري غير صحيح!");
+                adminPasswordInput.value = '';
+                adminPasswordInput.focus();
             }
         });
 
@@ -1076,18 +1209,23 @@
         // --- Init & Sync ---
         function initializeMonths() {
             const monthsArabic = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
-            const now = new Date();
-            let currentYear = now.getFullYear();
-            let currentMonth = now.getMonth();
+            
+            // نحصل على السنة والشهر الحاليين من الشهر المالي
+            const [year, month] = currentFinancialMonth.split('-').map(Number);
 
-            for (let y = currentYear - 1; y <= currentYear + 1; y++) {
-                for (let m = 0; m < 12; m++) {
-                    const option = document.createElement('option');
-                    option.value = `${y}-${(m + 1).toString().padStart(2, '0')}`;
-                    option.textContent = `${monthsArabic[m]} ${y}`;
-                    monthSelector.appendChild(option);
-                    if (y === currentYear && m === currentMonth) option.selected = true;
-                }
+            // عرض 3 أشهر سابقة + الشهر الحالي + 3 أشهر مستقبلية
+            for (let i = -3; i <= 3; i++) {
+                const date = new Date(year, month - 1 + i, 1);
+                const y = date.getFullYear();
+                const m = date.getMonth();
+                const monthVal = `${y}-${(m + 1).toString().padStart(2, '0')}`;
+
+                const option = document.createElement('option');
+                option.value = monthVal;
+                option.textContent = `${monthsArabic[m]} ${y}`;
+                monthSelector.appendChild(option);
+                
+                if (monthVal === currentFinancialMonth) option.selected = true;
             }
         }
 
@@ -1095,6 +1233,17 @@
 
         async function loadData() {
             const month = monthSelector.value;
+            isEditableMonth = (month === currentFinancialMonth);
+
+            // تحديث حالة الأزرار العامة بناءً على التاريخ
+            if (!isEditableMonth) {
+                editSalaryBtn.classList.add('hidden');
+                addCategoryBtn.classList.add('hidden');
+                saveSalaryBtn.classList.add('hidden');
+            } else {
+                editSalaryBtn.classList.remove('hidden');
+                addCategoryBtn.classList.remove('hidden');
+            }
 
             if (unsubscribeFirebase) {
                 unsubscribeFirebase();
@@ -1237,6 +1386,7 @@
                     catIdInput.value = cat.id;
                     catNameInput.value = cat.name;
                     catAllocatedInput.value = cat.allocated;
+                    catIconInput.value = cat.icon || 'auto';
                     modalTitle.textContent = 'تعديل بيانات القسم';
                     categoryModal.classList.remove('hidden');
                 }
@@ -1263,15 +1413,7 @@
             });
         };
 
-        resetDataBtn.addEventListener('click', () => {
-            requirePassword(() => {
-                if (confirm("هل أنت متأكد من مسح جميع سجلات المصروفات (تصفير الأقسام) لهذا الشهر؟")) {
-                    categories = categories.map(cat => ({ ...cat, transactions: [] }));
-                    syncData();
-                    updateUI();
-                }
-            });
-        });
+
 
         // --- Safe Operations (No Password Required) ---
 
@@ -1302,6 +1444,7 @@
             const catData = {
                 name: catNameInput.value,
                 allocated: parseFloat(catAllocatedInput.value || 0),
+                icon: catIconInput.value,
                 transactions: []
             };
 
@@ -1309,6 +1452,7 @@
                 const index = categories.findIndex(c => c.id === id);
                 categories[index].name = catData.name;
                 categories[index].allocated = catData.allocated;
+                categories[index].icon = catData.icon;
             } else {
                 categories.push({ id: Date.now().toString(), ...catData });
             }
@@ -1401,6 +1545,30 @@
             renderCategories();
         }
 
+        function getCategoryIcon(name) {
+            const icons = {
+                'الإيجار': 'fa-house',
+                'الإنترنت': 'fa-wifi',
+                'البنزين': 'fa-gas-pump',
+                'الراشن': 'fa-cart-shopping',
+                'الكهرباء': 'fa-bolt',
+                'الماء': 'fa-droplet',
+                'الصحة': 'fa-heart-pulse',
+                'التعليم': 'fa-graduation-cap',
+                'ترفيه': 'fa-clapperboard',
+                'مطاعم': 'fa-utensils',
+                'تسوق': 'fa-bag-shopping',
+                'سيارة': 'fa-car',
+                'هاتف': 'fa-mobile-screen',
+                'قرض': 'fa-hand-holding-dollar',
+                'ديون': 'fa-hand-holding-dollar'
+            };
+            for (let key in icons) {
+                if (name.includes(key)) return icons[key];
+            }
+            return 'fa-folder-open';
+        }
+
         function renderCategories() {
             categoriesGrid.innerHTML = '';
             categories.forEach(cat => {
@@ -1415,7 +1583,17 @@
 
                 let transHtml = '';
                 if (cat.transactions && cat.transactions.length > 0) {
-                    transHtml = '<div class="transactions-list">';
+                    transHtml = `
+                        <button class="toggle-trans-btn" onclick="toggleTransactions('${cat.id}', this)">
+                            <div class="btn-text">
+                                <i class="fa-solid fa-list-ul"></i>
+                                <span>عرض السجل (${cat.transactions.length})</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down chevron"></i>
+                        </button>
+                        <div id="wrapper-${cat.id}" class="transactions-wrapper">
+                            <div class="transactions-list">`;
+                    
                     cat.transactions.forEach(t => {
                         transHtml += `
                         <div class="transaction-item">
@@ -1424,22 +1602,31 @@
                                 <span class="trans-note">${t.note}</span>
                                 <span class="trans-date"><i class="fa-regular fa-clock"></i> ${t.date}</span>
                             </div>
+                            ${isEditableMonth ? `
                             <button class="del-trans-btn" onclick="requestDeleteTransaction('${cat.id}', '${t.id}')" title="حذف المصروف"><i class="fa-solid fa-trash-can"></i></button>
+                            ` : ''}
                         </div>
                         `;
                     });
-                    transHtml += '</div>';
+                    transHtml += `
+                            </div>
+                        </div>`;
                 }
 
                 const card = document.createElement('div');
                 card.className = 'category-card glass-card';
                 card.innerHTML = `
                     <div class="cat-header">
-                        <div class="cat-title">${cat.name}</div>
+                        <div class="cat-title">
+                            <i class="fa-solid ${cat.icon && cat.icon !== 'auto' ? cat.icon : getCategoryIcon(cat.name)}"></i>
+                            ${cat.name}
+                        </div>
                         <div class="cat-actions">
+                            ${isEditableMonth ? `
                             <button class="cat-btn" style="color: var(--success-color);" title="إضافة مصروف (معاملة جديدة)" onclick="openExpenseModal('${cat.id}')"><i class="fa-solid fa-plus"></i></button>
                             <button class="cat-btn edit" title="تعديل اسم أو مخصص القسم" onclick="requestEditCategory('${cat.id}')"><i class="fa-solid fa-pen"></i></button>
                             <button class="cat-btn delete" title="حذف القسم بالكامل" onclick="requestDeleteCategory('${cat.id}')"><i class="fa-solid fa-trash"></i></button>
+                            ` : `<span style="font-size: 0.7rem; color: var(--text-muted); border: 1px solid; padding: 2px 5px; border-radius: 4px;">${monthSelector.value > currentFinancialMonth ? 'مخطط مستقبلي' : 'مؤرشف'}</span>`}
                         </div>
                     </div>
                     <div class="cat-body">
@@ -1467,6 +1654,20 @@
             // استخدام en-GB للحصول على تاريخ ميلادي وأرقام إنجليزية
             lastUpdated.textContent = `آخر تحديث: ${date.toLocaleDateString('en-GB')} ${date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
         }
+
+        window.toggleTransactions = (id, btn) => {
+            const wrapper = document.getElementById(`wrapper-${id}`);
+            const isExpanded = wrapper.classList.contains('expanded');
+            
+            // Toggle classes
+            wrapper.classList.toggle('expanded');
+            btn.classList.toggle('active');
+            
+            // Update text
+            const span = btn.querySelector('.btn-text span');
+            const count = span.textContent.match(/\d+/)[0];
+            span.textContent = isExpanded ? `عرض السجل (${count})` : `إخفاء السجل`;
+        };
 
         // Start
         initializeMonths();
