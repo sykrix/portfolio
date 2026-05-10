@@ -18,34 +18,34 @@
 
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --card-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
             --primary-color: #3b82f6;
             --primary-hover: #2563eb;
             --success-color: #10b981;
             --danger-color: #ef4444;
             --danger-hover: #dc2626;
             --warning-color: #f59e0b;
-            --input-bg: rgba(15, 23, 42, 0.6);
-            --border-radius-lg: 16px;
-            --border-radius-md: 12px;
-            --border-radius-sm: 8px;
+            --bg-color: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: rgba(0, 0, 0, 0.2);
+            --glass-blur: 12px;
+            --border-radius-lg: 24px;
+            --border-radius-md: 16px;
+            --border-radius-sm: 12px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --glass-blur: blur(12px);
+            --stat-bg: rgba(15, 23, 42, 0.4);
         }
 
         body.light-mode {
-            --bg-color: #f1f5f9;
+            --bg-color: #f8fafc;
             --card-bg: rgba(255, 255, 255, 0.8);
-            --card-border: rgba(0, 0, 0, 0.08);
-            --text-main: #1e293b;
+            --card-border: rgba(0, 0, 0, 0.06);
+            --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary-color: #2563eb;
-            --input-bg: #ffffff;
-            --glass-blur: blur(8px);
+            --input-bg: rgba(0, 0, 0, 0.03);
+            --stat-bg: rgba(255, 255, 255, 0.7);
         }
 
         * {
@@ -129,9 +129,13 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            transition: background-color 0.4s ease, border-color 0.4s ease;
+            transition: background-color 0.4s ease, border-color 0.4s ease, z-index 0s;
             position: relative;
             z-index: 2000;
+        }
+
+        .header-glass.active-notif {
+            z-index: 3100; /* Higher than overlay (2500) */
         }
 
         .header-top {
@@ -149,6 +153,32 @@
             align-items: center;
             gap: 10px;
             color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .live-info-bar {
+            display: flex;
+            gap: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .live-info-bar span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--input-bg);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+        }
+
+        .live-info-bar i {
+            color: var(--primary-color);
+            font-size: 0.75rem;
         }
 
         .header-actions {
@@ -160,22 +190,63 @@
         }
 
         .icon-btn {
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--card-bg);
             border: 1px solid var(--card-border);
             color: var(--text-main);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: var(--transition);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px; /* Apple-style Squircle */
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .icon-btn:hover {
+            transform: translateY(-2px) scale(1.05);
             background: rgba(255, 255, 255, 0.1);
-            transform: rotate(15deg);
+            color: var(--text-main);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        body.light-mode .icon-btn:hover {
+            background: rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .icon-btn i {
+            font-size: 1.2rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .notif-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 900;
+            min-width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
+            z-index: 10;
+            box-shadow: 0 0 10px rgba(255, 75, 43, 0.4);
+            animation: pulseBadge 2s infinite;
+        }
+
+        @keyframes pulseBadge {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 75, 43, 0.5); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(255, 75, 43, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 75, 43, 0); }
         }
 
         .salary-input-section {
@@ -309,7 +380,7 @@
         }
 
         .stat-box {
-            background: rgba(15, 23, 42, 0.4);
+            background: var(--stat-bg);
             padding: 16px;
             border-radius: var(--border-radius-md);
             display: flex;
@@ -318,11 +389,12 @@
             text-align: center;
             gap: 8px;
             border: 1px solid var(--card-border);
+            transition: var(--transition);
         }
 
         .stat-box.highlight {
             background: rgba(59, 130, 246, 0.1);
-            border-color: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.2);
         }
 
         .stat-label {
@@ -356,7 +428,7 @@
         .progress-bar-bg {
             width: 100%;
             height: 12px;
-            background: rgba(15, 23, 42, 0.6);
+            background: var(--input-bg);
             border-radius: 6px;
             overflow: hidden;
         }
@@ -449,10 +521,6 @@
             transition: var(--transition);
         }
 
-        body.light-mode .cat-title i {
-            background: rgba(37, 99, 235, 0.08);
-        }
-
         .cat-actions {
             display: flex;
             gap: 8px;
@@ -514,7 +582,7 @@
         }
 
         .month-selector {
-            background: rgba(15, 23, 42, 0.6);
+            background: var(--input-bg);
             border: 1px solid var(--card-border);
             color: var(--text-main);
             padding: 8px 16px;
@@ -696,10 +764,6 @@
                 gap: 12px;
             }
 
-            .stat-box.highlight {
-                grid-column: span 2;
-            }
-
             .categories-grid {
                 grid-template-columns: 1fr;
                 gap: 16px;
@@ -773,39 +837,7 @@
                 padding: 12px;
             }
         }
-
-        /* Small Mobile (360px and below) */
-        @media (max-width: 380px) {
-            .cat-row {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-
-            .cat-row .value {
-                align-self: flex-end;
-                font-size: 1.05rem;
-            }
-
-            .transaction-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .del-trans-btn {
-                align-self: flex-end;
-                background: rgba(239, 68, 68, 0.1);
-                border-radius: 6px;
-            }
-
-            .progress-labels {
-                flex-direction: column;
-                gap: 5px;
-                align-items: center;
-            }
-        }
-        /* Collapsible Transactions */
+        
         .toggle-trans-btn {
             width: 100%;
             background: rgba(255, 255, 255, 0.03);
@@ -829,21 +861,6 @@
             border-color: rgba(255, 255, 255, 0.2);
         }
 
-        .toggle-trans-btn .btn-text {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .toggle-trans-btn i.chevron {
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.8rem;
-        }
-
-        .toggle-trans-btn.active i.chevron {
-            transform: rotate(180deg);
-        }
-
         .transactions-wrapper {
             max-height: 0;
             overflow: hidden;
@@ -853,52 +870,32 @@
         }
 
         .transactions-wrapper.expanded {
-            max-height: 2000px; /* Safe limit for many transactions */
+            max-height: 2000px;
             opacity: 1;
             pointer-events: all;
             margin-top: 5px;
         }
-        /* Notifications */
+        
         .notif-container {
             position: relative;
         }
 
-        .notif-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: var(--danger-color);
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 800;
-            min-width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 2px solid var(--bg-color);
-            z-index: 10;
-            pointer-events: none;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
+
 
         .notif-panel {
             position: absolute;
             top: calc(100% + 15px);
             left: 0;
-            width: 340px;
-            max-height: 500px;
+            width: 360px;
+            max-height: 550px;
             z-index: 3000;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid var(--card-border);
+            background: #1e293b; /* Solid background for max readability */
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--border-radius-lg);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.8);
             transform-origin: top left;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             opacity: 0;
@@ -907,7 +904,9 @@
         }
 
         body.light-mode .notif-panel {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            border: 1px solid rgba(0, 0, 0, 0.08);
         }
 
         .notif-panel.active {
@@ -922,7 +921,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255,255,255,0.03);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        body.light-mode .notif-header {
+            background: rgba(0, 0, 0, 0.02);
         }
 
         .notif-header h3 {
@@ -964,7 +967,7 @@
         }
 
         .notif-item:hover {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .notif-item.unread {
@@ -975,49 +978,51 @@
         .notif-item-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 6px;
+            gap: 12px;
+            margin-bottom: 8px;
         }
 
         .notif-type {
-            font-size: 0.7rem;
-            font-weight: 800;
-            padding: 3px 8px;
-            border-radius: 5px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            padding: 4px 10px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .type-add { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .type-edit { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
-        .type-delete { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .type-add { background: #10b981; color: white; }
+        .type-edit { background: #3b82f6; color: white; }
+        .type-delete { background: #ef4444; color: white; }
+        .type-login { background: #f59e0b; color: white; }
 
         .notif-item-name {
-            font-weight: 700;
-            font-size: 0.95rem;
+            font-weight: 800;
+            font-size: 1.05rem;
             color: var(--text-main);
         }
 
         .notif-item-meta {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             display: grid;
             grid-template-columns: 1fr;
-            gap: 4px;
-            line-height: 1.5;
+            gap: 6px;
+            line-height: 1.6;
         }
 
         .notif-item-meta span {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .notif-item-meta i {
-            width: 16px;
+            width: 18px;
             color: var(--primary-color);
-            opacity: 0.7;
+            font-size: 0.9rem;
         }
 
         .notif-empty {
@@ -1038,17 +1043,37 @@
                 transform-origin: top center;
             }
         }
+        .notif-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            z-index: 2500;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .notif-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 
 <body>
 
+    <div id="notif-overlay" class="notif-overlay"></div>
+    
     <div id="offline-banner" class="offline-banner">
         <i class="fa-solid fa-cloud-slash"></i> عذراً، أنت في وضع عدم الاتصال. يتم عرض البيانات من الذاكرة المحلية فقط.
     </div>
 
     <div id="main-app" class="app-container">
-        <!-- Header -->
         <header class="header-glass">
             <div class="header-top">
                 <h1><i class="fa-solid fa-wallet"></i> تقسيم الراتب</h1>
@@ -1064,12 +1089,17 @@
                                 <h3>سجل النشاطات</h3>
                             </div>
                             <div id="notif-list" class="notif-list">
-                                <!-- سيتم حقن الإشعارات هنا -->
                             </div>
                         </div>
                     </div>
                     <select id="month-selector" class="month-selector"></select>
                 </div>
+            </div>
+
+            <div class="live-info-bar">
+                <span id="live-day"><i class="fa-solid fa-calendar-day"></i> ---</span>
+                <span id="live-date"><i class="fa-solid fa-calendar-alt"></i> ---</span>
+                <span id="live-time"><i class="fa-solid fa-clock"></i> ---</span>
             </div>
 
             <div class="salary-input-section">
@@ -1083,21 +1113,20 @@
             </div>
         </header>
 
-        <!-- Stats -->
         <section class="stats-section glass-card">
             <div class="stats-grid">
-                <div class="stat-box">
+                <div class="stat-box highlight">
                     <span class="stat-label">المخصص للأقسام</span>
-                    <span class="stat-value" id="stat-allocated">0</span>
+                    <span id="stat-allocated" class="stat-value">OMR 0.000</span>
                 </div>
                 <div class="stat-box">
                     <span class="stat-label">إجمالي المصروفات</span>
-                    <span class="stat-value warning" id="stat-used">0</span>
+                    <span id="stat-used" class="stat-value">OMR 0.000</span>
                 </div>
-                <div class="stat-box highlight">
-                    <span class="stat-label">المتبقي من الراتب</span>
-                    <span class="stat-value success" id="stat-remaining">0</span>
-                </div>
+            </div>
+            <div class="stat-box highlight" style="margin-top: 10px; width: 100%;">
+                <span class="stat-label">المتبقي من الراتب</span>
+                <span id="stat-remaining" class="stat-value success">OMR 0.000</span>
             </div>
 
             <div class="progress-container">
@@ -1260,6 +1289,7 @@
         }
 
         // DOM Elements
+        const header = document.querySelector('.header-glass');
         const monthSelector = document.getElementById('month-selector');
         const totalSalaryInput = document.getElementById('total-salary');
         const saveSalaryBtn = document.getElementById('save-salary-btn');
@@ -1294,6 +1324,7 @@
         const notifPanel = document.getElementById('notif-panel');
         const notifBadge = document.getElementById('notif-badge');
         const notifList = document.getElementById('notif-list');
+        const notifOverlay = document.getElementById('notif-overlay');
         const offlineBanner = document.getElementById('offline-banner');
 
         const expenseModal = document.getElementById('expense-modal');
@@ -1359,12 +1390,6 @@
         initTheme();
 
         // --- Activity Logging System ---
-        let userIP = "جاري التحميل...";
-        fetch('https://api.ipify.org?format=json')
-            .then(r => r.json())
-            .then(d => userIP = d.ip)
-            .catch(() => userIP = "غير متوفر");
-
         function getDeviceInfo() {
             const ua = navigator.userAgent;
             let device = "كمبيوتر";
@@ -1384,12 +1409,11 @@
             let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
             const newLog = {
                 id: Date.now(),
-                type, // 'add', 'edit', 'delete'
+                type, // 'add', 'edit', 'delete', 'login'
                 name,
                 section,
                 time: new Date().toLocaleString('en-GB'),
                 device: getDeviceInfo(),
-                ip: userIP,
                 unread: true
             };
             logs.unshift(newLog);
@@ -1414,8 +1438,8 @@
                 return;
             }
 
-            const typeLabels = { 'add': 'إضافة', 'edit': 'تعديل', 'delete': 'حذف' };
-            const typeIcons = { 'add': 'fa-plus-circle', 'edit': 'fa-pen-to-square', 'delete': 'fa-trash-can' };
+            const typeLabels = { 'add': 'إضافة', 'edit': 'تعديل', 'delete': 'حذف', 'login': 'دخول' };
+            const typeIcons = { 'add': 'fa-plus-circle', 'edit': 'fa-pen-to-square', 'delete': 'fa-trash-can', 'login': 'fa-right-to-bracket' };
 
             notifList.innerHTML = logs.map(log => `
                 <div class="notif-item ${log.unread ? 'unread' : ''}">
@@ -1427,15 +1451,41 @@
                         <span><i class="fa-solid fa-folder-tree"></i> ${log.section}</span>
                         <span><i class="fa-solid fa-clock"></i> ${log.time}</span>
                         <span><i class="fa-solid fa-laptop-mobile"></i> ${log.device}</span>
-                        <span><i class="fa-solid fa-network-wired"></i> IP: ${log.ip}</span>
                     </div>
                 </div>
             `).join('');
         }
 
+        // تسجيل الدخول (مرة واحدة لكل جلسة متصفح)
+        if (!sessionStorage.getItem('site_entry_logged')) {
+            setTimeout(() => {
+                logAction('login', 'فتح الموقع', 'النظام');
+                sessionStorage.setItem('site_entry_logged', 'true');
+            }, 1000);
+        }
+
+        // تحديث الوقت واليوم
+        function updateLiveInfo() {
+            const now = new Date();
+            const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            
+            document.getElementById('live-day').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${days[now.getDay()]}`;
+            
+            const day = now.toLocaleDateString('en-US', { day: 'numeric' });
+            const month = now.toLocaleDateString('ar-OM', { month: 'long' });
+            const year = now.toLocaleDateString('en-US', { year: 'numeric' });
+            
+            document.getElementById('live-date').innerHTML = `<i class="fa-solid fa-calendar-alt"></i> ${day} ${month} ${year}`;
+            document.getElementById('live-time').innerHTML = `<i class="fa-solid fa-clock"></i> ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
+        }
+        setInterval(updateLiveInfo, 1000);
+        updateLiveInfo();
+
         notifBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             notifPanel.classList.toggle('active');
+            notifOverlay.classList.toggle('active');
+            header.classList.toggle('active-notif');
             if (notifPanel.classList.contains('active')) {
                 // Mark all as read when opening
                 let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
@@ -1445,8 +1495,18 @@
             }
         });
 
-        document.addEventListener('click', () => {
+        document.addEventListener('click', (e) => {
+            if (!notifPanel.contains(e.target) && e.target !== notifBtn) {
+                notifPanel.classList.remove('active');
+                notifOverlay.classList.remove('active');
+                header.classList.remove('active-notif');
+            }
+        });
+
+        notifOverlay.addEventListener('click', () => {
             notifPanel.classList.remove('active');
+            notifOverlay.classList.remove('active');
+            header.classList.remove('active-notif');
         });
 
         notifPanel.addEventListener('click', (e) => {
@@ -1515,13 +1575,13 @@
             // عرض 3 أشهر سابقة + الشهر الحالي + 3 أشهر مستقبلية
             for (let i = -3; i <= 3; i++) {
                 const date = new Date(year, month - 1 + i, 1);
-                const y = date.getFullYear();
-                const m = date.getMonth();
-                const monthVal = `${y}-${(m + 1).toString().padStart(2, '0')}`;
+                const y = date.toLocaleDateString('en-US', { year: 'numeric' });
+                const mArabic = date.toLocaleDateString('ar-OM', { month: 'long' });
+                const monthVal = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
 
                 const option = document.createElement('option');
                 option.value = monthVal;
-                option.textContent = `${monthsArabic[m]} ${y}`;
+                option.textContent = `${mArabic} ${y}`;
                 monthSelector.appendChild(option);
                 
                 if (monthVal === currentFinancialMonth) option.selected = true;
@@ -1758,10 +1818,18 @@
 
             if (id) {
                 const index = categories.findIndex(c => c.id === id);
+                const oldName = categories[index].name;
+                const oldAlloc = categories[index].allocated;
+                
                 categories[index].name = catData.name;
                 categories[index].allocated = catData.allocated;
                 categories[index].icon = catData.icon;
-                logAction('edit', catData.name, 'إدارة الأقسام');
+                
+                let detail = catData.name;
+                if (oldName !== catData.name) detail = `${oldName} ➔ ${catData.name}`;
+                if (oldAlloc !== catData.allocated) detail += ` (${oldAlloc} ➔ ${catData.allocated})`;
+                
+                logAction('edit', detail, 'إدارة الأقسام');
             } else {
                 categories.push({ id: Date.now().toString(), ...catData });
                 logAction('add', catData.name, 'إدارة الأقسام');
