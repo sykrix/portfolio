@@ -1922,20 +1922,14 @@
 
         async function logAction(type, name, section) {
             const newLog = {
-                type, // 'add', 'edit', 'delete', 'login', 'pay', 'done'
+                type,
                 name,
                 section,
                 time: new Date().toLocaleString('en-GB'),
                 timestamp: db ? firebase.firestore.FieldValue.serverTimestamp() : Date.now(),
-                createdAt: new Date().toISOString(),
+                createdAt: new Date().toISOString(), // Fallback for local
                 device: getDeviceInfo()
             };
-
-            // Save locally as backup
-            let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-            logs.unshift({ ...newLog, timestamp: Date.now() });
-            if (logs.length > 50) logs = logs.slice(0, 50);
-            localStorage.setItem('activity_logs', JSON.stringify(logs));
 
             // Sync to Firebase
             if (db) {
@@ -1944,36 +1938,37 @@
                     await db.collection('budgets').doc("my_budget").collection('logs').add(newLog);
                 } catch (e) {
                     console.error("Failed to sync log:", e);
+                    // Local backup if firebase fails
+                    let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+                    logs.unshift({ ...newLog, timestamp: Date.now() });
+                    if (logs.length > 50) logs = logs.slice(0, 50);
+                    localStorage.setItem('activity_logs', JSON.stringify(logs));
+                    updateNotifUI(logs);
                 }
+            } else {
+                let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+                logs.unshift({ ...newLog, timestamp: Date.now() });
+                if (logs.length > 50) logs = logs.slice(0, 50);
+                localStorage.setItem('activity_logs', JSON.stringify(logs));
+                updateNotifUI(logs);
             }
-
-            updateNotifUI(JSON.parse(localStorage.getItem('activity_logs') || '[]'));
         }
 
         async function cleanupOldLogs() {
-            const threeDaysInMs = 3 * 24 * 60 * 60 * 1000;
-            const now = Date.now();
-            const cutoffDate = new Date(now - threeDaysInMs);
-
-            // Cleanup local logs
-            let localLogs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-            localLogs = localLogs.filter(log => {
-                const logTime = log.createdAt ? new Date(log.createdAt).getTime() : 0;
-                return logTime >= (now - threeDaysInMs);
-            });
-            localStorage.setItem('activity_logs', JSON.stringify(localLogs));
-
             if (!db) return;
             try {
                 await authReady;
+                const threeDaysAgo = new Date();
+                threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+                
                 const logsRef = db.collection('budgets').doc("my_budget").collection('logs');
-                const oldLogsSnap = await logsRef.where('createdAt', '<', cutoffDate.toISOString()).limit(50).get();
+                // Cleanup using createdAt (ISO string) as it's easier to query without complex timestamp objects
+                const oldLogsSnap = await logsRef.where('createdAt', '<', threeDaysAgo.toISOString()).limit(50).get();
                 
                 if (!oldLogsSnap.empty) {
                     const batch = db.batch();
                     oldLogsSnap.forEach(doc => batch.delete(doc.ref));
                     await batch.commit();
-                    console.log(`Cleaned up ${oldLogsSnap.size} old logs from Firebase`);
                 }
             } catch (e) {
                 console.error("Failed to cleanup old logs:", e);
@@ -1984,26 +1979,29 @@
             if (log.timestamp && typeof log.timestamp.toMillis === 'function') return log.timestamp.toMillis();
             if (typeof log.timestamp === 'number') return log.timestamp;
             if (log.createdAt) return new Date(log.createdAt).getTime();
-            return new Date().getTime();
+            return Date.now();
         }
 
         let unsubscribeLogs = null;
         async function initLogsSync() {
-            if (!db) {
-                const logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-                updateNotifUI(logs);
-                return;
-            }
-
+            if (!db) return;
             if (unsubscribeLogs) unsubscribeLogs();
             await authReady;
 
+            // Use 'timestamp' for server-side sorting (most reliable)
             unsubscribeLogs = db.collection('budgets').doc("my_budget").collection('logs')
-                .orderBy('createdAt', 'desc')
+                .orderBy('timestamp', 'desc')
                 .limit(50)
                 .onSnapshot(snap => {
                     const logs = [];
-                    snap.forEach(doc => logs.push({ id: doc.id, ...doc.data() }));
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        logs.push({ id: doc.id, ...data });
+                    });
+                    
+                    // Final sort locally just in case serverTimestamp is still null (pending)
+                    logs.sort((a, b) => getLogMillis(b) - getLogMillis(a));
+                    
                     updateNotifUI(logs);
                     localStorage.setItem('activity_logs', JSON.stringify(logs));
                 }, err => {
@@ -2011,18 +2009,19 @@
                     updateNotifUI(JSON.parse(localStorage.getItem('activity_logs') || '[]'));
                 });
             
-            // Run cleanup periodically
-            setTimeout(cleanupOldLogs, 5000);
+            cleanupOldLogs();
         }
 
-
         function updateNotifUI(logs = []) {
-            const lastSeen = localStorage.getItem('notif_last_seen') || '';
-            const unreadCount = logs.filter(l => l.createdAt > lastSeen).length;
+            const lastSeenTime = parseInt(localStorage.getItem('notif_last_seen_time') || '0');
+            const unreadCount = logs.filter(l => getLogMillis(l) > lastSeenTime).length;
             
             if (unreadCount > 0) {
                 notifBadge.textContent = unreadCount;
                 notifBadge.classList.remove('hidden');
+                // Trigger a subtle pulse on the notification button if there's a new unread
+                notifBtn.classList.add('pulse');
+                setTimeout(() => notifBtn.classList.remove('pulse'), 2000);
             } else {
                 notifBadge.classList.add('hidden');
             }
@@ -2035,19 +2034,22 @@
             const typeLabels = { 'add': 'إضافة', 'edit': 'تعديل', 'delete': 'حذف', 'login': 'دخول', 'done': 'تم', 'pay': 'سداد' };
             const typeIcons = { 'add': 'fa-plus-circle', 'edit': 'fa-pen-to-square', 'delete': 'fa-trash-can', 'login': 'fa-right-to-bracket', 'done': 'fa-circle-check', 'pay': 'fa-money-bill-wave' };
 
-            notifList.innerHTML = logs.map(log => `
-                <div class="notif-item ${log.createdAt > lastSeen ? 'unread' : ''}">
-                    <div class="notif-item-header">
-                        <span class="notif-type type-${log.type}"><i class="fa-solid ${typeIcons[log.type] || 'fa-circle-info'}"></i> ${typeLabels[log.type] || log.type}</span>
-                        <span class="notif-item-name">${log.name}</span>
+            notifList.innerHTML = logs.map(log => {
+                const isUnread = getLogMillis(log) > lastSeenTime;
+                return `
+                    <div class="notif-item ${isUnread ? 'unread' : ''}">
+                        <div class="notif-item-header">
+                            <span class="notif-type type-${log.type}"><i class="fa-solid ${typeIcons[log.type] || 'fa-circle-info'}"></i> ${typeLabels[log.type] || log.type}</span>
+                            <span class="notif-item-name">${log.name}</span>
+                        </div>
+                        <div class="notif-item-meta">
+                            <span><i class="fa-solid fa-folder-tree"></i> ${log.section}</span>
+                            <span><i class="fa-solid fa-clock"></i> ${log.time}</span>
+                            <span><i class="fa-solid fa-laptop-mobile"></i> ${log.device || 'جهاز'}</span>
+                        </div>
                     </div>
-                    <div class="notif-item-meta">
-                        <span><i class="fa-solid fa-folder-tree"></i> ${log.section}</span>
-                        <span><i class="fa-solid fa-clock"></i> ${log.time}</span>
-                        <span><i class="fa-solid fa-laptop-mobile"></i> ${log.device}</span>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         // تسجيل الدخول (مرة واحدة لكل جلسة متصفح)
@@ -2085,7 +2087,7 @@
                 let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
                 if (logs.length > 0) {
                     // Mark as read locally by saving the latest log's time
-                    localStorage.setItem('notif_last_seen', logs[0].createdAt);
+                    localStorage.setItem('notif_last_seen_time', getLogMillis(logs[0]).toString());
                 }
                 updateNotifUI(logs);
             }
