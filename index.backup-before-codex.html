@@ -709,91 +709,6 @@
             font-size: 1rem;
         }
 
-        .shopping-details {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .shopping-date,
-        .savings-date {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        .shopping-thumb {
-            width: 54px;
-            height: 54px;
-            object-fit: cover;
-            border-radius: var(--border-radius-sm);
-            border: 1px solid var(--card-border);
-            background: var(--input-bg);
-            flex: 0 0 auto;
-        }
-
-        .file-chip {
-            position: relative;
-            overflow: hidden;
-            min-width: 48px;
-            padding-inline: 14px;
-        }
-
-        .file-chip input {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .savings-summary {
-            padding: 18px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .savings-total {
-            font-size: 1.7rem;
-            font-weight: 800;
-            color: var(--success-color);
-        }
-
-        .savings-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .savings-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 14px;
-            padding: 14px 16px;
-        }
-
-        .savings-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            min-width: 0;
-        }
-
-        .savings-note {
-            font-weight: 700;
-            word-break: break-word;
-        }
-
-        .savings-amount {
-            color: var(--success-color);
-            font-weight: 800;
-            white-space: nowrap;
-        }
-
         /* Debt List Styles */
         .debt-card {
             padding: 16px;
@@ -885,30 +800,25 @@
         .close-modal-btn,
         .close-delete-btn,
         .close-password-btn,
-        .close-expense-btn,
-        .close-debt-btn {
-            background: rgba(255, 255, 255, 0.05);
+        .close-expense-btn {
+            background: none;
             border: none;
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: var(--transition);
-            width: 34px;
-            height: 34px;
+            min-width: 44px;
+            min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
         }
 
         .close-modal-btn:hover,
         .close-delete-btn:hover,
         .close-password-btn:hover,
-        .close-expense-btn:hover,
-        .close-debt-btn:hover {
-            background: rgba(239, 68, 68, 0.1);
+        .close-expense-btn:hover {
             color: var(--danger-color);
-            transform: rotate(90deg);
         }
 
         .form-group {
@@ -1017,7 +927,7 @@
         @media (max-width: 600px) {
             .app-container {
                 padding: 10px;
-                padding-bottom: 120px; /* Space for fixed bottom nav */
+                padding-bottom: 100px;
             }
 
             .header-glass,
@@ -1067,52 +977,6 @@
 
             .section-header h2 {
                 font-size: 1.2rem;
-            }
-
-            .main-nav {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: var(--card-bg);
-                backdrop-filter: var(--glass-blur);
-                -webkit-backdrop-filter: var(--glass-blur);
-                border-top: 1px solid var(--card-border);
-                margin-bottom: 0;
-                padding: 12px 10px calc(12px + env(safe-area-inset-bottom));
-                z-index: 1000;
-                gap: 8px;
-                border-radius: 0;
-                box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
-            }
-
-            .nav-tab {
-                padding: 8px 4px;
-                font-size: 0.72rem;
-                border-radius: var(--border-radius-sm);
-                background: transparent;
-                border: none;
-            }
-
-            .nav-tab.active {
-                background: var(--primary-color);
-                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-            }
-
-            .input-wrapper {
-                flex-wrap: wrap;
-            }
-
-            .shopping-item,
-            .savings-item,
-            .debt-footer,
-            .debt-info {
-                align-items: flex-start;
-            }
-
-            .shopping-thumb {
-                width: 48px;
-                height: 48px;
             }
 
             .modal-content {
@@ -1447,10 +1311,6 @@
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span>المشتريات</span>
             </div>
-            <div class="nav-tab" data-section="savings-section">
-                <i class="fa-solid fa-piggy-bank"></i>
-                <span>المدخرات</span>
-            </div>
         </nav>
 
         <!-- Main Sections -->
@@ -1491,36 +1351,11 @@
                 <div class="glass-card" style="padding: 20px; margin-bottom: 20px;">
                     <form id="shopping-form" class="input-wrapper">
                         <input type="text" id="shopping-input" placeholder="ماذا تريد أن تشتري؟" required>
-                        <label class="btn-secondary file-chip" title="إضافة صورة من الاستوديو">
-                            <i class="fa-solid fa-image"></i>
-                            <input type="file" id="shopping-image" accept="image/*">
-                        </label>
                         <button type="submit" class="btn-primary">إضافة</button>
                     </form>
                 </div>
                 <div id="shopping-list" class="shopping-list">
                     <!-- Shopping items will be injected here -->
-                </div>
-            </section>
-
-            <!-- Savings Section -->
-            <section id="savings-section" class="main-section hidden">
-                <div class="section-header">
-                    <h2>المدخرات</h2>
-                </div>
-                <div class="savings-summary glass-card">
-                    <span class="stat-label">مجموع المدخرات</span>
-                    <span id="savings-total" class="savings-total">OMR 0.000</span>
-                </div>
-                <div class="glass-card" style="padding: 20px; margin-bottom: 20px;">
-                    <form id="savings-form" class="input-wrapper">
-                        <input type="number" inputmode="decimal" id="savings-amount" required min="0" step="any" placeholder="المبلغ">
-                        <input type="text" id="savings-note" placeholder="ملاحظة اختيارية">
-                        <button type="submit" class="btn-success"><i class="fa-solid fa-plus"></i> إضافة</button>
-                    </form>
-                </div>
-                <div id="savings-list" class="savings-list">
-                    <!-- Savings will be injected here -->
                 </div>
             </section>
         </main>
@@ -1682,14 +1517,10 @@
         };
 
         let db = null;
-        let authReady = Promise.resolve();
         try {
             if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
                 firebase.initializeApp(firebaseConfig);
                 db = firebase.firestore();
-                authReady = firebase.auth().signInAnonymously().catch((err) => {
-                    console.warn("Anonymous auth unavailable:", err);
-                });
                 
                 // تفعيل التخزين المستمر (Offline Persistence) لتحسين المزامنة
                 db.enablePersistence().catch((err) => {
@@ -1719,6 +1550,8 @@
         const spendingPercentage = document.getElementById('spending-percentage');
         const progressBarFill = document.getElementById('progress-bar-fill');
         const lastUpdated = document.getElementById('last-updated');
+        const budgetAlert = document.getElementById('budget-alert');
+
         const categoriesGrid = document.getElementById('categories-grid');
         const addCategoryBtn = document.getElementById('add-category-btn');
 
@@ -1775,12 +1608,6 @@
         const shoppingList = document.getElementById('shopping-list');
         const shoppingForm = document.getElementById('shopping-form');
         const shoppingInput = document.getElementById('shopping-input');
-        const shoppingImageInput = document.getElementById('shopping-image');
-        const savingsForm = document.getElementById('savings-form');
-        const savingsAmountInput = document.getElementById('savings-amount');
-        const savingsNoteInput = document.getElementById('savings-note');
-        const savingsList = document.getElementById('savings-list');
-        const savingsTotal = document.getElementById('savings-total');
 
         // منع كتابة الحروف والرموز (e, -, +) في حقول الأرقام
         document.querySelectorAll('input[type="number"]').forEach(input => {
@@ -1795,10 +1622,7 @@
         let categories = [];
         let debts = [];
         let shoppingItems = [];
-        let savingsItems = [];
         let categoryToDelete = null;
-        let globalDataLoaded = false;
-        let unsubscribeGlobalData = null;
 
         // --- Financial Month Logic ---
         function getFinancialMonth(date = new Date()) {
@@ -1820,13 +1644,12 @@
         let isEditableMonth = true;
 
         // --- Theme System ---
-        async function initTheme() {
+        function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'dark';
             applyTheme(savedTheme);
 
             // Sync theme from Firebase
             if (db) {
-                await authReady;
                 db.collection('budgets').doc("my_budget").collection('system').doc('config').onSnapshot(snap => {
                     if (snap.exists && snap.data().theme) {
                         applyTheme(snap.data().theme);
@@ -1854,7 +1677,6 @@
 
             if (db) {
                 try {
-                    await authReady;
                     await db.collection('budgets').doc("my_budget").collection('system').doc('config').set({
                         theme: newTheme,
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
@@ -1863,7 +1685,6 @@
                     console.error("Failed to sync theme:", e);
                 }
             }
-            logAction('edit', newTheme === 'light' ? 'الوضع الفاتح' : 'الوضع الداكن', 'المظهر');
         });
 
         initTheme();
@@ -1886,12 +1707,11 @@
 
         async function logAction(type, name, section) {
             const newLog = {
-                type, // 'add', 'edit', 'delete', 'login', 'pay', 'done'
+                type, // 'add', 'edit', 'delete', 'login'
                 name,
                 section,
                 time: new Date().toLocaleString('en-GB'),
-                timestamp: db ? firebase.firestore.FieldValue.serverTimestamp() : Date.now(),
-                createdAt: new Date().toISOString(),
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 device: getDeviceInfo(),
                 unread: true
             };
@@ -1905,55 +1725,17 @@
             // Sync to Firebase
             if (db) {
                 try {
-                    await authReady;
                     await db.collection('budgets').doc("my_budget").collection('logs').add(newLog);
                 } catch (e) {
                     console.error("Failed to sync log:", e);
                 }
             }
 
-            updateNotifUI(JSON.parse(localStorage.getItem('activity_logs') || '[]'));
-        }
-
-        async function cleanupOldLogs() {
-            const threeDaysInMs = 3 * 24 * 60 * 60 * 1000;
-            const now = Date.now();
-            const cutoffDate = new Date(now - threeDaysInMs);
-
-            // Cleanup local logs
-            let localLogs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-            localLogs = localLogs.filter(log => {
-                const logTime = log.createdAt ? new Date(log.createdAt).getTime() : 0;
-                return logTime >= (now - threeDaysInMs);
-            });
-            localStorage.setItem('activity_logs', JSON.stringify(localLogs));
-
-            if (!db) return;
-            try {
-                await authReady;
-                const logsRef = db.collection('budgets').doc("my_budget").collection('logs');
-                const oldLogsSnap = await logsRef.where('createdAt', '<', cutoffDate.toISOString()).limit(50).get();
-                
-                if (!oldLogsSnap.empty) {
-                    const batch = db.batch();
-                    oldLogsSnap.forEach(doc => batch.delete(doc.ref));
-                    await batch.commit();
-                    console.log(`Cleaned up ${oldLogsSnap.size} old logs from Firebase`);
-                }
-            } catch (e) {
-                console.error("Failed to cleanup old logs:", e);
-            }
-        }
-
-        function getLogMillis(log) {
-            if (log.timestamp && typeof log.timestamp.toMillis === 'function') return log.timestamp.toMillis();
-            if (typeof log.timestamp === 'number') return log.timestamp;
-            if (log.createdAt) return new Date(log.createdAt).getTime();
-            return new Date().getTime();
+            // updateNotifUI will be triggered by Firebase listener
         }
 
         let unsubscribeLogs = null;
-        async function initLogsSync() {
+        function initLogsSync() {
             if (!db) {
                 const logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
                 updateNotifUI(logs);
@@ -1961,10 +1743,9 @@
             }
 
             if (unsubscribeLogs) unsubscribeLogs();
-            await authReady;
 
             unsubscribeLogs = db.collection('budgets').doc("my_budget").collection('logs')
-                .orderBy('createdAt', 'desc')
+                .orderBy('timestamp', 'desc')
                 .limit(50)
                 .onSnapshot(snap => {
                     const logs = [];
@@ -1975,14 +1756,28 @@
                     console.error("Logs sync error:", err);
                     updateNotifUI(JSON.parse(localStorage.getItem('activity_logs') || '[]'));
                 });
-            
-            // Run cleanup periodically
-            setTimeout(cleanupOldLogs, 5000);
         }
 
-
         function updateNotifUI(logs = []) {
-            const unreadCount = logs.filter(l => l.unread).length;
+            const threeDaysInMs = 3 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+
+            // Filter logs older than 3 days
+            const activeLogs = logs.filter(log => {
+                let logTime;
+                if (log.timestamp && typeof log.timestamp.toMillis === 'function') {
+                    logTime = log.timestamp.toMillis();
+                } else if (typeof log.timestamp === 'number') {
+                    logTime = log.timestamp;
+                } else {
+                    // Try to parse string time if timestamp is null
+                    try { logTime = new Date(log.time).getTime(); }
+                    catch(e) { logTime = 0; }
+                }
+                return (now - logTime) < threeDaysInMs;
+            });
+
+            const unreadCount = activeLogs.filter(l => l.unread).length;
             
             if (unreadCount > 0) {
                 notifBadge.textContent = unreadCount;
@@ -1991,18 +1786,18 @@
                 notifBadge.classList.add('hidden');
             }
 
-            if (logs.length === 0) {
+            if (activeLogs.length === 0) {
                 notifList.innerHTML = '<div class="notif-empty">لا توجد نشاطات مسجلة بعد.</div>';
                 return;
             }
 
-            const typeLabels = { 'add': 'إضافة', 'edit': 'تعديل', 'delete': 'حذف', 'login': 'دخول', 'done': 'تم', 'pay': 'سداد' };
-            const typeIcons = { 'add': 'fa-plus-circle', 'edit': 'fa-pen-to-square', 'delete': 'fa-trash-can', 'login': 'fa-right-to-bracket', 'done': 'fa-circle-check', 'pay': 'fa-money-bill-wave' };
+            const typeLabels = { 'add': 'إضافة', 'edit': 'تعديل', 'delete': 'حذف', 'login': 'دخول' };
+            const typeIcons = { 'add': 'fa-plus-circle', 'edit': 'fa-pen-to-square', 'delete': 'fa-trash-can', 'login': 'fa-right-to-bracket' };
 
-            notifList.innerHTML = logs.map(log => `
+            notifList.innerHTML = activeLogs.map(log => `
                 <div class="notif-item ${log.unread ? 'unread' : ''}">
                     <div class="notif-item-header">
-                        <span class="notif-type type-${log.type}"><i class="fa-solid ${typeIcons[log.type] || 'fa-circle-info'}"></i> ${typeLabels[log.type] || log.type}</span>
+                        <span class="notif-type type-${log.type}"><i class="fa-solid ${typeIcons[log.type]}"></i> ${typeLabels[log.type]}</span>
                         <span class="notif-item-name">${log.name}</span>
                     </div>
                     <div class="notif-item-meta">
@@ -2021,7 +1816,6 @@
                 sessionStorage.setItem('site_entry_logged', 'true');
             }, 1000);
         }
-
         // تحديث الوقت واليوم
         function updateLiveInfo() {
             const now = new Date();
@@ -2045,22 +1839,18 @@
             notifOverlay.classList.toggle('active');
             header.classList.toggle('active-notif');
             if (notifPanel.classList.contains('active')) {
-                // Mark as read locally
-                let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-                logs.forEach(l => l.unread = false);
-                localStorage.setItem('activity_logs', JSON.stringify(logs));
-                updateNotifUI(logs);
-
                 // Mark visible logs as read in Firebase
                 if (db) {
-                    try {
-                        await authReady;
-                        const snap = await db.collection('budgets').doc("my_budget").collection('logs')
-                            .where('unread', '==', true).get();
-                        const batch = db.batch();
-                        snap.forEach(doc => batch.update(doc.ref, { unread: false }));
-                        await batch.commit();
-                    } catch(e) { console.warn("Sync read status failed", e); }
+                    const snap = await db.collection('budgets').doc("my_budget").collection('logs')
+                        .where('unread', '==', true).limit(20).get();
+                    const batch = db.batch();
+                    snap.forEach(doc => batch.update(doc.ref, { unread: false }));
+                    await batch.commit();
+                } else {
+                    let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+                    logs.forEach(l => l.unread = false);
+                    localStorage.setItem('activity_logs', JSON.stringify(logs));
+                    updateNotifUI(logs);
                 }
             }
         });
@@ -2083,6 +1873,10 @@
             e.stopPropagation(); // Prevent closing when clicking inside
         });
 
+
+
+        initLogsSync();
+
         // --- Tab Switching Logic ---
         navTabs.forEach(tab => {
             tab.addEventListener('click', () => {
@@ -2100,9 +1894,6 @@
                         section.classList.add('hidden');
                     }
                 });
-                
-                // Track opening sections for notifications (optional)
-                // logAction('edit', tab.textContent.trim(), 'فتح قسم');
             });
         });
 
@@ -2146,114 +1937,56 @@
         // مراقبة حالة الاتصال بـ Firebase
         if (db) {
             db.enableNetwork().catch(err => console.error("Enable Network Error", err));
+            
+            // مراقبة حالة الاتصال بالإنترنت
             window.addEventListener('online', () => offlineBanner.classList.remove('active'));
             window.addEventListener('offline', () => offlineBanner.classList.add('active'));
+            
             if (!navigator.onLine) offlineBanner.classList.add('active');
         }
 
         // --- Init & Sync ---
         function initializeMonths() {
+            const monthsArabic = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+            
+            // نحصل على السنة والشهر الحاليين من الشهر المالي
             const [year, month] = currentFinancialMonth.split('-').map(Number);
+
+            // عرض 3 أشهر سابقة + الشهر الحالي + 3 أشهر مستقبلية
             for (let i = -3; i <= 3; i++) {
                 const date = new Date(year, month - 1 + i, 1);
                 const y = date.toLocaleDateString('en-US', { year: 'numeric' });
                 const mArabic = date.toLocaleDateString('ar-OM', { month: 'long' });
                 const monthVal = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+
                 const option = document.createElement('option');
                 option.value = monthVal;
                 option.textContent = `${mArabic} ${y}`;
                 monthSelector.appendChild(option);
+                
                 if (monthVal === currentFinancialMonth) option.selected = true;
             }
         }
 
         let unsubscribeFirebase = null;
 
-        function getNowStamp() {
-            const now = new Date();
-            return `${now.toLocaleDateString('en-GB')} ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
-        }
-
-        function makeId(prefix = '') {
-            return `${prefix}${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
-        }
-
-        function normalizeGlobalData(data = {}) {
-            debts = Array.isArray(data.debts) ? data.debts : [];
-            shoppingItems = Array.isArray(data.shoppingItems) ? data.shoppingItems : [];
-            savingsItems = Array.isArray(data.savingsItems) ? data.savingsItems : [];
-            saveGlobalDataLocal();
-        }
-
-        function saveGlobalDataLocal() {
-            localStorage.setItem('global_debts', JSON.stringify(debts));
-            localStorage.setItem('global_shopping', JSON.stringify(shoppingItems));
-            localStorage.setItem('global_savings', JSON.stringify(savingsItems));
-        }
-
-        function loadGlobalDataLocal() {
-            try { debts = JSON.parse(localStorage.getItem('global_debts') || '[]'); } catch (e) { debts = []; }
-            try { shoppingItems = JSON.parse(localStorage.getItem('global_shopping') || '[]'); } catch (e) { shoppingItems = []; }
-            try { savingsItems = JSON.parse(localStorage.getItem('global_savings') || '[]'); } catch (e) { savingsItems = []; }
-        }
-
-        async function startGlobalDataSync() {
-            if (globalDataLoaded) return;
-            globalDataLoaded = true;
-
-            loadGlobalDataLocal();
-            updateUI();
-
-            if (!db) return;
-            await authReady;
-            const globalRef = db.collection('budgets').doc("my_budget").collection('system').doc('globalData');
-            if (unsubscribeGlobalData) unsubscribeGlobalData();
-            unsubscribeGlobalData = globalRef.onSnapshot(snap => {
-                if (snap.exists) {
-                    normalizeGlobalData(snap.data());
-                    updateUI();
-                } else {
-                    syncGlobalData();
-                }
-            }, error => {
-                console.error("Global data sync error:", error);
-            });
-        }
-
-        async function syncGlobalData() {
-            saveGlobalDataLocal();
-            if (!db) return;
-            try {
-                await authReady;
-                await db.collection('budgets').doc("my_budget").collection('system').doc('globalData').set({
-                    debts,
-                    shoppingItems,
-                    savingsItems,
-                    lastUpdated: new Date().toISOString()
-                }, { merge: true });
-            } catch (e) {
-                console.error("Failed to sync global data:", e);
-            }
-        }
-
         async function loadData() {
             const month = monthSelector.value;
-            await startGlobalDataSync();
+            // السماح بالتعديل للشهر الحالي والأشهر المستقبلية (للتخطيط)
             isEditableMonth = (month >= currentFinancialMonth);
 
+            // تحديث حالة الأزرار العامة بناءً على التاريخ
             if (!isEditableMonth) {
                 editSalaryBtn.classList.add('hidden');
                 addCategoryBtn.classList.add('hidden');
                 addDebtBtn.classList.add('hidden');
                 shoppingForm.classList.add('hidden');
-                savingsForm.classList.add('hidden');
                 saveSalaryBtn.classList.add('hidden');
             } else {
                 editSalaryBtn.classList.remove('hidden');
                 addCategoryBtn.classList.remove('hidden');
                 addDebtBtn.classList.remove('hidden');
                 shoppingForm.classList.remove('hidden');
-                savingsForm.classList.remove('hidden');
             }
 
             if (unsubscribeFirebase) {
@@ -2261,19 +1994,24 @@
                 unsubscribeFirebase = null;
             }
 
+            // 1. Try Loading from Firebase if active
             if (db) {
                 try {
-                    await authReady;
                     const docRef = db.collection('budgets').doc("my_budget").collection('months').doc(month);
+
+                    // Setup Realtime Listener
                     unsubscribeFirebase = docRef.onSnapshot(snap => {
                         if (snap.exists) {
                             const data = snap.data();
                             totalSalary = data.totalSalary || 529;
                             categories = data.categories || [];
+                            debts = data.debts || [];
+                            shoppingItems = data.shoppingItems || [];
                             totalSalaryInput.value = totalSalary;
                             updateLastModified(data.lastUpdated);
                             updateUI();
                         } else {
+                            // Document doesn't exist on cloud yet, fallback to default and sync
                             loadLocalData(month);
                             syncData();
                         }
@@ -2281,14 +2019,15 @@
                         console.error("Firebase Snapshot Error:", error);
                         loadLocalData(month);
                     });
-                    return;
+                    return; // The listener will trigger the initial load
                 } catch (e) {
                     console.error("Error accessing Firebase, falling back to local.", e);
                 }
             }
+
+            // 2. Fallback to Local Storage
             loadLocalData(month);
         }
-
 
         function loadLocalData(month) {
             if (localStorage.getItem(`salary_${month}`)) {
@@ -2311,7 +2050,18 @@
                 catch (e) { categories = []; }
             }
 
-            loadGlobalDataLocal(month);
+            // Load Debts and Shopping locally
+            const debtsKey = `debts_${month}`;
+            if (localStorage.getItem(debtsKey)) {
+                try { debts = JSON.parse(localStorage.getItem(debtsKey)); }
+                catch (e) { debts = []; }
+            } else { debts = []; }
+
+            const shoppingKey = `shopping_${month}`;
+            if (localStorage.getItem(shoppingKey)) {
+                try { shoppingItems = JSON.parse(localStorage.getItem(shoppingKey)); }
+                catch (e) { shoppingItems = []; }
+            } else { shoppingItems = []; }
 
             // Migrate old data structure (used -> transactions)
             let migrated = false;
@@ -2346,17 +2096,19 @@
             const month = monthSelector.value;
             // Always save locally
             localStorage.setItem(`categories_${month}`, JSON.stringify(categories));
+            localStorage.setItem(`debts_${month}`, JSON.stringify(debts));
+            localStorage.setItem(`shopping_${month}`, JSON.stringify(shoppingItems));
             localStorage.setItem(`salary_${month}`, totalSalary);
-            saveGlobalDataLocal();
 
             // Sync to Firebase if connected
             if (db) {
                 try {
-                    await authReady;
                     const docRef = db.collection('budgets').doc("my_budget").collection('months').doc(month);
                     await docRef.set({
                         totalSalary: totalSalary,
                         categories: categories,
+                        debts: debts,
+                        shoppingItems: shoppingItems,
                         lastUpdated: new Date().toISOString()
                     });
                 } catch (e) {
@@ -2585,7 +2337,6 @@
             renderCategories();
             renderDebts();
             renderShoppingItems();
-            renderSavingsItems();
         }
 
         // --- Debt Management ---
@@ -2610,7 +2361,6 @@
                         ${isEditableMonth ? `
                         <div class="cat-actions">
                             <button class="cat-btn edit" onclick="requestEditDebt('${debt.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button class="cat-btn" style="color: var(--success-color);" title="تم دفع الدين" onclick="payDebt('${debt.id}')"><i class="fa-solid fa-circle-check"></i></button>
                             <button class="cat-btn delete" onclick="requestDeleteDebt('${debt.id}')"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
                         ` : '<span style="font-size: 0.7rem; color: var(--text-muted);">مؤرشف</span>'}
@@ -2635,7 +2385,8 @@
         debtForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const id = debtIdInput.value;
-            const dateStr = getNowStamp();
+            const now = new Date();
+            const dateStr = `${now.toLocaleDateString('en-GB')} ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
 
             const debtData = {
                 person: debtPersonInput.value,
@@ -2651,11 +2402,11 @@
                     logAction('edit', `${debtData.person} (${debtData.amount})`, 'الديون');
                 }
             } else {
-                debts.push({ id: makeId('debt_'), ...debtData });
+                debts.push({ id: Date.now().toString(), ...debtData });
                 logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون');
             }
 
-            syncGlobalData();
+            syncData();
             updateUI();
             debtModal.classList.add('hidden');
         });
@@ -2680,22 +2431,9 @@
                     const debt = debts.find(d => d.id === id);
                     const name = debt ? debt.person : 'دين';
                     debts = debts.filter(d => d.id !== id);
-                    syncGlobalData();
+                    syncData();
                     updateUI();
                     logAction('delete', name, 'الديون');
-                }
-            });
-        };
-
-        window.payDebt = (id) => {
-            requirePassword(() => {
-                const debt = debts.find(d => d.id === id);
-                if (!debt) return;
-                if (confirm("هل تم دفع هذا الدين بالكامل؟")) {
-                    debts = debts.filter(d => d.id !== id);
-                    syncGlobalData();
-                    updateUI();
-                    logAction('pay', `${debt.person} (${debt.amount})`, 'الديون');
                 }
             });
         };
@@ -2708,19 +2446,14 @@
                 return;
             }
 
-            const sortedItems = [...shoppingItems].sort((a, b) => Number(a.checked) - Number(b.checked));
-            sortedItems.forEach(item => {
+            shoppingItems.forEach(item => {
                 const div = document.createElement('div');
                 div.className = `shopping-item ${item.checked ? 'checked' : ''}`;
                 div.innerHTML = `
-                    ${item.image ? `<img class="shopping-thumb" src="${item.image}" alt="">` : ''}
                     <div class="checkbox-wrapper" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">
                         <i class="fa-solid fa-check"></i>
                     </div>
-                    <div class="shopping-details" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">
-                        <span class="item-text">${item.text}</span>
-                        ${item.date ? `<span class="shopping-date"><i class="fa-regular fa-clock"></i> ${item.date}</span>` : ''}
-                    </div>
+                    <span class="item-text" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">${item.text}</span>
                     ${isEditableMonth ? `
                     <button class="cat-btn delete" onclick="deleteShoppingItem('${item.id}')">
                         <i class="fa-solid fa-trash-can"></i>
@@ -2731,131 +2464,35 @@
             });
         }
 
-        function resizeImageFile(file) {
-            return new Promise((resolve, reject) => {
-                if (!file) return resolve('');
-                const reader = new FileReader();
-                reader.onload = () => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const maxSize = 640;
-                        const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
-                        const canvas = document.createElement('canvas');
-                        canvas.width = Math.max(1, Math.round(img.width * scale));
-                        canvas.height = Math.max(1, Math.round(img.height * scale));
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.72));
-                    };
-                    img.onerror = reject;
-                    img.src = reader.result;
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
-
-        shoppingForm.addEventListener('submit', async (e) => {
+        shoppingForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const text = shoppingInput.value.trim();
             if (!text) return;
-            let image = '';
-            try {
-                image = await resizeImageFile(shoppingImageInput.files[0]);
-            } catch (error) {
-                alert("تعذر تجهيز الصورة، جرّب صورة أصغر.");
-                return;
-            }
 
             shoppingItems.push({
-                id: makeId('shop_'),
+                id: Date.now().toString(),
                 text: text,
-                checked: false,
-                image,
-                date: getNowStamp()
+                checked: false
             });
 
             shoppingInput.value = '';
-            if (shoppingImageInput) shoppingImageInput.value = '';
-            syncGlobalData();
+            syncData();
             updateUI();
-            logAction('add', text, 'المشتريات');
         });
 
         window.toggleShoppingItem = (id) => {
             const item = shoppingItems.find(i => i.id === id);
             if (item) {
                 item.checked = !item.checked;
-                item.checkedAt = item.checked ? getNowStamp() : '';
-                syncGlobalData();
+                syncData();
                 updateUI();
-                logAction(item.checked ? 'done' : 'edit', item.text, item.checked ? 'تم شراء غرض' : 'إلغاء شراء غرض');
             }
         };
 
         window.deleteShoppingItem = (id) => {
-            const item = shoppingItems.find(i => i.id === id);
             shoppingItems = shoppingItems.filter(i => i.id !== id);
-            syncGlobalData();
+            syncData();
             updateUI();
-            logAction('delete', item ? item.text : 'غرض', 'المشتريات');
-        };
-
-        function renderSavingsItems() {
-            if (!savingsList || !savingsTotal) return;
-            const totalSavings = savingsItems.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
-            savingsTotal.textContent = formatCurrency(totalSavings);
-
-            savingsList.innerHTML = '';
-            if (savingsItems.length === 0) {
-                savingsList.innerHTML = '<div class="glass-card" style="padding: 30px; text-align: center; color: var(--text-muted);">لا توجد مدخرات مسجلة بعد.</div>';
-                return;
-            }
-
-            [...savingsItems].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')).forEach(item => {
-                const row = document.createElement('div');
-                row.className = 'savings-item glass-card';
-                row.innerHTML = `
-                    <div class="savings-info">
-                        <span class="savings-note">${item.note || 'مدخرات'}</span>
-                        <span class="savings-date"><i class="fa-regular fa-clock"></i> ${item.date || ''}</span>
-                    </div>
-                    <div class="cat-actions">
-                        <span class="savings-amount">${formatCurrency(item.amount)}</span>
-                        ${isEditableMonth ? `<button class="cat-btn delete" onclick="deleteSavingsItem('${item.id}')"><i class="fa-solid fa-trash-can"></i></button>` : ''}
-                    </div>
-                `;
-                savingsList.appendChild(row);
-            });
-        }
-
-        savingsForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const amount = parseFloat(savingsAmountInput.value || 0);
-            if (!amount) return;
-            const note = savingsNoteInput.value.trim() || 'مدخرات';
-            savingsItems.push({
-                id: makeId('save_'),
-                amount,
-                note,
-                date: getNowStamp(),
-                createdAt: new Date().toISOString()
-            });
-            savingsAmountInput.value = '';
-            savingsNoteInput.value = '';
-            syncGlobalData();
-            updateUI();
-            logAction('add', `${note} (${amount})`, 'المدخرات');
-        });
-
-        window.deleteSavingsItem = (id) => {
-            requirePassword(() => {
-                const item = savingsItems.find(i => i.id === id);
-                savingsItems = savingsItems.filter(i => i.id !== id);
-                syncGlobalData();
-                updateUI();
-                logAction('delete', item ? `${item.note} (${item.amount})` : 'مدخرات', 'المدخرات');
-            });
         };
 
         function getCategoryIcon(name) {
