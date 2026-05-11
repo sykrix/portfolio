@@ -1936,6 +1936,7 @@
                 try {
                     await authReady;
                     await db.collection('budgets').doc("my_budget").collection('logs').add(newLog);
+                    console.log("تم إرسال الإشعار بنجاح إلى Firebase:", newLog.name);
                 } catch (e) {
                     console.error("Failed to sync log:", e);
                     // Local backup if firebase fails
@@ -1986,30 +1987,40 @@
         async function initLogsSync() {
             if (!db) return;
             if (unsubscribeLogs) unsubscribeLogs();
-            await authReady;
-
-            // Use 'timestamp' for server-side sorting (most reliable)
-            unsubscribeLogs = db.collection('budgets').doc("my_budget").collection('logs')
-                .orderBy('timestamp', 'desc')
-                .limit(50)
-                .onSnapshot(snap => {
-                    const logs = [];
-                    snap.forEach(doc => {
-                        const data = doc.data();
-                        logs.push({ id: doc.id, ...data });
-                    });
-                    
-                    // Final sort locally just in case serverTimestamp is still null (pending)
-                    logs.sort((a, b) => getLogMillis(b) - getLogMillis(a));
-                    
-                    updateNotifUI(logs);
-                    localStorage.setItem('activity_logs', JSON.stringify(logs));
-                }, err => {
-                    console.error("Logs sync error:", err);
-                    updateNotifUI(JSON.parse(localStorage.getItem('activity_logs') || '[]'));
-                });
             
-            cleanupOldLogs();
+            try {
+                await authReady;
+                console.log("جاري البدء في مزامنة الإشعارات...");
+
+                // نستخدم 'createdAt' للترتيب لأنه يضمن ظهور الإشعار فوراً حتى قبل وصوله للسيرفر
+                unsubscribeLogs = db.collection('budgets').doc("my_budget").collection('logs')
+                    .orderBy('createdAt', 'desc')
+                    .limit(50)
+                    .onSnapshot(snap => {
+                        console.log(`تم استلام ${snap.size} إشعار من Firebase`);
+                        const logs = [];
+                        snap.forEach(doc => {
+                            const data = doc.data();
+                            logs.push({ id: doc.id, ...data });
+                        });
+                        
+                        // ترتيب إضافي محلي لضمان الدقة
+                        logs.sort((a, b) => getLogMillis(b) - getLogMillis(a));
+                        
+                        updateNotifUI(logs);
+                        localStorage.setItem('activity_logs', JSON.stringify(logs));
+                    }, err => {
+                        console.error("خطأ في مزامنة الإشعارات:", err);
+                        if (err.code === 'failed-precondition') {
+                            console.warn("قد تحتاج لإضافة Index في Firebase Firestore لهذا الترتيب.");
+                        }
+                        updateNotifUI(JSON.parse(localStorage.getItem('activity_logs') || '[]'));
+                    });
+                
+                cleanupOldLogs();
+            } catch (e) {
+                console.error("Critical logs initialization error:", e);
+            }
         }
 
         function updateNotifUI(logs = []) {
@@ -2267,6 +2278,7 @@
         async function loadData() {
             const month = monthSelector.value;
             await startGlobalDataSync();
+            initLogsSync(); // تشغيل مزامنة الإشعارات فوراً بشكل مستقل
             isEditableMonth = (month >= currentFinancialMonth);
 
             if (!isEditableMonth) {
