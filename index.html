@@ -1062,7 +1062,7 @@
         @media (max-width: 600px) {
             .app-container {
                 padding: 10px;
-                padding-bottom: 120px; /* Space for fixed bottom nav */
+                padding-bottom: 40px;
             }
 
             .header-glass,
@@ -1115,33 +1115,17 @@
             }
 
             .main-nav {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background: var(--card-bg);
-                backdrop-filter: var(--glass-blur);
-                -webkit-backdrop-filter: var(--glass-blur);
-                border-top: 1px solid var(--card-border);
-                margin-bottom: 0;
-                padding: 12px 10px calc(12px + env(safe-area-inset-bottom));
-                z-index: 1000;
-                gap: 8px;
-                border-radius: 0;
-                box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+                position: sticky;
+                top: 8px;
+                z-index: 900;
+                gap: 6px;
+                margin-bottom: 20px;
             }
 
             .nav-tab {
-                padding: 8px 4px;
-                font-size: 0.72rem;
+                padding: 10px 6px;
+                font-size: 0.78rem;
                 border-radius: var(--border-radius-sm);
-                background: transparent;
-                border: none;
-            }
-
-            .nav-tab.active {
-                background: var(--primary-color);
-                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
             }
 
             .input-wrapper {
@@ -1944,8 +1928,7 @@
                 time: new Date().toLocaleString('en-GB'),
                 timestamp: db ? firebase.firestore.FieldValue.serverTimestamp() : Date.now(),
                 createdAt: new Date().toISOString(),
-                device: getDeviceInfo(),
-                unread: true
+                device: getDeviceInfo()
             };
 
             // Save locally as backup
@@ -2034,7 +2017,8 @@
 
 
         function updateNotifUI(logs = []) {
-            const unreadCount = logs.filter(l => l.unread).length;
+            const lastSeen = localStorage.getItem('notif_last_seen') || '';
+            const unreadCount = logs.filter(l => l.createdAt > lastSeen).length;
             
             if (unreadCount > 0) {
                 notifBadge.textContent = unreadCount;
@@ -2052,7 +2036,7 @@
             const typeIcons = { 'add': 'fa-plus-circle', 'edit': 'fa-pen-to-square', 'delete': 'fa-trash-can', 'login': 'fa-right-to-bracket', 'done': 'fa-circle-check', 'pay': 'fa-money-bill-wave' };
 
             notifList.innerHTML = logs.map(log => `
-                <div class="notif-item ${log.unread ? 'unread' : ''}">
+                <div class="notif-item ${log.createdAt > lastSeen ? 'unread' : ''}">
                     <div class="notif-item-header">
                         <span class="notif-type type-${log.type}"><i class="fa-solid ${typeIcons[log.type] || 'fa-circle-info'}"></i> ${typeLabels[log.type] || log.type}</span>
                         <span class="notif-item-name">${log.name}</span>
@@ -2097,23 +2081,13 @@
             notifOverlay.classList.toggle('active');
             header.classList.toggle('active-notif');
             if (notifPanel.classList.contains('active')) {
-                // Mark as read locally
+                // Get current logs
                 let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-                logs.forEach(l => l.unread = false);
-                localStorage.setItem('activity_logs', JSON.stringify(logs));
-                updateNotifUI(logs);
-
-                // Mark visible logs as read in Firebase
-                if (db) {
-                    try {
-                        await authReady;
-                        const snap = await db.collection('budgets').doc("my_budget").collection('logs')
-                            .where('unread', '==', true).get();
-                        const batch = db.batch();
-                        snap.forEach(doc => batch.update(doc.ref, { unread: false }));
-                        await batch.commit();
-                    } catch(e) { console.warn("Sync read status failed", e); }
+                if (logs.length > 0) {
+                    // Mark as read locally by saving the latest log's time
+                    localStorage.setItem('notif_last_seen', logs[0].createdAt);
                 }
+                updateNotifUI(logs);
             }
         });
 
