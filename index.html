@@ -933,6 +933,51 @@
             flex: 1;
         }
 
+        /* Image Preview Modal */
+        .image-modal-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #preview-img {
+            max-width: 100%;
+            max-height: 90vh;
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 2px solid var(--card-border);
+            object-fit: contain;
+        }
+
+        .close-image-btn {
+            position: absolute;
+            top: -45px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: var(--transition);
+            z-index: 1001;
+        }
+
+        .close-image-btn:hover {
+            background: var(--danger-color);
+            transform: scale(1.1) rotate(90deg);
+        }
+
         .transactions-list {
             display: flex;
             flex-direction: column;
@@ -1668,17 +1713,24 @@
         </div>
     </div>
 
+    <!-- Image Preview Modal -->
+    <div id="image-modal" class="modal-overlay hidden" onclick="closeImageModal()">
+        <div class="image-modal-content" onclick="event.stopPropagation()">
+            <button class="close-image-btn" onclick="closeImageModal()"><i class="fa-solid fa-xmark"></i></button>
+            <img id="preview-img" src="" alt="Image Preview">
+        </div>
+    </div>
+
     <script>
         // Firebase Setup
         // يرجى استبدال القيم التالية بمفاتيح مشروعك في Firebase لتفعيل المزامنة السحابية
         const firebaseConfig = {
-            apiKey: "AIzaSyD5kRsU2TTiwhhMFUaTjoTeIvtg961PQKc",
-            authDomain: "savings-app-31ae2.firebaseapp.com",
-            projectId: "savings-app-31ae2",
-            storageBucket: "savings-app-31ae2.firebasestorage.app",
-            messagingSenderId: "335920014033",
-            appId: "1:335920014033:web:6625c71cc656bf3f92dbf0",
-            measurementId: "G-TLRVJ12JJQ"
+            apiKey: "AIzaSyAeOIQdh-7Cbo85Ncn6bNNDxySARne06VU",
+            authDomain: "savings-app-722bd.firebaseapp.com",
+            projectId: "savings-app-722bd",
+            storageBucket: "savings-app-722bd.firebasestorage.app",
+            messagingSenderId: "326060844117",
+            appId: "1:326060844117:web:2abb781aa569df9ae320dc"
         };
 
         let db = null;
@@ -2713,7 +2765,7 @@
                 const div = document.createElement('div');
                 div.className = `shopping-item ${item.checked ? 'checked' : ''}`;
                 div.innerHTML = `
-                    ${item.image ? `<img class="shopping-thumb" src="${item.image}" alt="">` : ''}
+                    ${item.image ? `<img class="shopping-thumb" src="${item.image}" alt="" onclick="openImageModal('${item.image}')" style="cursor: zoom-in;">` : ''}
                     <div class="checkbox-wrapper" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">
                         <i class="fa-solid fa-check"></i>
                     </div>
@@ -2730,6 +2782,20 @@
                 shoppingList.appendChild(div);
             });
         }
+
+        window.openImageModal = (src) => {
+            const modal = document.getElementById('image-modal');
+            const img = document.getElementById('preview-img');
+            img.src = src;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        };
+
+        window.closeImageModal = () => {
+            const modal = document.getElementById('image-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore scrolling
+        };
 
         function resizeImageFile(file) {
             return new Promise((resolve, reject) => {
