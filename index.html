@@ -2252,7 +2252,7 @@
                     normalizeGlobalData(snap.data());
                     updateUI();
                 } else {
-                    syncGlobalData();
+                    console.info("Global data document not found. Waiting for a manual change before creating it.");
                 }
             }, error => {
                 console.error("Global data sync error:", error);
@@ -2315,7 +2315,7 @@
                             updateUI();
                         } else {
                             loadLocalData(month);
-                            syncData();
+                            console.info("Month data document not found. Local/default data was loaded without uploading automatically.");
                         }
                     }, error => {
                         console.error("Firebase Snapshot Error:", error);
@@ -2376,7 +2376,10 @@
                 return cat;
             });
 
-            if (migrated) syncData();
+            if (migrated) {
+                localStorage.setItem(`categories_${month}`, JSON.stringify(categories));
+                localStorage.setItem(`salary_${month}`, totalSalary);
+            }
 
             updateLastModified();
             updateUI();
