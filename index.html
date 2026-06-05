@@ -265,6 +265,25 @@
             gap: 10px;
         }
 
+        .salary-input-wrapper input {
+            direction: ltr;
+            text-align: right;
+            font-weight: 700;
+        }
+
+        .salary-toggle-btn {
+            min-width: 52px;
+            padding: 0;
+        }
+
+        .password-error {
+            color: var(--danger-color);
+            font-size: 0.9rem;
+            text-align: center;
+            min-height: 22px;
+            margin-top: 8px;
+        }
+
         input {
             flex: 1;
             background: var(--input-bg);
@@ -1422,8 +1441,9 @@
 
             <div class="salary-input-section">
                 <label for="total-salary">الراتب بالريال العماني:</label>
-                <div class="input-wrapper">
-                    <input type="number" inputmode="decimal" id="total-salary" readonly value="529" step="any" min="0">
+                <div class="input-wrapper salary-input-wrapper">
+                    <input type="text" inputmode="decimal" pattern="[0-9.]*" id="total-salary" readonly value="***" autocomplete="off">
+                    <button id="toggle-salary-visibility-btn" class="btn-secondary salary-toggle-btn" title="إظهار الراتب" aria-label="إظهار الراتب"><i class="fa-solid fa-eye"></i></button>
                     <button id="edit-salary-btn" class="btn-secondary" title="فتح القفل للتعديل"><i
                             class="fa-solid fa-lock"></i></button>
                     <button id="save-salary-btn" class="btn-primary hidden">حفظ التعديل</button>
@@ -1667,7 +1687,7 @@
                 <button class="close-delete-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <p>هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟</p>
+                <p id="delete-modal-message">هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟</p>
                 <div class="modal-actions">
                     <button id="confirm-delete-btn" class="btn-danger">نعم، احذف</button>
                     <button class="btn-secondary close-delete-btn">إلغاء</button>
@@ -1687,7 +1707,8 @@
                 <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.95rem;">يرجى إدخال الرمز السري لتتمكن من إجراء التعديلات.</p>
                 <div class="form-group">
                     <label>الرمز السري</label>
-                    <input type="password" id="admin-password" placeholder="****" style="direction: ltr; text-align: center; letter-spacing: 5px;">
+                    <input type="password" id="admin-password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="one-time-code" placeholder="****" style="direction: ltr; text-align: center; letter-spacing: 5px;">
+                    <p id="password-error" class="password-error"></p>
                 </div>
                 <div class="modal-actions">
                     <button id="confirm-password-btn" class="btn-primary">تأكيد</button>
@@ -1748,6 +1769,7 @@
         const totalSalaryInput = document.getElementById('total-salary');
         const saveSalaryBtn = document.getElementById('save-salary-btn');
         const editSalaryBtn = document.getElementById('edit-salary-btn');
+        const toggleSalaryVisibilityBtn = document.getElementById('toggle-salary-visibility-btn');
 
         const statAllocated = document.getElementById('stat-allocated');
         const statUsed = document.getElementById('stat-used');
@@ -1764,11 +1786,13 @@
         const modalTitle = document.getElementById('modal-title');
 
         const deleteModal = document.getElementById('delete-modal');
+        const deleteModalMessage = document.getElementById('delete-modal-message');
         const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
         const closeDeleteBtns = document.querySelectorAll('.close-delete-btn');
 
         const passwordModal = document.getElementById('password-modal');
         const adminPasswordInput = document.getElementById('admin-password');
+        const passwordError = document.getElementById('password-error');
         const confirmPasswordBtn = document.getElementById('confirm-password-btn');
         const closePasswordBtns = document.querySelectorAll('.close-password-btn');
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
@@ -1828,11 +1852,13 @@
         });
 
         let totalSalary = 529;
+        let isSalaryVisible = false;
         let categories = [];
         let debts = [];
         let shoppingItems = [];
         let savingsItems = [];
         let categoryToDelete = null;
+        let pendingConfirmAction = null;
         let globalDataLoaded = false;
         let unsubscribeGlobalData = null;
 
@@ -2145,6 +2171,31 @@
             });
         });
 
+        function sanitizeDecimalInput(value) {
+            const cleaned = String(value).replace(/[^\d.]/g, '');
+            const parts = cleaned.split('.');
+            return parts.length > 1 ? `${parts[0]}.${parts.slice(1).join('')}` : cleaned;
+        }
+
+        function renderSalaryInput() {
+            const isEditing = !totalSalaryInput.hasAttribute('readonly');
+            const shouldShowAmount = isSalaryVisible || isEditing;
+            if (!isEditing || document.activeElement !== totalSalaryInput) {
+                totalSalaryInput.value = shouldShowAmount ? totalSalary : '***';
+            }
+            if (toggleSalaryVisibilityBtn) {
+                toggleSalaryVisibilityBtn.innerHTML = `<i class="fa-solid ${shouldShowAmount ? 'fa-eye-slash' : 'fa-eye'}"></i>`;
+                toggleSalaryVisibilityBtn.title = shouldShowAmount ? 'إخفاء الراتب' : 'إظهار الراتب';
+                toggleSalaryVisibilityBtn.setAttribute('aria-label', toggleSalaryVisibilityBtn.title);
+            }
+        }
+
+        function openConfirmDialog(message, action) {
+            deleteModalMessage.textContent = message;
+            pendingConfirmAction = action;
+            deleteModal.classList.remove('hidden');
+        }
+
         // --- Password System ---
         let pendingAction = null;
         let isAuthorized = false;
@@ -2156,13 +2207,24 @@
             }
             pendingAction = callback;
             adminPasswordInput.value = '';
+            passwordError.textContent = '';
             passwordModal.classList.remove('hidden');
             setTimeout(() => adminPasswordInput.focus(), 100);
         }
 
+        adminPasswordInput.addEventListener('input', () => {
+            adminPasswordInput.value = adminPasswordInput.value.replace(/\D/g, '').slice(0, 4);
+            passwordError.textContent = '';
+        });
+
+        adminPasswordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') confirmPasswordBtn.click();
+        });
+
         closePasswordBtns.forEach(btn => btn.addEventListener('click', () => {
             passwordModal.classList.add('hidden');
             pendingAction = null;
+            passwordError.textContent = '';
         }));
 
         confirmPasswordBtn.addEventListener('click', () => {
@@ -2176,7 +2238,7 @@
                     pendingAction = null;
                 }
             } else {
-                alert("الرمز السري غير صحيح!");
+                passwordError.textContent = "الرمز السري غير صحيح!";
                 adminPasswordInput.value = '';
                 adminPasswordInput.focus();
             }
@@ -2310,7 +2372,7 @@
                             const data = snap.data();
                             totalSalary = data.totalSalary || 529;
                             categories = data.categories || [];
-                            totalSalaryInput.value = totalSalary;
+                            renderSalaryInput();
                             updateLastModified(data.lastUpdated);
                             updateUI();
                         } else {
@@ -2336,7 +2398,7 @@
             } else {
                 totalSalary = 529;
             }
-            totalSalaryInput.value = totalSalary;
+            renderSalaryInput();
 
             const key = `categories_${month}`;
             if (!localStorage.getItem(key)) {
@@ -2417,18 +2479,32 @@
         editSalaryBtn.addEventListener('click', () => {
             requirePassword(() => {
                 totalSalaryInput.removeAttribute('readonly');
+                isSalaryVisible = true;
+                renderSalaryInput();
                 totalSalaryInput.focus();
                 editSalaryBtn.classList.add('hidden');
                 saveSalaryBtn.classList.remove('hidden');
             });
         });
 
+        totalSalaryInput.addEventListener('input', () => {
+            totalSalaryInput.value = sanitizeDecimalInput(totalSalaryInput.value);
+        });
+
+        toggleSalaryVisibilityBtn.addEventListener('click', () => {
+            if (!totalSalaryInput.hasAttribute('readonly')) return;
+            isSalaryVisible = !isSalaryVisible;
+            renderSalaryInput();
+        });
+
         saveSalaryBtn.addEventListener('click', () => {
             const oldSalary = totalSalary;
-            totalSalary = parseFloat(totalSalaryInput.value || 0);
+            totalSalary = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || 0);
             syncData();
             updateUI();
             totalSalaryInput.setAttribute('readonly', 'true');
+            isSalaryVisible = false;
+            renderSalaryInput();
             saveSalaryBtn.classList.add('hidden');
             editSalaryBtn.classList.remove('hidden');
             logAction('edit', `من ${oldSalary} إلى ${totalSalary}`, 'تعديل الراتب');
@@ -2450,14 +2526,20 @@
 
         window.requestDeleteCategory = (id) => {
             requirePassword(() => {
-                categoryToDelete = id;
-                deleteModal.classList.remove('hidden');
+                openConfirmDialog('هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟', () => {
+                    const cat = categories.find(c => c.id === id);
+                    const name = cat ? cat.name : 'قسم';
+                    categories = categories.filter(c => c.id !== id);
+                    syncData();
+                    updateUI();
+                    logAction('delete', name, 'إدارة الأقسام');
+                });
             });
         };
 
         window.requestDeleteTransaction = (catId, transId) => {
             requirePassword(() => {
-                if (confirm("هل أنت متأكد من حذف هذه العملية من السجل؟")) {
+                openConfirmDialog('هل أنت متأكد من حذف هذه العملية من السجل؟', () => {
                     const cat = categories.find(c => c.id === catId);
                     if (cat && cat.transactions) {
                         const trans = cat.transactions.find(t => t.id === transId);
@@ -2467,7 +2549,7 @@
                         updateUI();
                         logAction('delete', transName, `قسم ${cat.name}`);
                     }
-                }
+                });
             });
         };
 
@@ -2495,7 +2577,11 @@
 
         // Modal Closers
         closeModalBtns.forEach(btn => btn.addEventListener('click', () => categoryModal.classList.add('hidden')));
-        closeDeleteBtns.forEach(btn => btn.addEventListener('click', () => { deleteModal.classList.add('hidden'); categoryToDelete = null; }));
+        closeDeleteBtns.forEach(btn => btn.addEventListener('click', () => {
+            deleteModal.classList.add('hidden');
+            categoryToDelete = null;
+            pendingConfirmAction = null;
+        }));
         closeExpenseBtns.forEach(btn => btn.addEventListener('click', () => expenseModal.classList.add('hidden')));
 
         // Form Submissions
@@ -2534,16 +2620,10 @@
         });
 
         confirmDeleteBtn.addEventListener('click', () => {
-            if (categoryToDelete) {
-                const cat = categories.find(c => c.id === categoryToDelete);
-                const name = cat ? cat.name : 'قسم';
-                categories = categories.filter(c => c.id !== categoryToDelete);
-                syncData();
-                updateUI();
-                deleteModal.classList.add('hidden');
-                categoryToDelete = null;
-                logAction('delete', name, 'إدارة الأقسام');
-            }
+            if (pendingConfirmAction) pendingConfirmAction();
+            deleteModal.classList.add('hidden');
+            categoryToDelete = null;
+            pendingConfirmAction = null;
         });
 
         expenseForm.addEventListener('submit', (e) => {
@@ -2719,14 +2799,14 @@
 
         window.requestDeleteDebt = (id) => {
             requirePassword(() => {
-                if (confirm("هل أنت متأكد من حذف هذا الدين؟")) {
+                openConfirmDialog('هل أنت متأكد من حذف هذا الدين؟', () => {
                     const debt = debts.find(d => d.id === id);
                     const name = debt ? debt.person : 'دين';
                     debts = debts.filter(d => d.id !== id);
                     syncGlobalData();
                     updateUI();
                     logAction('delete', name, 'الديون');
-                }
+                });
             });
         };
 
@@ -2734,12 +2814,12 @@
             requirePassword(() => {
                 const debt = debts.find(d => d.id === id);
                 if (!debt) return;
-                if (confirm("هل تم دفع هذا الدين بالكامل؟")) {
+                openConfirmDialog('هل تم دفع هذا الدين بالكامل؟', () => {
                     debts = debts.filter(d => d.id !== id);
                     syncGlobalData();
                     updateUI();
                     logAction('pay', `${debt.person} (${debt.amount})`, 'الديون');
-                }
+                });
             });
         };
 
@@ -2851,11 +2931,13 @@
         };
 
         window.deleteShoppingItem = (id) => {
-            const item = shoppingItems.find(i => i.id === id);
-            shoppingItems = shoppingItems.filter(i => i.id !== id);
-            syncGlobalData();
-            updateUI();
-            logAction('delete', item ? item.text : 'غرض', 'المشتريات');
+            openConfirmDialog('هل أنت متأكد من حذف هذا الغرض؟', () => {
+                const item = shoppingItems.find(i => i.id === id);
+                shoppingItems = shoppingItems.filter(i => i.id !== id);
+                syncGlobalData();
+                updateUI();
+                logAction('delete', item ? item.text : 'غرض', 'المشتريات');
+            });
         };
 
         function renderSavingsItems() {
@@ -2907,11 +2989,13 @@
 
         window.deleteSavingsItem = (id) => {
             requirePassword(() => {
-                const item = savingsItems.find(i => i.id === id);
-                savingsItems = savingsItems.filter(i => i.id !== id);
-                syncGlobalData();
-                updateUI();
-                logAction('delete', item ? `${item.note} (${item.amount})` : 'مدخرات', 'المدخرات');
+                openConfirmDialog('هل أنت متأكد من حذف هذا الإدخال؟', () => {
+                    const item = savingsItems.find(i => i.id === id);
+                    savingsItems = savingsItems.filter(i => i.id !== id);
+                    syncGlobalData();
+                    updateUI();
+                    logAction('delete', item ? `${item.note} (${item.amount})` : 'مدخرات', 'المدخرات');
+                });
             });
         };
 
