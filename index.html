@@ -276,12 +276,14 @@
             padding: 0;
         }
 
-        .password-error {
-            color: var(--danger-color);
-            font-size: 0.9rem;
-            text-align: center;
-            min-height: 22px;
-            margin-top: 8px;
+        .edit-amount-btn {
+            min-width: 52px;
+            padding: 0;
+        }
+
+        .amount-hidden {
+            letter-spacing: 2px;
+            direction: ltr;
         }
 
         input {
@@ -903,7 +905,6 @@
 
         .close-modal-btn,
         .close-delete-btn,
-        .close-password-btn,
         .close-expense-btn,
         .close-debt-btn {
             background: rgba(255, 255, 255, 0.05);
@@ -922,7 +923,6 @@
 
         .close-modal-btn:hover,
         .close-delete-btn:hover,
-        .close-password-btn:hover,
         .close-expense-btn:hover,
         .close-debt-btn:hover {
             background: rgba(239, 68, 68, 0.1);
@@ -955,16 +955,19 @@
         /* Image Preview Modal */
         .image-modal-content {
             position: relative;
-            max-width: 90vw;
-            max-height: 90vh;
+            width: 100%;
+            height: 100%;
+            max-width: 960px;
+            max-height: 100svh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 12px;
         }
 
         #preview-img {
             max-width: 100%;
-            max-height: 90vh;
+            max-height: calc(100svh - 72px);
             border-radius: var(--border-radius-md);
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             border: 2px solid var(--card-border);
@@ -972,14 +975,14 @@
         }
 
         .close-image-btn {
-            position: absolute;
-            top: -45px;
-            right: 0;
+            position: fixed;
+            top: max(12px, env(safe-area-inset-top));
+            right: max(12px, env(safe-area-inset-right));
             background: rgba(255, 255, 255, 0.1);
             border: none;
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -989,12 +992,30 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             transition: var(--transition);
-            z-index: 1001;
+            z-index: 4001;
         }
 
         .close-image-btn:hover {
             background: var(--danger-color);
             transform: scale(1.1) rotate(90deg);
+        }
+
+        #image-modal {
+            background: rgba(0, 0, 0, 0.86);
+            padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+            z-index: 4000;
+        }
+
+        @media (max-width: 640px) {
+            .image-modal-content {
+                max-width: 100vw;
+                padding: 8px;
+            }
+
+            #preview-img {
+                max-width: calc(100vw - 24px);
+                max-height: calc(100svh - 86px);
+            }
         }
 
         .transactions-list {
@@ -1443,9 +1464,9 @@
                 <label for="total-salary">الراتب بالريال العماني:</label>
                 <div class="input-wrapper salary-input-wrapper">
                     <input type="text" inputmode="decimal" pattern="[0-9.]*" id="total-salary" readonly value="***" autocomplete="off">
-                    <button id="toggle-salary-visibility-btn" class="btn-secondary salary-toggle-btn" title="إظهار الراتب" aria-label="إظهار الراتب"><i class="fa-solid fa-eye"></i></button>
-                    <button id="edit-salary-btn" class="btn-secondary" title="فتح القفل للتعديل"><i
-                            class="fa-solid fa-lock"></i></button>
+                    <button id="toggle-salary-visibility-btn" class="btn-secondary salary-toggle-btn" title="إظهار المبالغ" aria-label="إظهار المبالغ"><i class="fa-solid fa-eye"></i></button>
+                    <button id="edit-salary-btn" class="btn-secondary edit-amount-btn" title="تعديل الراتب"><i
+                            class="fa-solid fa-pen-to-square"></i></button>
                     <button id="save-salary-btn" class="btn-primary hidden">حفظ التعديل</button>
                 </div>
             </div>
@@ -1455,20 +1476,20 @@
             <div class="stats-grid">
                 <div class="stat-box">
                     <span class="stat-label">المخصص للأقسام</span>
-                    <span id="stat-allocated" class="stat-value">OMR 0.000</span>
+                    <span id="stat-allocated" class="stat-value amount-hidden">OMR ***</span>
                     <div id="stat-debt-container" class="debt-line hidden">
                         <span>الدين</span>
-                        <span id="stat-debt-value">- OMR 0.000</span>
+                        <span id="stat-debt-value" class="amount-hidden">- OMR ***</span>
                     </div>
                 </div>
                 <div class="stat-box">
                     <span class="stat-label">إجمالي المصروفات</span>
-                    <span id="stat-used" class="stat-value">OMR 0.000</span>
+                    <span id="stat-used" class="stat-value amount-hidden">OMR ***</span>
                 </div>
             </div>
             <div class="stat-box highlight" style="margin-top: 10px; width: 100%;">
                 <span class="stat-label">المتبقي من الراتب</span>
-                <span id="stat-remaining" class="stat-value success">OMR 0.000</span>
+                <span id="stat-remaining" class="stat-value success amount-hidden">OMR ***</span>
             </div>
 
             <div class="progress-container">
@@ -1559,7 +1580,7 @@
                 </div>
                 <div class="savings-summary glass-card">
                     <span class="stat-label">مجموع المدخرات</span>
-                    <span id="savings-total" class="savings-total">OMR 0.000</span>
+                    <span id="savings-total" class="savings-total amount-hidden">OMR ***</span>
                 </div>
                 <div class="glass-card" style="padding: 20px; margin-bottom: 20px;">
                     <form id="savings-form" class="input-wrapper">
@@ -1683,7 +1704,7 @@
     <div id="delete-modal" class="modal-overlay hidden">
         <div class="modal-content glass-card small-modal">
             <div class="modal-header">
-                <h3>تأكيد الحذف</h3>
+                <h3 id="confirm-modal-title">تأكيد الحذف</h3>
                 <button class="close-delete-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
@@ -1691,28 +1712,6 @@
                 <div class="modal-actions">
                     <button id="confirm-delete-btn" class="btn-danger">نعم، احذف</button>
                     <button class="btn-secondary close-delete-btn">إلغاء</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Password Modal (Static Code) -->
-    <div id="password-modal" class="modal-overlay hidden">
-        <div class="modal-content glass-card small-modal">
-            <div class="modal-header">
-                <h3>تأكيد الرمز السري</h3>
-                <button class="close-password-btn"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <p style="margin-bottom: 15px; color: var(--text-muted); font-size: 0.95rem;">يرجى إدخال الرمز السري لتتمكن من إجراء التعديلات.</p>
-                <div class="form-group">
-                    <label>الرمز السري</label>
-                    <input type="password" id="admin-password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="one-time-code" placeholder="****" style="direction: ltr; text-align: center; letter-spacing: 5px;">
-                    <p id="password-error" class="password-error"></p>
-                </div>
-                <div class="modal-actions">
-                    <button id="confirm-password-btn" class="btn-primary">تأكيد</button>
-                    <button class="btn-secondary close-password-btn">إلغاء</button>
                 </div>
             </div>
         </div>
@@ -1786,15 +1785,11 @@
         const modalTitle = document.getElementById('modal-title');
 
         const deleteModal = document.getElementById('delete-modal');
+        const confirmModalTitle = document.getElementById('confirm-modal-title');
         const deleteModalMessage = document.getElementById('delete-modal-message');
         const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
         const closeDeleteBtns = document.querySelectorAll('.close-delete-btn');
 
-        const passwordModal = document.getElementById('password-modal');
-        const adminPasswordInput = document.getElementById('admin-password');
-        const passwordError = document.getElementById('password-error');
-        const confirmPasswordBtn = document.getElementById('confirm-password-btn');
-        const closePasswordBtns = document.querySelectorAll('.close-password-btn');
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const notifBtn = document.getElementById('notif-btn');
         const notifPanel = document.getElementById('notif-panel');
@@ -1852,7 +1847,7 @@
         });
 
         let totalSalary = 529;
-        let isSalaryVisible = false;
+        let areAmountsVisible = false;
         let categories = [];
         let debts = [];
         let shoppingItems = [];
@@ -2009,6 +2004,11 @@
             return Date.now();
         }
 
+        function maskAmountText(text) {
+            if (areAmountsVisible) return text || '';
+            return String(text || '').replace(/\b\d+(?:[.,]\d+)?\b/g, '***');
+        }
+
         let unsubscribeLogs = null;
         async function initLogsSync() {
             if (!db) return;
@@ -2077,7 +2077,7 @@
                     <div class="notif-item ${isUnread ? 'unread' : ''}">
                         <div class="notif-item-header">
                             <span class="notif-type type-${log.type}"><i class="fa-solid ${typeIcons[log.type] || 'fa-circle-info'}"></i> ${typeLabels[log.type] || log.type}</span>
-                            <span class="notif-item-name">${log.name}</span>
+                            <span class="notif-item-name">${maskAmountText(log.name)}</span>
                         </div>
                         <div class="notif-item-meta">
                             <span><i class="fa-solid fa-folder-tree"></i> ${log.section}</span>
@@ -2179,70 +2179,53 @@
 
         function renderSalaryInput() {
             const isEditing = !totalSalaryInput.hasAttribute('readonly');
-            const shouldShowAmount = isSalaryVisible || isEditing;
+            const shouldShowAmount = areAmountsVisible || isEditing;
             if (!isEditing || document.activeElement !== totalSalaryInput) {
                 totalSalaryInput.value = shouldShowAmount ? totalSalary : '***';
             }
+            totalSalaryInput.classList.toggle('amount-hidden', !shouldShowAmount);
             if (toggleSalaryVisibilityBtn) {
-                toggleSalaryVisibilityBtn.innerHTML = `<i class="fa-solid ${shouldShowAmount ? 'fa-eye-slash' : 'fa-eye'}"></i>`;
-                toggleSalaryVisibilityBtn.title = shouldShowAmount ? 'إخفاء الراتب' : 'إظهار الراتب';
+                toggleSalaryVisibilityBtn.innerHTML = `<i class="fa-solid ${areAmountsVisible ? 'fa-eye-slash' : 'fa-eye'}"></i>`;
+                toggleSalaryVisibilityBtn.title = areAmountsVisible ? 'إخفاء المبالغ' : 'إظهار المبالغ';
                 toggleSalaryVisibilityBtn.setAttribute('aria-label', toggleSalaryVisibilityBtn.title);
             }
         }
 
-        function openConfirmDialog(message, action) {
+        function refreshAmountDisplays() {
+            renderSalaryInput();
+            updateUI();
+            updateNotifUI(JSON.parse(localStorage.getItem('activity_logs') || '[]'));
+        }
+
+        function openConfirmDialog(message, action, options = {}) {
+            const {
+                title = 'تأكيد الحذف',
+                confirmText = 'نعم، احذف',
+                confirmClass = 'btn-danger'
+            } = options;
+            confirmModalTitle.textContent = title;
             deleteModalMessage.textContent = message;
+            confirmDeleteBtn.className = confirmClass;
+            confirmDeleteBtn.textContent = confirmText;
             pendingConfirmAction = action;
             deleteModal.classList.remove('hidden');
         }
 
-        // --- Password System ---
-        let pendingAction = null;
-        let isAuthorized = false;
-
-        function requirePassword(callback) {
-            if (isAuthorized) {
-                callback();
-                return;
-            }
-            pendingAction = callback;
-            adminPasswordInput.value = '';
-            passwordError.textContent = '';
-            passwordModal.classList.remove('hidden');
-            setTimeout(() => adminPasswordInput.focus(), 100);
+        function openEditConfirmDialog(message, action) {
+            openConfirmDialog(message, action, {
+                title: 'تأكيد التعديل',
+                confirmText: 'حفظ التعديل',
+                confirmClass: 'btn-primary'
+            });
         }
 
-        adminPasswordInput.addEventListener('input', () => {
-            adminPasswordInput.value = adminPasswordInput.value.replace(/\D/g, '').slice(0, 4);
-            passwordError.textContent = '';
-        });
-
-        adminPasswordInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') confirmPasswordBtn.click();
-        });
-
-        closePasswordBtns.forEach(btn => btn.addEventListener('click', () => {
-            passwordModal.classList.add('hidden');
-            pendingAction = null;
-            passwordError.textContent = '';
-        }));
-
-        confirmPasswordBtn.addEventListener('click', () => {
-            const password = adminPasswordInput.value;
-            
-            if (password === '1234') {
-                isAuthorized = true;
-                passwordModal.classList.add('hidden');
-                if (pendingAction) {
-                    pendingAction();
-                    pendingAction = null;
-                }
-            } else {
-                passwordError.textContent = "الرمز السري غير صحيح!";
-                adminPasswordInput.value = '';
-                adminPasswordInput.focus();
-            }
-        });
+        function openInfoDialog(message, title = 'تنبيه') {
+            openConfirmDialog(message, () => {}, {
+                title,
+                confirmText: 'حسنًا',
+                confirmClass: 'btn-primary'
+            });
+        }
 
         // مراقبة حالة الاتصال بـ Firebase
         if (db) {
@@ -2474,17 +2457,14 @@
 
         monthSelector.addEventListener('change', loadData);
 
-        // --- Interactions requiring Password ---
+        // --- Edit & Delete Interactions ---
 
         editSalaryBtn.addEventListener('click', () => {
-            requirePassword(() => {
-                totalSalaryInput.removeAttribute('readonly');
-                isSalaryVisible = true;
-                renderSalaryInput();
-                totalSalaryInput.focus();
-                editSalaryBtn.classList.add('hidden');
-                saveSalaryBtn.classList.remove('hidden');
-            });
+            totalSalaryInput.removeAttribute('readonly');
+            renderSalaryInput();
+            totalSalaryInput.focus();
+            editSalaryBtn.classList.add('hidden');
+            saveSalaryBtn.classList.remove('hidden');
         });
 
         totalSalaryInput.addEventListener('input', () => {
@@ -2492,79 +2472,71 @@
         });
 
         toggleSalaryVisibilityBtn.addEventListener('click', () => {
-            if (!totalSalaryInput.hasAttribute('readonly')) return;
-            isSalaryVisible = !isSalaryVisible;
-            renderSalaryInput();
+            areAmountsVisible = !areAmountsVisible;
+            refreshAmountDisplays();
         });
 
         saveSalaryBtn.addEventListener('click', () => {
-            const oldSalary = totalSalary;
-            totalSalary = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || 0);
-            syncData();
-            updateUI();
-            totalSalaryInput.setAttribute('readonly', 'true');
-            isSalaryVisible = false;
-            renderSalaryInput();
-            saveSalaryBtn.classList.add('hidden');
-            editSalaryBtn.classList.remove('hidden');
-            logAction('edit', `من ${oldSalary} إلى ${totalSalary}`, 'تعديل الراتب');
+            openEditConfirmDialog('هل تريد حفظ تعديل الراتب؟', () => {
+                const oldSalary = totalSalary;
+                totalSalary = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || 0);
+                syncData();
+                updateUI();
+                totalSalaryInput.setAttribute('readonly', 'true');
+                renderSalaryInput();
+                saveSalaryBtn.classList.add('hidden');
+                editSalaryBtn.classList.remove('hidden');
+                logAction('edit', `من ${oldSalary} إلى ${totalSalary}`, 'تعديل الراتب');
+            });
         });
 
         window.requestEditCategory = (id) => {
-            requirePassword(() => {
-                const cat = categories.find(c => c.id === id);
-                if (cat) {
-                    catIdInput.value = cat.id;
-                    catNameInput.value = cat.name;
-                    catAllocatedInput.value = cat.allocated;
-                    catIconInput.value = cat.icon || 'auto';
-                    modalTitle.textContent = 'تعديل بيانات القسم';
-                    categoryModal.classList.remove('hidden');
-                }
-            });
+            const cat = categories.find(c => c.id === id);
+            if (cat) {
+                catIdInput.value = cat.id;
+                catNameInput.value = cat.name;
+                catAllocatedInput.value = cat.allocated;
+                catIconInput.value = cat.icon || 'auto';
+                modalTitle.textContent = 'تعديل بيانات القسم';
+                categoryModal.classList.remove('hidden');
+            }
         };
 
         window.requestDeleteCategory = (id) => {
-            requirePassword(() => {
-                openConfirmDialog('هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟', () => {
-                    const cat = categories.find(c => c.id === id);
-                    const name = cat ? cat.name : 'قسم';
-                    categories = categories.filter(c => c.id !== id);
-                    syncData();
-                    updateUI();
-                    logAction('delete', name, 'إدارة الأقسام');
-                });
+            openConfirmDialog('هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟', () => {
+                const cat = categories.find(c => c.id === id);
+                const name = cat ? cat.name : 'قسم';
+                categories = categories.filter(c => c.id !== id);
+                syncData();
+                updateUI();
+                logAction('delete', name, 'إدارة الأقسام');
             });
         };
 
         window.requestDeleteTransaction = (catId, transId) => {
-            requirePassword(() => {
-                openConfirmDialog('هل أنت متأكد من حذف هذه العملية من السجل؟', () => {
-                    const cat = categories.find(c => c.id === catId);
-                    if (cat && cat.transactions) {
-                        const trans = cat.transactions.find(t => t.id === transId);
-                        const transName = trans ? `${trans.note} (${trans.amount})` : 'عملية';
-                        cat.transactions = cat.transactions.filter(t => t.id !== transId);
-                        syncData();
-                        updateUI();
-                        logAction('delete', transName, `قسم ${cat.name}`);
-                    }
-                });
+            openConfirmDialog('هل أنت متأكد من حذف هذه العملية من السجل؟', () => {
+                const cat = categories.find(c => c.id === catId);
+                if (cat && cat.transactions) {
+                    const trans = cat.transactions.find(t => t.id === transId);
+                    const transName = trans ? `${trans.note} (${trans.amount})` : 'عملية';
+                    cat.transactions = cat.transactions.filter(t => t.id !== transId);
+                    syncData();
+                    updateUI();
+                    logAction('delete', transName, `قسم ${cat.name}`);
+                }
             });
         };
 
 
 
-        // --- Safe Operations (No Password Required) ---
+        // --- Safe Operations ---
 
         addCategoryBtn.addEventListener('click', () => {
-            requirePassword(() => {
-                categoryForm.reset();
-                catIdInput.value = '';
-                if (catIconInput) catIconInput.value = 'auto';
-                modalTitle.textContent = 'إضافة قسم جديد';
-                categoryModal.classList.remove('hidden');
-            });
+            categoryForm.reset();
+            catIdInput.value = '';
+            if (catIconInput) catIconInput.value = 'auto';
+            modalTitle.textContent = 'إضافة قسم جديد';
+            categoryModal.classList.remove('hidden');
         });
 
         window.openExpenseModal = (id) => {
@@ -2597,18 +2569,25 @@
 
             if (id) {
                 const index = categories.findIndex(c => c.id === id);
+                if (index === -1) return;
                 const oldName = categories[index].name;
                 const oldAlloc = categories[index].allocated;
-                
-                categories[index].name = catData.name;
-                categories[index].allocated = catData.allocated;
-                categories[index].icon = catData.icon;
-                
-                let detail = catData.name;
-                if (oldName !== catData.name) detail = `${oldName} ➔ ${catData.name}`;
-                if (oldAlloc !== catData.allocated) detail += ` (${oldAlloc} ➔ ${catData.allocated})`;
-                
-                logAction('edit', detail, 'إدارة الأقسام');
+
+                openEditConfirmDialog('هل تريد حفظ تعديل هذا القسم؟', () => {
+                    categories[index].name = catData.name;
+                    categories[index].allocated = catData.allocated;
+                    categories[index].icon = catData.icon;
+                    
+                    let detail = catData.name;
+                    if (oldName !== catData.name) detail = `${oldName} ➔ ${catData.name}`;
+                    if (oldAlloc !== catData.allocated) detail += ` (${oldAlloc} ➔ ${catData.allocated})`;
+                    
+                    logAction('edit', detail, 'إدارة الأقسام');
+                    syncData();
+                    updateUI();
+                    categoryModal.classList.add('hidden');
+                });
+                return;
             } else {
                 categories.push({ id: Date.now().toString(), ...catData });
                 logAction('add', catData.name, 'إدارة الأقسام');
@@ -2639,7 +2618,7 @@
             const remaining = cat.allocated - currentUsed;
 
             if (newAmount > remaining) {
-                alert(`عذراً، لا يمكنك إضافة ${newAmount} ريال!\nالمتبقي في هذا القسم هو ${remaining} ريال فقط.`);
+                openInfoDialog(`عذرًا، لا يمكنك إضافة ${formatCurrency(newAmount)}. المتبقي في هذا القسم هو ${formatCurrency(remaining)} فقط.`);
                 return;
             }
 
@@ -2705,6 +2684,8 @@
                 statRemaining.className = "stat-value success";
             }
 
+            [statAllocated, statUsed, statRemaining, statDebtValue].forEach(toggleAmountClass);
+
             renderCategories();
             renderDebts();
             renderShoppingItems();
@@ -2725,7 +2706,7 @@
                 card.innerHTML = `
                     <div class="debt-info">
                         <span class="debt-name">${debt.person}</span>
-                        <span class="debt-amount">${formatCurrency(debt.amount)}</span>
+                        <span class="debt-amount${amountHiddenClass()}">${formatCurrency(debt.amount)}</span>
                     </div>
                     ${debt.note ? `<div class="debt-note">${debt.note}</div>` : ''}
                     <div class="debt-footer">
@@ -2744,13 +2725,11 @@
         }
 
         addDebtBtn.addEventListener('click', () => {
-            requirePassword(() => {
-                debtForm.reset();
-                debtIdInput.value = '';
-                debtModalTitle.textContent = 'تسجيل دين جديد';
-                debtModal.classList.remove('hidden');
-                setTimeout(() => debtPersonInput.focus(), 100);
-            });
+            debtForm.reset();
+            debtIdInput.value = '';
+            debtModalTitle.textContent = 'تسجيل دين جديد';
+            debtModal.classList.remove('hidden');
+            setTimeout(() => debtPersonInput.focus(), 100);
         });
 
         closeDebtBtns.forEach(btn => btn.addEventListener('click', () => debtModal.classList.add('hidden')));
@@ -2770,9 +2749,15 @@
             if (id) {
                 const index = debts.findIndex(d => d.id === id);
                 if (index !== -1) {
-                    debts[index] = { ...debts[index], ...debtData, date: debts[index].date }; 
-                    logAction('edit', `${debtData.person} (${debtData.amount})`, 'الديون');
+                    openEditConfirmDialog('هل تريد حفظ تعديل هذا الدين؟', () => {
+                        debts[index] = { ...debts[index], ...debtData, date: debts[index].date }; 
+                        logAction('edit', `${debtData.person} (${debtData.amount})`, 'الديون');
+                        syncGlobalData();
+                        updateUI();
+                        debtModal.classList.add('hidden');
+                    });
                 }
+                return;
             } else {
                 debts.push({ id: makeId('debt_'), ...debtData });
                 logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون');
@@ -2784,42 +2769,40 @@
         });
 
         window.requestEditDebt = (id) => {
-            requirePassword(() => {
-                const debt = debts.find(d => d.id === id);
-                if (debt) {
-                    debtIdInput.value = debt.id;
-                    debtPersonInput.value = debt.person;
-                    debtAmountInput.value = debt.amount;
-                    debtNoteInput.value = debt.note || '';
-                    debtModalTitle.textContent = 'تعديل بيانات الدين';
-                    debtModal.classList.remove('hidden');
-                }
-            });
+            const debt = debts.find(d => d.id === id);
+            if (debt) {
+                debtIdInput.value = debt.id;
+                debtPersonInput.value = debt.person;
+                debtAmountInput.value = debt.amount;
+                debtNoteInput.value = debt.note || '';
+                debtModalTitle.textContent = 'تعديل بيانات الدين';
+                debtModal.classList.remove('hidden');
+            }
         };
 
         window.requestDeleteDebt = (id) => {
-            requirePassword(() => {
-                openConfirmDialog('هل أنت متأكد من حذف هذا الدين؟', () => {
-                    const debt = debts.find(d => d.id === id);
-                    const name = debt ? debt.person : 'دين';
-                    debts = debts.filter(d => d.id !== id);
-                    syncGlobalData();
-                    updateUI();
-                    logAction('delete', name, 'الديون');
-                });
+            openConfirmDialog('هل أنت متأكد من حذف هذا الدين؟', () => {
+                const debt = debts.find(d => d.id === id);
+                const name = debt ? debt.person : 'دين';
+                debts = debts.filter(d => d.id !== id);
+                syncGlobalData();
+                updateUI();
+                logAction('delete', name, 'الديون');
             });
         };
 
         window.payDebt = (id) => {
-            requirePassword(() => {
-                const debt = debts.find(d => d.id === id);
-                if (!debt) return;
-                openConfirmDialog('هل تم دفع هذا الدين بالكامل؟', () => {
-                    debts = debts.filter(d => d.id !== id);
-                    syncGlobalData();
-                    updateUI();
-                    logAction('pay', `${debt.person} (${debt.amount})`, 'الديون');
-                });
+            const debt = debts.find(d => d.id === id);
+            if (!debt) return;
+            openConfirmDialog('هل تم دفع هذا الدين بالكامل؟', () => {
+                debts = debts.filter(d => d.id !== id);
+                syncGlobalData();
+                updateUI();
+                logAction('pay', `${debt.person} (${debt.amount})`, 'الديون');
+            }, {
+                title: 'تأكيد السداد',
+                confirmText: 'نعم، تم السداد',
+                confirmClass: 'btn-primary'
             });
         };
 
@@ -2868,6 +2851,10 @@
             document.body.style.overflow = ''; // Restore scrolling
         };
 
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeImageModal();
+        });
+
         function resizeImageFile(file) {
             return new Promise((resolve, reject) => {
                 if (!file) return resolve('');
@@ -2900,7 +2887,7 @@
             try {
                 image = await resizeImageFile(shoppingImageInput.files[0]);
             } catch (error) {
-                alert("تعذر تجهيز الصورة، جرّب صورة أصغر.");
+                openInfoDialog('تعذر تجهيز الصورة، جرّب صورة أصغر.');
                 return;
             }
 
@@ -2944,6 +2931,7 @@
             if (!savingsList || !savingsTotal) return;
             const totalSavings = savingsItems.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
             savingsTotal.textContent = formatCurrency(totalSavings);
+            toggleAmountClass(savingsTotal);
 
             savingsList.innerHTML = '';
             if (savingsItems.length === 0) {
@@ -2960,7 +2948,7 @@
                         <span class="savings-date"><i class="fa-regular fa-clock"></i> ${item.date || ''}</span>
                     </div>
                     <div class="cat-actions">
-                        <span class="savings-amount">${formatCurrency(item.amount)}</span>
+                        <span class="savings-amount${amountHiddenClass()}">${formatCurrency(item.amount)}</span>
                         ${isEditableMonth ? `<button class="cat-btn delete" onclick="deleteSavingsItem('${item.id}')"><i class="fa-solid fa-trash-can"></i></button>` : ''}
                     </div>
                 `;
@@ -2988,14 +2976,12 @@
         });
 
         window.deleteSavingsItem = (id) => {
-            requirePassword(() => {
-                openConfirmDialog('هل أنت متأكد من حذف هذا الإدخال؟', () => {
-                    const item = savingsItems.find(i => i.id === id);
-                    savingsItems = savingsItems.filter(i => i.id !== id);
-                    syncGlobalData();
-                    updateUI();
-                    logAction('delete', item ? `${item.note} (${item.amount})` : 'مدخرات', 'المدخرات');
-                });
+            openConfirmDialog('هل أنت متأكد من حذف هذا الإدخال؟', () => {
+                const item = savingsItems.find(i => i.id === id);
+                savingsItems = savingsItems.filter(i => i.id !== id);
+                syncGlobalData();
+                updateUI();
+                logAction('delete', item ? `${item.note} (${item.amount})` : 'مدخرات', 'المدخرات');
             });
         };
 
@@ -3052,7 +3038,7 @@
                         transHtml += `
                         <div class="transaction-item">
                             <div class="trans-details">
-                                <span class="trans-amount">- ${formatCurrency(t.amount)}</span>
+                                <span class="trans-amount${amountHiddenClass()}">- ${formatCurrency(t.amount)}</span>
                                 <span class="trans-note">${t.note}</span>
                                 <span class="trans-date"><i class="fa-regular fa-clock"></i> ${t.date}</span>
                             </div>
@@ -3084,9 +3070,9 @@
                         </div>
                     </div>
                     <div class="cat-body">
-                        <div class="cat-row"><span class="label">المخصص:</span><span class="value">${formatCurrency(allocated)}</span></div>
-                        <div class="cat-row"><span class="label">المستخدم (المجموع):</span><span class="value">${formatCurrency(used)}</span></div>
-                        <div class="cat-row"><span class="label">المتبقي:</span><span class="value ${remaining < 0 ? 'danger' : (remaining == 0 ? 'warning' : 'success')}">${formatCurrency(remaining)}</span></div>
+                        <div class="cat-row"><span class="label">المخصص:</span><span class="value${amountHiddenClass()}">${formatCurrency(allocated)}</span></div>
+                        <div class="cat-row"><span class="label">المستخدم (المجموع):</span><span class="value${amountHiddenClass()}">${formatCurrency(used)}</span></div>
+                        <div class="cat-row"><span class="label">المتبقي:</span><span class="value ${remaining < 0 ? 'danger' : (remaining == 0 ? 'warning' : 'success')}${amountHiddenClass()}">${formatCurrency(remaining)}</span></div>
                         <div class="cat-progress"><div class="cat-progress-fill" style="width: ${safePercentage}%; background: ${progressColor};"></div></div>
                         ${transHtml}
                     </div>
@@ -3096,8 +3082,17 @@
         }
 
         function formatCurrency(amount) {
+            if (!areAmountsVisible) return 'OMR ***';
             // استخدام en-OM للحصول على أرقام إنجليزية مع سياق العملة العمانية
             return new Intl.NumberFormat('en-OM', { style: 'currency', currency: 'OMR' }).format(amount);
+        }
+
+        function amountHiddenClass() {
+            return areAmountsVisible ? '' : ' amount-hidden';
+        }
+
+        function toggleAmountClass(element) {
+            if (element) element.classList.toggle('amount-hidden', !areAmountsVisible);
         }
 
         function updateLastModified(dateString) {
