@@ -125,10 +125,10 @@
             backdrop-filter: var(--glass-blur);
             border: 1px solid var(--card-border);
             border-radius: var(--border-radius-lg);
-            padding: 24px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 18px;
             transition: background-color 0.4s ease, border-color 0.4s ease, z-index 0s;
             position: relative;
             z-index: 2000;
@@ -140,10 +140,12 @@
 
         .header-top {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            align-items: stretch;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 14px;
+            text-align: center;
         }
 
         .header-top h1 {
@@ -151,29 +153,32 @@
             font-weight: 700;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             color: var(--primary-color);
-            margin-bottom: 5px;
+            margin-bottom: 0;
         }
 
         .live-info-bar {
             display: flex;
-            gap: 15px;
+            gap: 10px;
             font-size: 0.8rem;
             color: var(--text-muted);
             justify-content: center;
-            margin-bottom: 15px;
             flex-wrap: wrap;
         }
 
         .live-info-bar span {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             background: var(--input-bg);
-            padding: 4px 10px;
-            border-radius: 20px;
+            padding: 8px 14px;
+            min-width: 96px;
+            border-radius: 999px;
             border: 1px solid var(--card-border);
+            font-weight: 700;
         }
 
         .live-info-bar i {
@@ -184,9 +189,10 @@
         .header-actions {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
-            width: auto;
+            width: 100%;
         }
 
         .icon-btn {
@@ -252,12 +258,14 @@
         .salary-input-section {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .salary-input-section label {
             font-size: 1.1rem;
             font-weight: 600;
+            text-align: center;
+            color: var(--text-muted);
         }
 
         .input-wrapper {
@@ -276,9 +284,16 @@
             padding: 0;
         }
 
-        .edit-amount-btn {
+        .edit-amount-btn,
+        .salary-pin-btn {
             min-width: 52px;
             padding: 0;
+        }
+
+        .salary-pin-btn.active {
+            background: rgba(59, 130, 246, 0.16);
+            border-color: rgba(59, 130, 246, 0.5);
+            color: var(--primary-color);
         }
 
         .amount-hidden {
@@ -388,21 +403,21 @@
         }
 
         .stats-section {
-            padding: 24px;
+            padding: 0;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 14px;
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
         }
 
         .stat-box {
             background: var(--stat-bg);
-            padding: 16px;
+            padding: 14px 12px;
             border-radius: var(--border-radius-md);
             display: flex;
             flex-direction: column;
@@ -416,6 +431,10 @@
         .stat-box.highlight {
             background: rgba(59, 130, 246, 0.1);
             border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .stat-box.stat-wide {
+            width: 100%;
         }
 
         .stat-label {
@@ -432,12 +451,13 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
-            margin-top: 10px;
         }
 
         .progress-labels {
             display: flex;
             justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
             font-size: 0.9rem;
         }
 
@@ -1233,7 +1253,6 @@
             }
 
             .header-glass,
-            .stats-section,
             .quick-expense-card,
             .category-card {
                 padding: 16px;
@@ -1254,13 +1273,24 @@
             .header-actions {
                 justify-content: center;
                 width: 100%;
-                gap: 12px;
+                gap: 10px;
             }
 
             .month-selector {
                 margin-left: 0;
                 flex: 1;
-                max-width: 200px;
+                max-width: 220px;
+                min-width: 180px;
+            }
+
+            .salary-input-wrapper {
+                display: grid;
+                grid-template-columns: repeat(3, minmax(48px, auto));
+            }
+
+            .salary-input-wrapper input,
+            .salary-input-wrapper .btn-primary {
+                grid-column: 1 / -1;
             }
 
             .salary-input-section label {
@@ -1564,6 +1594,8 @@
             <div class="header-top">
                 <h1><i class="fa-solid fa-wallet"></i> تقسيم الراتب</h1>
                 <div class="header-actions">
+                    <select id="month-selector" class="month-selector"></select>
+                    <button id="settings-btn" class="icon-btn" title="الإعدادات" aria-label="الإعدادات"><i class="fa-solid fa-gear"></i></button>
                     <button id="theme-toggle-btn" class="icon-btn" title="تبديل الوضع"><i class="fa-solid fa-moon"></i></button>
                     <div class="notif-container">
                         <button id="notif-btn" class="icon-btn" title="الإشعارات">
@@ -1578,7 +1610,6 @@
                             </div>
                         </div>
                     </div>
-                    <select id="month-selector" class="month-selector"></select>
                 </div>
             </div>
 
@@ -1595,12 +1626,12 @@
                     <button id="toggle-salary-visibility-btn" class="btn-secondary salary-toggle-btn" title="إظهار المبالغ" aria-label="إظهار المبالغ"><i class="fa-solid fa-eye"></i></button>
                     <button id="edit-salary-btn" class="btn-secondary edit-amount-btn" title="تعديل الراتب"><i
                             class="fa-solid fa-pen-to-square"></i></button>
+                    <button id="pin-salary-btn" class="btn-secondary salary-pin-btn hidden" title="تثبيت الراتب للشهور القادمة" aria-label="تثبيت الراتب للشهور القادمة"><i class="fa-solid fa-thumbtack"></i></button>
                     <button id="save-salary-btn" class="btn-primary hidden">حفظ التعديل</button>
                 </div>
             </div>
-        </header>
 
-        <div id="stats-card" class="stats-section glass-card">
+            <div id="stats-card" class="stats-section">
             <div class="stats-grid">
                 <div class="stat-box">
                     <span class="stat-label">المخصص للأقسام</span>
@@ -1615,7 +1646,7 @@
                     <span id="stat-used" class="stat-value amount-hidden">OMR ***</span>
                 </div>
             </div>
-            <div class="stat-box highlight" style="margin-top: 10px; width: 100%;">
+            <div class="stat-box highlight stat-wide">
                 <span class="stat-label">المتبقي من الراتب</span>
                 <span id="stat-remaining" class="stat-value success amount-hidden">OMR ***</span>
             </div>
@@ -1629,7 +1660,8 @@
                     <div id="progress-bar-fill" class="progress-bar-fill"></div>
                 </div>
             </div>
-        </div>
+            </div>
+        </header>
 
         <!-- Main Navigation -->
         <nav class="main-nav">
@@ -1921,7 +1953,9 @@
         const totalSalaryInput = document.getElementById('total-salary');
         const saveSalaryBtn = document.getElementById('save-salary-btn');
         const editSalaryBtn = document.getElementById('edit-salary-btn');
+        const pinSalaryBtn = document.getElementById('pin-salary-btn');
         const toggleSalaryVisibilityBtn = document.getElementById('toggle-salary-visibility-btn');
+        const settingsBtn = document.getElementById('settings-btn');
 
         const statAllocated = document.getElementById('stat-allocated');
         const statUsed = document.getElementById('stat-used');
@@ -2005,7 +2039,10 @@
         });
 
         let totalSalary = 529;
-        let areAmountsVisible = false;
+        let areAmountsVisible = localStorage.getItem('amounts_visible') === 'true';
+        let isSalaryPinned = localStorage.getItem('salary_pinned') === 'true';
+        let pinnedSalary = parseFloat(localStorage.getItem('pinned_salary') || '');
+        if (!Number.isFinite(pinnedSalary)) pinnedSalary = null;
         let categories = [];
         let debts = [];
         let shoppingItems = [];
@@ -2247,14 +2284,6 @@
             }).join('');
         }
 
-        // تسجيل الدخول (مرة واحدة لكل جلسة متصفح)
-        if (!sessionStorage.getItem('site_entry_logged')) {
-            setTimeout(() => {
-                logAction('login', 'فتح الموقع', 'النظام');
-                sessionStorage.setItem('site_entry_logged', 'true');
-            }, 1000);
-        }
-
         // تحديث الوقت واليوم
         function updateLiveInfo() {
             const now = new Date();
@@ -2347,6 +2376,15 @@
                 toggleSalaryVisibilityBtn.title = areAmountsVisible ? 'إخفاء المبالغ' : 'إظهار المبالغ';
                 toggleSalaryVisibilityBtn.setAttribute('aria-label', toggleSalaryVisibilityBtn.title);
             }
+            if (pinSalaryBtn) {
+                pinSalaryBtn.classList.toggle('hidden', !isEditing || !isEditableMonth);
+                pinSalaryBtn.classList.toggle('active', isSalaryPinned);
+                const pinTitle = isSalaryPinned && pinnedSalary !== null
+                    ? `الراتب مثبت للشهور القادمة: ${pinnedSalary}`
+                    : 'تثبيت الراتب للشهور القادمة';
+                pinSalaryBtn.title = pinTitle;
+                pinSalaryBtn.setAttribute('aria-label', pinTitle);
+            }
         }
 
         function refreshAmountDisplays() {
@@ -2420,10 +2458,31 @@
             return `${prefix}${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
         }
 
+        function saveSalaryPinLocal() {
+            localStorage.setItem('salary_pinned', isSalaryPinned ? 'true' : 'false');
+            if (pinnedSalary === null || !Number.isFinite(pinnedSalary)) {
+                localStorage.removeItem('pinned_salary');
+            } else {
+                localStorage.setItem('pinned_salary', pinnedSalary.toString());
+            }
+        }
+
+        function getDefaultSalaryForMonth(month) {
+            if (isSalaryPinned && pinnedSalary !== null && month >= currentFinancialMonth) {
+                return pinnedSalary;
+            }
+            return 529;
+        }
+
         function normalizeGlobalData(data = {}) {
             debts = Array.isArray(data.debts) ? data.debts : [];
             shoppingItems = Array.isArray(data.shoppingItems) ? data.shoppingItems : [];
             savingsItems = Array.isArray(data.savingsItems) ? data.savingsItems : [];
+            if (data.salaryPin && typeof data.salaryPin === 'object') {
+                isSalaryPinned = data.salaryPin.pinned === true;
+                const nextPinnedSalary = parseFloat(data.salaryPin.amount);
+                pinnedSalary = Number.isFinite(nextPinnedSalary) ? nextPinnedSalary : null;
+            }
             saveGlobalDataLocal();
         }
 
@@ -2431,12 +2490,16 @@
             localStorage.setItem('global_debts', JSON.stringify(debts));
             localStorage.setItem('global_shopping', JSON.stringify(shoppingItems));
             localStorage.setItem('global_savings', JSON.stringify(savingsItems));
+            saveSalaryPinLocal();
         }
 
         function loadGlobalDataLocal() {
             try { debts = JSON.parse(localStorage.getItem('global_debts') || '[]'); } catch (e) { debts = []; }
             try { shoppingItems = JSON.parse(localStorage.getItem('global_shopping') || '[]'); } catch (e) { shoppingItems = []; }
             try { savingsItems = JSON.parse(localStorage.getItem('global_savings') || '[]'); } catch (e) { savingsItems = []; }
+            isSalaryPinned = localStorage.getItem('salary_pinned') === 'true';
+            const nextPinnedSalary = parseFloat(localStorage.getItem('pinned_salary') || '');
+            pinnedSalary = Number.isFinite(nextPinnedSalary) ? nextPinnedSalary : null;
         }
 
         async function startGlobalDataSync() {
@@ -2471,6 +2534,10 @@
                     debts,
                     shoppingItems,
                     savingsItems,
+                    salaryPin: {
+                        pinned: isSalaryPinned,
+                        amount: pinnedSalary
+                    },
                     lastUpdated: new Date().toISOString()
                 }, { merge: true });
             } catch (e) {
@@ -2513,7 +2580,8 @@
                     unsubscribeFirebase = docRef.onSnapshot(snap => {
                         if (snap.exists) {
                             const data = snap.data();
-                            totalSalary = data.totalSalary || 529;
+                            const savedSalary = parseFloat(data.totalSalary);
+                            totalSalary = Number.isFinite(savedSalary) ? savedSalary : getDefaultSalaryForMonth(month);
                             categories = data.categories || [];
                             renderSalaryInput();
                             updateLastModified(data.lastUpdated);
@@ -2539,7 +2607,7 @@
             if (localStorage.getItem(`salary_${month}`)) {
                 totalSalary = parseFloat(localStorage.getItem(`salary_${month}`));
             } else {
-                totalSalary = 529;
+                totalSalary = getDefaultSalaryForMonth(month);
             }
             renderSalaryInput();
 
@@ -2633,13 +2701,34 @@
 
         toggleSalaryVisibilityBtn.addEventListener('click', () => {
             areAmountsVisible = !areAmountsVisible;
+            localStorage.setItem('amounts_visible', areAmountsVisible ? 'true' : 'false');
             refreshAmountDisplays();
+        });
+
+        pinSalaryBtn.addEventListener('click', () => {
+            const currentValue = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || totalSalary || 0);
+            if (!currentValue || currentValue <= 0) {
+                openInfoDialog('اكتب الراتب أولًا ثم اضغط زر التثبيت.');
+                return;
+            }
+
+            isSalaryPinned = !isSalaryPinned;
+            pinnedSalary = isSalaryPinned ? currentValue : null;
+            saveSalaryPinLocal();
+            syncGlobalData();
+            renderSalaryInput();
+            logAction('edit', isSalaryPinned ? `تثبيت ${currentValue}` : 'إلغاء تثبيت الراتب', 'تثبيت الراتب');
         });
 
         saveSalaryBtn.addEventListener('click', () => {
             openEditConfirmDialog('هل تريد حفظ تعديل الراتب؟', () => {
                 const oldSalary = totalSalary;
                 totalSalary = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || 0);
+                if (isSalaryPinned) {
+                    pinnedSalary = totalSalary;
+                    saveSalaryPinLocal();
+                    syncGlobalData();
+                }
                 syncData();
                 updateUI();
                 totalSalaryInput.setAttribute('readonly', 'true');
