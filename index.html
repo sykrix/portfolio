@@ -1047,6 +1047,28 @@
             flex: 1;
         }
 
+        .modal-actions .btn-cancel {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--border-radius-md);
+            min-height: 48px;
+            width: auto;
+            height: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
+
+        .modal-actions .btn-cancel:hover {
+            background: var(--primary-hover);
+            color: white;
+            transform: none;
+        }
+
         /* Image Preview Modal */
         .image-modal-content {
             position: relative;
@@ -1842,7 +1864,7 @@
                 <p id="delete-modal-message">هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟</p>
                 <div class="modal-actions">
                     <button id="confirm-delete-btn" class="btn-danger">نعم، احذف</button>
-                    <button class="btn-secondary close-delete-btn">إلغاء</button>
+                    <button class="btn-cancel close-delete-btn">إلغاء</button>
                 </div>
             </div>
         </div>
