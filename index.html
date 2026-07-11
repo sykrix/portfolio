@@ -489,6 +489,101 @@
             font-size: clamp(1.2rem, 4vw, 1.4rem);
         }
 
+        .quick-expense-card {
+            padding: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .quick-expense-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .quick-expense-title i {
+            color: var(--success-color);
+            background: rgba(16, 185, 129, 0.12);
+            min-width: 36px;
+            height: 36px;
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-expense-form {
+            display: grid;
+            grid-template-columns: 1.5fr minmax(230px, 0.9fr);
+            gap: 12px;
+            align-items: end;
+        }
+
+        .quick-expense-fields,
+        .quick-expense-actions {
+            display: grid;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .quick-expense-fields {
+            grid-template-columns: minmax(120px, 0.8fr) 1fr;
+        }
+
+        .quick-expense-actions {
+            grid-template-columns: minmax(130px, 1fr) auto;
+        }
+
+        .quick-expense-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .quick-expense-field label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .quick-expense-card input,
+        .quick-expense-select {
+            width: 100%;
+            min-height: 48px;
+        }
+
+        .quick-expense-select {
+            background: var(--input-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 12px 14px;
+            border-radius: var(--border-radius-md);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .quick-expense-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .quick-expense-select option {
+            background: var(--bg-color);
+            color: var(--text-main);
+        }
+
+        .quick-expense-submit {
+            min-width: 104px;
+            height: 48px;
+            white-space: nowrap;
+        }
+
         .categories-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -1096,6 +1191,16 @@
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
+
+            .quick-expense-form,
+            .quick-expense-fields,
+            .quick-expense-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-expense-submit {
+                width: 100%;
+            }
         }
 
         /* Mobile */
@@ -1107,6 +1212,7 @@
 
             .header-glass,
             .stats-section,
+            .quick-expense-card,
             .category-card {
                 padding: 16px;
                 border-radius: var(--border-radius-md);
@@ -1534,6 +1640,31 @@
                         إضافة قسم
                     </button>
                 </div>
+                <div id="quick-expense-card" class="quick-expense-card glass-card">
+                    <div class="quick-expense-title">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>إضافة مصروف سريع</span>
+                    </div>
+                    <form id="quick-expense-form" class="quick-expense-form">
+                        <div class="quick-expense-fields">
+                            <div class="quick-expense-field">
+                                <label for="quick-expense-amount">المبلغ</label>
+                                <input type="number" inputmode="decimal" id="quick-expense-amount" required min="0" step="any" placeholder="مثال: 5">
+                            </div>
+                            <div class="quick-expense-field">
+                                <label for="quick-expense-note">الملاحظة</label>
+                                <input type="text" id="quick-expense-note" placeholder="مثال: قهوة">
+                            </div>
+                        </div>
+                        <div class="quick-expense-actions">
+                            <div class="quick-expense-field">
+                                <label for="quick-expense-category">القسم</label>
+                                <select id="quick-expense-category" class="quick-expense-select" required></select>
+                            </div>
+                            <button type="submit" class="btn-success quick-expense-submit"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
+                        </div>
+                    </form>
+                </div>
                 <div id="categories-grid" class="categories-grid">
                     <!-- Categories will be injected here -->
                 </div>
@@ -1778,6 +1909,11 @@
         const lastUpdated = document.getElementById('last-updated');
         const categoriesGrid = document.getElementById('categories-grid');
         const addCategoryBtn = document.getElementById('add-category-btn');
+        const quickExpenseCard = document.getElementById('quick-expense-card');
+        const quickExpenseForm = document.getElementById('quick-expense-form');
+        const quickExpenseAmountInput = document.getElementById('quick-expense-amount');
+        const quickExpenseNoteInput = document.getElementById('quick-expense-note');
+        const quickExpenseCategoryInput = document.getElementById('quick-expense-category');
 
         const categoryModal = document.getElementById('category-modal');
         const categoryForm = document.getElementById('category-form');
@@ -2332,6 +2468,7 @@
                 addDebtBtn.classList.add('hidden');
                 shoppingForm.classList.add('hidden');
                 savingsForm.classList.add('hidden');
+                quickExpenseCard.classList.add('hidden');
                 saveSalaryBtn.classList.add('hidden');
             } else {
                 editSalaryBtn.classList.remove('hidden');
@@ -2339,6 +2476,7 @@
                 addDebtBtn.classList.remove('hidden');
                 shoppingForm.classList.remove('hidden');
                 savingsForm.classList.remove('hidden');
+                quickExpenseCard.classList.remove('hidden');
             }
 
             if (unsubscribeFirebase) {
@@ -2605,40 +2743,109 @@
             pendingConfirmAction = null;
         });
 
-        expenseForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = expenseCatIdInput.value;
-            const cat = categories.find(c => c.id === id);
-            if (!cat) return;
+        function getCategoryUsed(cat) {
+            let used = 0;
+            if (cat && cat.transactions) {
+                cat.transactions.forEach(t => used += parseFloat(t.amount || 0));
+            }
+            return used;
+        }
 
-            const newAmount = parseFloat(expenseAmountInput.value || 0);
+        function renderQuickExpenseCategories() {
+            if (!quickExpenseCard || !quickExpenseCategoryInput) return;
 
-            let currentUsed = 0;
-            if (cat.transactions) cat.transactions.forEach(t => currentUsed += t.amount);
-            const remaining = cat.allocated - currentUsed;
+            const selectedCategoryId = quickExpenseCategoryInput.value;
+            quickExpenseCategoryInput.innerHTML = '';
 
-            if (newAmount > remaining) {
-                openInfoDialog(`عذرًا، لا يمكنك إضافة ${formatCurrency(newAmount)}. المتبقي في هذا القسم هو ${formatCurrency(remaining)} فقط.`);
-                return;
+            if (categories.length === 0) {
+                const option = document.createElement('option');
+                option.value = '';
+                option.textContent = 'أضف قسمًا أولًا';
+                quickExpenseCategoryInput.appendChild(option);
+            } else {
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.name;
+                    quickExpenseCategoryInput.appendChild(option);
+                });
             }
 
-            const now = new Date();
-            // استخدام en-GB للحصول على تاريخ ميلادي وأرقام إنجليزية في المعاملات
-            const timestamp = `${now.toLocaleDateString('en-GB')} ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
+            if (categories.some(cat => cat.id === selectedCategoryId)) {
+                quickExpenseCategoryInput.value = selectedCategoryId;
+            } else if (categories[0]) {
+                quickExpenseCategoryInput.value = categories[0].id;
+            }
 
+            const isDisabled = !isEditableMonth || categories.length === 0;
+            quickExpenseCard.classList.toggle('hidden', !isEditableMonth);
+            quickExpenseAmountInput.disabled = isDisabled;
+            quickExpenseNoteInput.disabled = isDisabled;
+            quickExpenseCategoryInput.disabled = isDisabled;
+
+            const submitBtn = quickExpenseForm ? quickExpenseForm.querySelector('button[type="submit"]') : null;
+            if (submitBtn) submitBtn.disabled = isDisabled;
+        }
+
+        function addExpenseToCategory(categoryId, amountValue, noteValue) {
+            if (!isEditableMonth) {
+                openInfoDialog('لا يمكن إضافة مصروف لشهر مؤرشف.');
+                return false;
+            }
+
+            const cat = categories.find(c => c.id === categoryId);
+            if (!cat) {
+                openInfoDialog('اختر القسم الذي تريد إضافة المصروف فيه.');
+                return false;
+            }
+
+            const newAmount = parseFloat(amountValue || 0);
+            if (!newAmount || newAmount <= 0) {
+                openInfoDialog('أدخل مبلغًا صحيحًا.');
+                return false;
+            }
+
+            const remaining = parseFloat(cat.allocated || 0) - getCategoryUsed(cat);
+            if (newAmount > remaining) {
+                openInfoDialog(`عذرًا، لا يمكنك إضافة ${formatCurrency(newAmount)}. المتبقي في هذا القسم هو ${formatCurrency(remaining)} فقط.`);
+                return false;
+            }
+
+            const note = (noteValue || '').trim() || 'بدون ملاحظة';
             if (!cat.transactions) cat.transactions = [];
 
             cat.transactions.push({
-                id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
+                id: makeId('trx_'),
                 amount: newAmount,
-                note: expenseNoteInput.value || 'بدون ملاحظة',
-                date: timestamp
+                note,
+                date: getNowStamp()
             });
 
             syncData();
             updateUI();
-            expenseModal.classList.add('hidden');
-            logAction('add', `${expenseNoteInput.value || 'بدون ملاحظة'} (${newAmount})`, `قسم ${cat.name}`);
+            logAction('add', `${note} (${newAmount})`, `قسم ${cat.name}`);
+            return true;
+        }
+
+        quickExpenseForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const added = addExpenseToCategory(
+                quickExpenseCategoryInput.value,
+                quickExpenseAmountInput.value,
+                quickExpenseNoteInput.value
+            );
+
+            if (!added) return;
+            quickExpenseAmountInput.value = '';
+            quickExpenseNoteInput.value = '';
+            quickExpenseAmountInput.focus();
+        });
+
+        expenseForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = expenseCatIdInput.value;
+            const added = addExpenseToCategory(id, expenseAmountInput.value, expenseNoteInput.value);
+            if (added) expenseModal.classList.add('hidden');
         });
 
         // --- UI & Math ---
@@ -2686,6 +2893,7 @@
 
             [statAllocated, statUsed, statRemaining, statDebtValue].forEach(toggleAmountClass);
 
+            renderQuickExpenseCategories();
             renderCategories();
             renderDebts();
             renderShoppingItems();
