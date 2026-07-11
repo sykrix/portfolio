@@ -550,24 +550,10 @@
 
         .quick-expense-form {
             display: grid;
-            grid-template-columns: 1.5fr minmax(230px, 0.9fr);
+            grid-template-columns: minmax(120px, 0.75fr) minmax(170px, 1fr) minmax(150px, 0.85fr) auto;
+            grid-template-areas: "amount note category submit";
             gap: 12px;
             align-items: end;
-        }
-
-        .quick-expense-fields,
-        .quick-expense-actions {
-            display: grid;
-            gap: 12px;
-            align-items: end;
-        }
-
-        .quick-expense-fields {
-            grid-template-columns: minmax(120px, 0.8fr) 1fr;
-        }
-
-        .quick-expense-actions {
-            grid-template-columns: minmax(130px, 1fr) auto;
         }
 
         .quick-expense-field {
@@ -583,10 +569,24 @@
             font-weight: 700;
         }
 
+        .quick-expense-amount-field {
+            grid-area: amount;
+        }
+
+        .quick-expense-note-field {
+            grid-area: note;
+        }
+
+        .quick-expense-category-field {
+            grid-area: category;
+        }
+
         .quick-expense-card input,
         .quick-expense-select {
             width: 100%;
             min-height: 48px;
+            min-width: 0;
+            font-size: 16px;
         }
 
         .quick-expense-select {
@@ -611,6 +611,7 @@
         }
 
         .quick-expense-submit {
+            grid-area: submit;
             min-width: 104px;
             height: 48px;
             white-space: nowrap;
@@ -1255,14 +1256,18 @@
                 gap: 16px;
             }
 
-            .quick-expense-form,
-            .quick-expense-fields,
-            .quick-expense-actions {
-                grid-template-columns: 1fr;
+            .quick-expense-form {
+                grid-template-columns: minmax(116px, 0.78fr) minmax(0, 1fr);
+                grid-template-areas:
+                    "amount category"
+                    "note note"
+                    "submit submit";
+                gap: 10px 12px;
             }
 
             .quick-expense-submit {
-                width: 100%;
+                justify-self: center;
+                width: min(220px, 72%);
             }
         }
 
@@ -1278,6 +1283,39 @@
             .category-card {
                 padding: 16px;
                 border-radius: var(--border-radius-md);
+            }
+
+            .quick-expense-card {
+                gap: 12px;
+            }
+
+            .quick-expense-title {
+                display: none;
+            }
+
+            .quick-expense-form {
+                grid-template-columns: minmax(112px, 0.78fr) minmax(0, 1fr);
+            }
+
+            .quick-expense-field {
+                gap: 6px;
+            }
+
+            .quick-expense-field label {
+                font-size: 0.82rem;
+            }
+
+            .quick-expense-card input,
+            .quick-expense-select {
+                min-height: 44px;
+                padding: 10px 12px;
+            }
+
+            .quick-expense-submit {
+                min-height: 44px;
+                height: 44px;
+                padding: 10px 18px;
+                width: min(190px, 70%);
             }
 
             .header-top {
@@ -1758,23 +1796,19 @@
                         <span>إضافة مصروف سريع</span>
                     </div>
                     <form id="quick-expense-form" class="quick-expense-form">
-                        <div class="quick-expense-fields">
-                            <div class="quick-expense-field">
-                                <label for="quick-expense-amount">المبلغ</label>
-                                <input type="number" inputmode="decimal" id="quick-expense-amount" required min="0" step="any" placeholder="مثال: 5">
-                            </div>
-                            <div class="quick-expense-field">
-                                <label for="quick-expense-note">الملاحظة</label>
-                                <input type="text" id="quick-expense-note" placeholder="مثال: قهوة">
-                            </div>
+                        <div class="quick-expense-field quick-expense-amount-field">
+                            <label for="quick-expense-amount">المبلغ</label>
+                            <input type="number" inputmode="decimal" id="quick-expense-amount" required min="0" step="any" placeholder="مثال: 5">
                         </div>
-                        <div class="quick-expense-actions">
-                            <div class="quick-expense-field">
-                                <label for="quick-expense-category">القسم</label>
-                                <select id="quick-expense-category" class="quick-expense-select" required></select>
-                            </div>
-                            <button type="submit" class="btn-success quick-expense-submit"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
+                        <div class="quick-expense-field quick-expense-note-field">
+                            <label for="quick-expense-note">الملاحظة</label>
+                            <input type="text" id="quick-expense-note" placeholder="مثال: قهوة">
                         </div>
+                        <div class="quick-expense-field quick-expense-category-field">
+                            <label for="quick-expense-category">القسم</label>
+                            <select id="quick-expense-category" class="quick-expense-select" required></select>
+                        </div>
+                        <button type="submit" class="btn-success quick-expense-submit"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
                     </form>
                 </div>
                 <div id="categories-grid" class="categories-grid">
