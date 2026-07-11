@@ -191,8 +191,14 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             width: 100%;
+        }
+
+        .header-actions .month-selector {
+            flex: 0 1 220px;
+            min-width: 170px;
+            margin-left: 0;
         }
 
         .icon-btn {
@@ -273,10 +279,16 @@
             gap: 10px;
         }
 
+        .salary-input-wrapper {
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
         .salary-input-wrapper input {
             direction: ltr;
             text-align: right;
             font-weight: 700;
+            min-width: 0;
         }
 
         .salary-toggle-btn {
@@ -678,6 +690,16 @@
             color: var(--primary-color);
         }
 
+        .cat-btn.pin:hover,
+        .cat-btn.pin.active {
+            color: var(--primary-color);
+        }
+
+        .cat-btn.pin.active {
+            background: rgba(59, 130, 246, 0.12);
+            border-radius: 8px;
+        }
+
         .cat-btn.delete:hover {
             color: var(--danger-color);
         }
@@ -726,7 +748,6 @@
             font-size: 1rem;
             outline: none;
             cursor: pointer;
-            margin-left: 10px;
             font-family: 'Cairo', sans-serif;
         }
 
@@ -1274,23 +1295,59 @@
                 justify-content: center;
                 width: 100%;
                 gap: 10px;
+                flex-wrap: nowrap;
             }
 
             .month-selector {
-                margin-left: 0;
                 flex: 1;
-                max-width: 220px;
-                min-width: 180px;
+                max-width: none;
+                min-width: 0;
+                padding-inline: 10px;
+                font-size: 0.92rem;
+            }
+
+            .icon-btn {
+                width: 42px;
+                height: 42px;
+                flex: 0 0 42px;
+            }
+
+            .live-info-bar {
+                flex-wrap: nowrap;
+                gap: 6px;
+                width: 100%;
+            }
+
+            .live-info-bar span {
+                flex: 1 1 0;
+                min-width: 0;
+                padding: 7px 6px;
+                font-size: 0.72rem;
+                white-space: nowrap;
             }
 
             .salary-input-wrapper {
-                display: grid;
-                grid-template-columns: repeat(3, minmax(48px, auto));
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 8px;
             }
 
-            .salary-input-wrapper input,
+            .salary-input-wrapper input {
+                flex: 1 1 0;
+                min-width: 0;
+            }
+
+            .salary-input-wrapper .salary-toggle-btn,
+            .salary-input-wrapper .edit-amount-btn,
+            .salary-input-wrapper .salary-pin-btn {
+                flex: 0 0 46px;
+                width: 46px;
+                min-width: 46px;
+                padding: 0;
+            }
+
             .salary-input-wrapper .btn-primary {
-                grid-column: 1 / -1;
+                flex: 1 0 100%;
             }
 
             .salary-input-section label {
@@ -1394,6 +1451,7 @@
         
         .notif-container {
             position: relative;
+            flex: 0 0 auto;
         }
 
 
@@ -1596,7 +1654,6 @@
                 <div class="header-actions">
                     <select id="month-selector" class="month-selector"></select>
                     <button id="settings-btn" class="icon-btn" title="الإعدادات" aria-label="الإعدادات"><i class="fa-solid fa-gear"></i></button>
-                    <button id="theme-toggle-btn" class="icon-btn" title="تبديل الوضع"><i class="fa-solid fa-moon"></i></button>
                     <div class="notif-container">
                         <button id="notif-btn" class="icon-btn" title="الإشعارات">
                             <i class="fa-solid fa-bell"></i>
@@ -1982,7 +2039,6 @@
         const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
         const closeDeleteBtns = document.querySelectorAll('.close-delete-btn');
 
-        const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const notifBtn = document.getElementById('notif-btn');
         const notifPanel = document.getElementById('notif-panel');
         const notifBadge = document.getElementById('notif-badge');
@@ -2044,6 +2100,7 @@
         let pinnedSalary = parseFloat(localStorage.getItem('pinned_salary') || '');
         if (!Number.isFinite(pinnedSalary)) pinnedSalary = null;
         let categories = [];
+        let pinnedCategories = [];
         let debts = [];
         let shoppingItems = [];
         let savingsItems = [];
@@ -2073,50 +2130,13 @@
 
         // --- Theme System ---
         async function initTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'dark';
-            applyTheme(savedTheme);
-
-            // Sync theme from Firebase
-            if (db) {
-                await authReady;
-                db.collection('budgets').doc("my_budget").collection('system').doc('config').onSnapshot(snap => {
-                    if (snap.exists && snap.data().theme) {
-                        applyTheme(snap.data().theme);
-                        localStorage.setItem('theme', snap.data().theme);
-                    }
-                });
-            }
+            applyTheme('dark');
+            localStorage.setItem('theme', 'dark');
         }
 
         function applyTheme(theme) {
-            if (theme === 'light') {
-                document.body.classList.add('light-mode');
-                themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
-            } else {
-                document.body.classList.remove('light-mode');
-                themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            }
+            document.body.classList.remove('light-mode');
         }
-
-        themeToggleBtn.addEventListener('click', async () => {
-            const isLight = !document.body.classList.contains('light-mode');
-            const newTheme = isLight ? 'light' : 'dark';
-            applyTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
-
-            if (db) {
-                try {
-                    await authReady;
-                    await db.collection('budgets').doc("my_budget").collection('system').doc('config').set({
-                        theme: newTheme,
-                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                } catch (e) {
-                    console.error("Failed to sync theme:", e);
-                }
-            }
-            logAction('edit', newTheme === 'light' ? 'الوضع الفاتح' : 'الوضع الداكن', 'المظهر');
-        });
 
         initTheme();
 
@@ -2368,7 +2388,7 @@
             const isEditing = !totalSalaryInput.hasAttribute('readonly');
             const shouldShowAmount = areAmountsVisible || isEditing;
             if (!isEditing || document.activeElement !== totalSalaryInput) {
-                totalSalaryInput.value = shouldShowAmount ? totalSalary : '***';
+                totalSalaryInput.value = shouldShowAmount ? formatPlainAmount(totalSalary) : '***';
             }
             totalSalaryInput.classList.toggle('amount-hidden', !shouldShowAmount);
             if (toggleSalaryVisibilityBtn) {
@@ -2380,7 +2400,7 @@
                 pinSalaryBtn.classList.toggle('hidden', !isEditing || !isEditableMonth);
                 pinSalaryBtn.classList.toggle('active', isSalaryPinned);
                 const pinTitle = isSalaryPinned && pinnedSalary !== null
-                    ? `الراتب مثبت للشهور القادمة: ${pinnedSalary}`
+                    ? `الراتب مثبت للشهور القادمة: ${formatPlainAmount(pinnedSalary)}`
                     : 'تثبيت الراتب للشهور القادمة';
                 pinSalaryBtn.title = pinTitle;
                 pinSalaryBtn.setAttribute('aria-label', pinTitle);
@@ -2415,8 +2435,8 @@
             });
         }
 
-        function openInfoDialog(message, title = 'تنبيه') {
-            openConfirmDialog(message, () => {}, {
+        function openInfoDialog(message, title = 'تنبيه', action = () => {}) {
+            openConfirmDialog(message, action, {
                 title,
                 confirmText: 'حسنًا',
                 confirmClass: 'btn-primary'
@@ -2458,6 +2478,145 @@
             return `${prefix}${Date.now()}${Math.random().toString(36).slice(2, 8)}`;
         }
 
+        function formatPlainAmount(amount) {
+            const value = parseFloat(amount);
+            return Number.isFinite(value) ? value.toFixed(3) : '0.000';
+        }
+
+        function rememberCategoryHistory() {
+            localStorage.setItem('categories_initialized', 'true');
+        }
+
+        function hasSavedCategoryHistory() {
+            if (localStorage.getItem('categories_initialized') === 'true') return true;
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('categories_')) return true;
+            }
+            return false;
+        }
+
+        function normalizePinnedCategories(list = []) {
+            const seen = new Set();
+            return (Array.isArray(list) ? list : []).reduce((result, cat) => {
+                if (!cat || !cat.id || seen.has(cat.id)) return result;
+                seen.add(cat.id);
+                result.push({
+                    id: cat.id,
+                    name: cat.name || 'قسم',
+                    allocated: parseFloat(cat.allocated || 0),
+                    icon: cat.icon || 'auto',
+                    pinned: true,
+                    transactions: []
+                });
+                return result;
+            }, []);
+        }
+
+        function clonePinnedCategory(cat) {
+            return {
+                id: cat.id || makeId('cat_'),
+                name: cat.name || 'قسم',
+                allocated: parseFloat(cat.allocated || 0),
+                icon: cat.icon || 'auto',
+                pinned: true,
+                transactions: []
+            };
+        }
+
+        function isPinnedCategory(cat) {
+            return !!cat && pinnedCategories.some(pin => pin.id === cat.id);
+        }
+
+        function upsertPinnedCategory(cat) {
+            const nextPinned = clonePinnedCategory(cat);
+            const index = pinnedCategories.findIndex(pin => pin.id === nextPinned.id);
+            if (index === -1) pinnedCategories.push(nextPinned);
+            else pinnedCategories[index] = nextPinned;
+        }
+
+        function removePinnedCategory(id) {
+            pinnedCategories = pinnedCategories.filter(pin => pin.id !== id);
+        }
+
+        function mergePinnedCategoriesIntoCategories() {
+            let changed = false;
+            pinnedCategories.forEach(pin => {
+                const existing = categories.find(cat => cat.id === pin.id);
+                if (existing) {
+                    if (!existing.pinned) {
+                        existing.pinned = true;
+                        changed = true;
+                    }
+                } else {
+                    categories.push(clonePinnedCategory(pin));
+                    changed = true;
+                }
+            });
+
+            categories.forEach(cat => {
+                const shouldBePinned = isPinnedCategory(cat);
+                if (cat.pinned !== shouldBePinned) {
+                    cat.pinned = shouldBePinned;
+                    changed = true;
+                }
+            });
+            return changed;
+        }
+
+        function getInitialCategoriesForMonth(month) {
+            const pinnedForMonth = pinnedCategories.map(clonePinnedCategory);
+            if (pinnedForMonth.length > 0 || hasSavedCategoryHistory() || month !== currentFinancialMonth) {
+                return pinnedForMonth;
+            }
+
+            rememberCategoryHistory();
+            return [
+                { id: "1", name: "الإيجار", allocated: 160, pinned: false, transactions: [] },
+                { id: "2", name: "الإنترنت", allocated: 30, pinned: false, transactions: [] },
+                { id: "3", name: "البنزين", allocated: 60, pinned: false, transactions: [] },
+                { id: "4", name: "الراشن", allocated: 70, pinned: false, transactions: [] }
+            ];
+        }
+
+        function normalizeMonthCategories(rawCategories = []) {
+            let migrated = false;
+            const source = Array.isArray(rawCategories) ? rawCategories : [];
+            const normalized = source.map(cat => {
+                const nextCat = { ...cat };
+                if (!nextCat.id) {
+                    nextCat.id = makeId('cat_');
+                    migrated = true;
+                }
+                if (nextCat.used !== undefined) {
+                    migrated = true;
+                    if (nextCat.used > 0) {
+                        nextCat.transactions = [{
+                            id: makeId('trx_'),
+                            amount: nextCat.used,
+                            note: nextCat.note || 'مصروف سابق',
+                            date: nextCat.lastModified || new Date().toLocaleString('ar-SA')
+                        }];
+                    } else {
+                        nextCat.transactions = [];
+                    }
+                    delete nextCat.used;
+                    delete nextCat.note;
+                    delete nextCat.lastModified;
+                }
+                if (!Array.isArray(nextCat.transactions)) {
+                    nextCat.transactions = [];
+                    migrated = true;
+                }
+                nextCat.allocated = parseFloat(nextCat.allocated || 0);
+                nextCat.icon = nextCat.icon || 'auto';
+                nextCat.pinned = isPinnedCategory(nextCat);
+                return nextCat;
+            });
+
+            return { categories: normalized, migrated };
+        }
+
         function saveSalaryPinLocal() {
             localStorage.setItem('salary_pinned', isSalaryPinned ? 'true' : 'false');
             if (pinnedSalary === null || !Number.isFinite(pinnedSalary)) {
@@ -2478,10 +2637,14 @@
             debts = Array.isArray(data.debts) ? data.debts : [];
             shoppingItems = Array.isArray(data.shoppingItems) ? data.shoppingItems : [];
             savingsItems = Array.isArray(data.savingsItems) ? data.savingsItems : [];
+            pinnedCategories = normalizePinnedCategories(data.pinnedCategories || []);
             if (data.salaryPin && typeof data.salaryPin === 'object') {
                 isSalaryPinned = data.salaryPin.pinned === true;
                 const nextPinnedSalary = parseFloat(data.salaryPin.amount);
                 pinnedSalary = Number.isFinite(nextPinnedSalary) ? nextPinnedSalary : null;
+            }
+            if (mergePinnedCategoriesIntoCategories() && monthSelector.value) {
+                localStorage.setItem(`categories_${monthSelector.value}`, JSON.stringify(categories));
             }
             saveGlobalDataLocal();
         }
@@ -2490,6 +2653,7 @@
             localStorage.setItem('global_debts', JSON.stringify(debts));
             localStorage.setItem('global_shopping', JSON.stringify(shoppingItems));
             localStorage.setItem('global_savings', JSON.stringify(savingsItems));
+            localStorage.setItem('global_pinned_categories', JSON.stringify(pinnedCategories));
             saveSalaryPinLocal();
         }
 
@@ -2497,6 +2661,7 @@
             try { debts = JSON.parse(localStorage.getItem('global_debts') || '[]'); } catch (e) { debts = []; }
             try { shoppingItems = JSON.parse(localStorage.getItem('global_shopping') || '[]'); } catch (e) { shoppingItems = []; }
             try { savingsItems = JSON.parse(localStorage.getItem('global_savings') || '[]'); } catch (e) { savingsItems = []; }
+            try { pinnedCategories = normalizePinnedCategories(JSON.parse(localStorage.getItem('global_pinned_categories') || '[]')); } catch (e) { pinnedCategories = []; }
             isSalaryPinned = localStorage.getItem('salary_pinned') === 'true';
             const nextPinnedSalary = parseFloat(localStorage.getItem('pinned_salary') || '');
             pinnedSalary = Number.isFinite(nextPinnedSalary) ? nextPinnedSalary : null;
@@ -2534,6 +2699,7 @@
                     debts,
                     shoppingItems,
                     savingsItems,
+                    pinnedCategories,
                     salaryPin: {
                         pinned: isSalaryPinned,
                         amount: pinnedSalary
@@ -2582,10 +2748,14 @@
                             const data = snap.data();
                             const savedSalary = parseFloat(data.totalSalary);
                             totalSalary = Number.isFinite(savedSalary) ? savedSalary : getDefaultSalaryForMonth(month);
-                            categories = data.categories || [];
+                            const normalizedResult = normalizeMonthCategories(data.categories || []);
+                            categories = normalizedResult.categories;
+                            rememberCategoryHistory();
+                            const pinsChanged = mergePinnedCategoriesIntoCategories();
                             renderSalaryInput();
                             updateLastModified(data.lastUpdated);
                             updateUI();
+                            if (isEditableMonth && (normalizedResult.migrated || pinsChanged)) syncData();
                         } else {
                             loadLocalData(month);
                             console.info("Month data document not found. Local/default data was loaded without uploading automatically.");
@@ -2612,44 +2782,24 @@
             renderSalaryInput();
 
             const key = `categories_${month}`;
+            let shouldSaveMonth = false;
             if (!localStorage.getItem(key)) {
-                categories = [
-                    { id: "1", name: "الإيجار", allocated: 160, transactions: [] },
-                    { id: "2", name: "الإنترنت", allocated: 30, transactions: [] },
-                    { id: "3", name: "البنزين", allocated: 60, transactions: [] },
-                    { id: "4", name: "الراشن", allocated: 70, transactions: [] }
-                ];
+                categories = getInitialCategoriesForMonth(month);
+                shouldSaveMonth = true;
             } else {
                 try { categories = JSON.parse(localStorage.getItem(key)); }
                 catch (e) { categories = []; }
+                rememberCategoryHistory();
             }
 
             loadGlobalDataLocal(month);
 
-            // Migrate old data structure (used -> transactions)
-            let migrated = false;
-            categories = categories.map(cat => {
-                if (cat.used !== undefined) {
-                    migrated = true;
-                    if (cat.used > 0) {
-                        cat.transactions = [{
-                            id: Date.now().toString() + Math.random().toString(36).substr(2, 5),
-                            amount: cat.used,
-                            note: cat.note || 'مصروف سابق',
-                            date: cat.lastModified || new Date().toLocaleString('ar-SA')
-                        }];
-                    } else {
-                        cat.transactions = [];
-                    }
-                    delete cat.used;
-                    delete cat.note;
-                    delete cat.lastModified;
-                }
-                if (!cat.transactions) { cat.transactions = []; migrated = true; }
-                return cat;
-            });
+            const normalizedResult = normalizeMonthCategories(categories);
+            categories = normalizedResult.categories;
+            const pinsChanged = mergePinnedCategoriesIntoCategories();
 
-            if (migrated) {
+            if (normalizedResult.migrated || pinsChanged || shouldSaveMonth) {
+                rememberCategoryHistory();
                 localStorage.setItem(`categories_${month}`, JSON.stringify(categories));
                 localStorage.setItem(`salary_${month}`, totalSalary);
             }
@@ -2755,11 +2905,32 @@
             openConfirmDialog('هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟', () => {
                 const cat = categories.find(c => c.id === id);
                 const name = cat ? cat.name : 'قسم';
+                if (cat && cat.pinned) {
+                    removePinnedCategory(cat.id);
+                    syncGlobalData();
+                }
                 categories = categories.filter(c => c.id !== id);
                 syncData();
                 updateUI();
                 logAction('delete', name, 'إدارة الأقسام');
             });
+        };
+
+        window.toggleCategoryPin = (id) => {
+            const cat = categories.find(c => c.id === id);
+            if (!cat) return;
+
+            cat.pinned = !cat.pinned;
+            if (cat.pinned) {
+                upsertPinnedCategory(cat);
+            } else {
+                removePinnedCategory(cat.id);
+            }
+
+            syncGlobalData();
+            syncData();
+            updateUI();
+            logAction('edit', cat.pinned ? `تثبيت ${cat.name}` : `إلغاء تثبيت ${cat.name}`, 'تثبيت الأقسام');
         };
 
         window.requestDeleteTransaction = (catId, transId) => {
@@ -2813,6 +2984,7 @@
                 name: catNameInput.value,
                 allocated: parseFloat(catAllocatedInput.value || 0),
                 icon: catIconInput.value,
+                pinned: false,
                 transactions: []
             };
 
@@ -2826,6 +2998,10 @@
                     categories[index].name = catData.name;
                     categories[index].allocated = catData.allocated;
                     categories[index].icon = catData.icon;
+                    if (categories[index].pinned) {
+                        upsertPinnedCategory(categories[index]);
+                        syncGlobalData();
+                    }
                     
                     let detail = catData.name;
                     if (oldName !== catData.name) detail = `${oldName} ➔ ${catData.name}`;
@@ -2838,7 +3014,7 @@
                 });
                 return;
             } else {
-                categories.push({ id: Date.now().toString(), ...catData });
+                categories.push({ id: makeId('cat_'), ...catData });
                 logAction('add', catData.name, 'إدارة الأقسام');
             }
 
@@ -2949,7 +3125,9 @@
             if (!added) return;
             quickExpenseAmountInput.value = '';
             quickExpenseNoteInput.value = '';
-            quickExpenseAmountInput.focus();
+            openInfoDialog('تم حفظ المصروف بنجاح.', 'تم الحفظ', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
 
         expenseForm.addEventListener('submit', (e) => {
@@ -3382,7 +3560,7 @@
                         </div>
                         <div class="cat-actions">
                             ${isEditableMonth ? `
-                            <button class="cat-btn" style="color: var(--success-color);" title="إضافة مصروف (معاملة جديدة)" onclick="openExpenseModal('${cat.id}')"><i class="fa-solid fa-plus"></i></button>
+                            <button class="cat-btn pin ${cat.pinned ? 'active' : ''}" title="${cat.pinned ? 'إلغاء تثبيت القسم من الشهور القادمة' : 'تثبيت القسم للشهور القادمة'}" onclick="toggleCategoryPin('${cat.id}')"><i class="fa-solid fa-thumbtack"></i></button>
                             <button class="cat-btn edit" title="تعديل اسم أو مخصص القسم" onclick="requestEditCategory('${cat.id}')"><i class="fa-solid fa-pen"></i></button>
                             <button class="cat-btn delete" title="حذف القسم بالكامل" onclick="requestDeleteCategory('${cat.id}')"><i class="fa-solid fa-trash"></i></button>
                             ` : `<span style="font-size: 0.7rem; color: var(--text-muted); border: 1px solid; padding: 2px 5px; border-radius: 4px;">مؤرشف</span>`}
@@ -3403,7 +3581,12 @@
         function formatCurrency(amount) {
             if (!areAmountsVisible) return 'OMR ***';
             // استخدام en-OM للحصول على أرقام إنجليزية مع سياق العملة العمانية
-            return new Intl.NumberFormat('en-OM', { style: 'currency', currency: 'OMR' }).format(amount);
+            return new Intl.NumberFormat('en-OM', {
+                style: 'currency',
+                currency: 'OMR',
+                minimumFractionDigits: 3,
+                maximumFractionDigits: 3
+            }).format(amount);
         }
 
         function amountHiddenClass() {
