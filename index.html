@@ -2921,17 +2921,30 @@
             const cat = categories.find(c => c.id === id);
             if (!cat) return;
 
-            cat.pinned = !cat.pinned;
-            if (cat.pinned) {
-                upsertPinnedCategory(cat);
-            } else {
-                removePinnedCategory(cat.id);
-            }
+            const willPin = !cat.pinned;
+            openConfirmDialog(
+                willPin
+                    ? `هل تريد تثبيت قسم "${cat.name}" للشهور القادمة؟`
+                    : `هل تريد إلغاء تثبيت قسم "${cat.name}" من الشهور القادمة؟`,
+                () => {
+                    cat.pinned = willPin;
+                    if (cat.pinned) {
+                        upsertPinnedCategory(cat);
+                    } else {
+                        removePinnedCategory(cat.id);
+                    }
 
-            syncGlobalData();
-            syncData();
-            updateUI();
-            logAction('edit', cat.pinned ? `تثبيت ${cat.name}` : `إلغاء تثبيت ${cat.name}`, 'تثبيت الأقسام');
+                    syncGlobalData();
+                    syncData();
+                    updateUI();
+                    logAction('edit', cat.pinned ? `تثبيت ${cat.name}` : `إلغاء تثبيت ${cat.name}`, 'تثبيت الأقسام');
+                },
+                {
+                    title: willPin ? 'تأكيد التثبيت' : 'تأكيد إلغاء التثبيت',
+                    confirmText: 'نعم',
+                    confirmClass: 'btn-primary'
+                }
+            );
         };
 
         window.requestDeleteTransaction = (catId, transId) => {
@@ -3406,13 +3419,26 @@
 
         window.toggleShoppingItem = (id) => {
             const item = shoppingItems.find(i => i.id === id);
-            if (item) {
-                item.checked = !item.checked;
-                item.checkedAt = item.checked ? getNowStamp() : '';
-                syncGlobalData();
-                updateUI();
-                logAction(item.checked ? 'done' : 'edit', item.text, item.checked ? 'تم شراء غرض' : 'إلغاء شراء غرض');
-            }
+            if (!item) return;
+
+            const willCheck = !item.checked;
+            openConfirmDialog(
+                willCheck
+                    ? `هل تريد تأكيد شراء "${item.text}"؟`
+                    : `هل تريد إلغاء علامة الشراء عن "${item.text}"؟`,
+                () => {
+                    item.checked = willCheck;
+                    item.checkedAt = item.checked ? getNowStamp() : '';
+                    syncGlobalData();
+                    updateUI();
+                    logAction(item.checked ? 'done' : 'edit', item.text, item.checked ? 'تم شراء غرض' : 'إلغاء شراء غرض');
+                },
+                {
+                    title: willCheck ? 'تأكيد الشراء' : 'تأكيد إلغاء الشراء',
+                    confirmText: 'نعم',
+                    confirmClass: 'btn-primary'
+                }
+            );
         };
 
         window.deleteShoppingItem = (id) => {
