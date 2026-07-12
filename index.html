@@ -18,32 +18,32 @@
 
     <style>
         :root {
-            --primary-color: #3b82f6;
-            --primary-hover: #2563eb;
+            --primary-color: #f59e0b;
+            --primary-hover: #d97706;
             --success-color: #10b981;
             --danger-color: #ef4444;
             --danger-hover: #dc2626;
             --warning-color: #f59e0b;
-            --bg-color: #0f172a;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --bg-color: #111111;
+            --card-bg: rgba(31, 31, 34, 0.7);
             --card-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --text-main: #fafafa;
+            --text-muted: #a3a3a3;
             --input-bg: rgba(0, 0, 0, 0.2);
             --glass-blur: 12px;
             --border-radius-lg: 24px;
             --border-radius-md: 16px;
             --border-radius-sm: 12px;
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --stat-bg: rgba(15, 23, 42, 0.4);
+            --stat-bg: rgba(17, 17, 17, 0.4);
         }
 
         body.light-mode {
-            --bg-color: #f8fafc;
+            --bg-color: #f9fafb;
             --card-bg: rgba(255, 255, 255, 0.8);
             --card-border: rgba(0, 0, 0, 0.06);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
+            --text-main: #111827;
+            --text-muted: #6b7280;
             --input-bg: rgba(0, 0, 0, 0.03);
             --stat-bg: rgba(255, 255, 255, 0.7);
         }
@@ -60,7 +60,7 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             min-height: 100vh;
-            background-image: radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
+            background-image: radial-gradient(circle at 15% 50%, rgba(245, 158, 11, 0.08), transparent 25%),
                 radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.08), transparent 25%);
             background-attachment: fixed;
             padding-bottom: 60px;
@@ -277,8 +277,8 @@
         }
 
         .salary-pin-btn.active {
-            background: rgba(59, 130, 246, 0.16);
-            border-color: rgba(59, 130, 246, 0.5);
+            background: rgba(245, 158, 11, 0.16);
+            border-color: rgba(245, 158, 11, 0.5);
             color: var(--primary-color);
         }
 
@@ -331,7 +331,7 @@
 
         input:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
         }
 
         button {
@@ -497,8 +497,8 @@
         }
 
         .stat-box.highlight {
-            background: rgba(59, 130, 246, 0.1);
-            border-color: rgba(59, 130, 246, 0.2);
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.2);
         }
 
         .stat-box.stat-wide {
@@ -658,7 +658,7 @@
 
         .quick-expense-select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
         }
 
         .quick-expense-select option {
@@ -716,7 +716,7 @@
         .cat-title i {
             color: var(--primary-color);
             font-size: 0.95rem;
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(245, 158, 11, 0.1);
             min-width: 35px;
             height: 35px;
             display: flex;
@@ -753,7 +753,7 @@
         }
 
         .cat-btn.pin.active {
-            background: rgba(59, 130, 246, 0.12);
+            background: rgba(245, 158, 11, 0.12);
             border-radius: 8px;
         }
 
@@ -824,7 +824,7 @@
             flex: 1;
             background:
                 linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05)),
-                rgba(15, 23, 42, 0.34);
+                rgba(20, 20, 20, 0.34);
             border: 1px solid rgba(255, 255, 255, 0.18);
             color: var(--text-muted);
             padding: 12px;
@@ -865,7 +865,7 @@
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.82),
                 inset 0 -18px 28px rgba(255, 255, 255, 0.16),
-                0 10px 24px rgba(15, 23, 42, 0.08);
+                0 10px 24px rgba(20, 20, 20, 0.08);
         }
 
         .nav-tab i {
@@ -882,19 +882,19 @@
         .nav-tab.active {
             background:
                 linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.09)),
-                rgba(59, 130, 246, 0.52);
+                rgba(245, 158, 11, 0.5);
             color: white;
-            border-color: rgba(147, 197, 253, 0.62);
+            border-color: rgba(251, 191, 36, 0.62);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.34),
-                inset 0 -18px 34px rgba(37, 99, 235, 0.18),
-                0 10px 26px rgba(59, 130, 246, 0.28);
+                inset 0 -18px 34px rgba(146, 64, 14, 0.18),
+                0 10px 26px rgba(245, 158, 11, 0.24);
         }
 
         .nav-tab:not(.active):hover {
             background:
                 linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07)),
-                rgba(15, 23, 42, 0.42);
+                rgba(20, 20, 20, 0.42);
             color: var(--text-main);
             border-color: rgba(255, 255, 255, 0.26);
             transform: translateY(-1px);
@@ -1633,7 +1633,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: #1e293b; /* Solid background for max readability */
+            background: #202020; /* Solid background for max readability */
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--border-radius-lg);
             box-shadow: 0 25px 60px rgba(0,0,0,0.8);
@@ -1687,7 +1687,7 @@
         }
 
         .notif-header button:hover {
-            background: rgba(59, 130, 246, 0.1);
+            background: rgba(245, 158, 11, 0.1);
         }
 
         .notif-list {
@@ -1712,7 +1712,7 @@
         }
 
         .notif-item.unread {
-            background: rgba(59, 130, 246, 0.08);
+            background: rgba(245, 158, 11, 0.12);
             border-right: 3px solid var(--primary-color);
         }
 
@@ -1735,7 +1735,7 @@
         }
 
         .type-add { background: #10b981; color: white; }
-        .type-edit { background: #3b82f6; color: white; }
+        .type-edit { background: #f59e0b; color: white; }
         .type-delete { background: #ef4444; color: white; }
         .type-login { background: #f59e0b; color: white; }
 
@@ -1807,13 +1807,13 @@
 
         /* Liquid Glass refresh */
         :root {
-            --primary-color: #5fa8ff;
-            --primary-hover: #8fc4ff;
+            --primary-color: #f59e0b;
+            --primary-hover: #fbbf24;
             --success-color: #22d7a7;
             --danger-color: #ff4f67;
             --danger-hover: #ff7185;
             --warning-color: #ffbd4a;
-            --bg-color: #080b14;
+            --bg-color: #0b0c0f;
             --card-bg: rgba(255, 255, 255, 0.105);
             --card-border: rgba(255, 255, 255, 0.22);
             --text-main: rgba(255, 255, 255, 0.94);
@@ -1833,14 +1833,14 @@
         }
 
         body.light-mode {
-            --bg-color: #eef5ff;
+            --bg-color: #f7f7f8;
             --card-bg: rgba(255, 255, 255, 0.46);
             --card-border: rgba(255, 255, 255, 0.72);
-            --text-main: rgba(15, 23, 42, 0.92);
-            --text-muted: rgba(51, 65, 85, 0.66);
+            --text-main: rgba(17, 24, 39, 0.92);
+            --text-muted: rgba(63, 63, 70, 0.66);
             --input-bg: rgba(255, 255, 255, 0.48);
             --stat-bg: rgba(255, 255, 255, 0.42);
-            --liquid-shadow: 0 20px 58px rgba(31, 41, 55, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.82), inset 0 -20px 30px rgba(255, 255, 255, 0.2);
+            --liquid-shadow: 0 20px 58px rgba(31, 31, 34, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.82), inset 0 -20px 30px rgba(255, 255, 255, 0.2);
         }
 
         html {
@@ -1851,10 +1851,10 @@
         body {
             background:
                 radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, 0.18), transparent 18rem),
-                radial-gradient(circle at 18% 12%, rgba(96, 165, 250, 0.28), transparent 22rem),
-                radial-gradient(circle at 88% 22%, rgba(45, 212, 191, 0.22), transparent 20rem),
+                radial-gradient(circle at 18% 12%, rgba(245, 158, 11, 0.24), transparent 22rem),
+                radial-gradient(circle at 88% 22%, rgba(16, 185, 129, 0.2), transparent 20rem),
                 radial-gradient(circle at 16% 82%, rgba(244, 114, 182, 0.14), transparent 20rem),
-                linear-gradient(150deg, #070a12 0%, #101321 38%, #0b1320 70%, #111015 100%);
+                linear-gradient(150deg, #080807 0%, #13110d 38%, #11100d 70%, #111015 100%);
             background-attachment: fixed;
             isolation: isolate;
         }
@@ -1870,8 +1870,8 @@
 
         body::before {
             background:
-                radial-gradient(circle at 24% 30%, rgba(96, 165, 250, 0.18), transparent 22%),
-                radial-gradient(circle at 76% 22%, rgba(34, 211, 238, 0.14), transparent 24%),
+                radial-gradient(circle at 24% 30%, rgba(245, 158, 11, 0.16), transparent 22%),
+                radial-gradient(circle at 76% 22%, rgba(16, 185, 129, 0.13), transparent 24%),
                 radial-gradient(circle at 62% 82%, rgba(251, 191, 36, 0.08), transparent 23%);
             filter: blur(10px);
             animation: liquidDrift 18s ease-in-out infinite alternate;
@@ -2038,12 +2038,12 @@
             color: rgba(255, 255, 255, 0.95);
             font-weight: 800;
             letter-spacing: 0;
-            text-shadow: 0 8px 28px rgba(96, 165, 250, 0.3);
+            text-shadow: 0 8px 28px rgba(245, 158, 11, 0.28);
         }
 
         .header-top h1 i {
             color: var(--primary-color);
-            filter: drop-shadow(0 0 18px rgba(96, 165, 250, 0.45));
+            filter: drop-shadow(0 0 18px rgba(245, 158, 11, 0.42));
         }
 
         .month-selector,
@@ -2067,8 +2067,8 @@
         input:focus,
         .quick-expense-select:focus,
         .month-selector:focus {
-            border-color: rgba(147, 197, 253, 0.72);
-            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgba(251, 191, 36, 0.72);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.14);
         }
 
@@ -2116,8 +2116,8 @@
         .modal-actions .btn-cancel {
             background:
                 linear-gradient(155deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.1)),
-                rgba(79, 154, 255, 0.5);
-            border-color: rgba(147, 197, 253, 0.62);
+                rgba(245, 158, 11, 0.5);
+            border-color: rgba(251, 191, 36, 0.62);
         }
 
         .btn-success {
@@ -2148,7 +2148,7 @@
             background:
                 linear-gradient(155deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.12)),
                 rgba(255, 255, 255, 0.15);
-            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.26), 0 0 34px rgba(96, 165, 250, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.26), 0 0 34px rgba(245, 158, 11, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.36);
         }
 
         .btn-primary:active,
@@ -2182,7 +2182,7 @@
         }
 
         .nav-tab.active {
-            box-shadow: 0 14px 34px rgba(79, 154, 255, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+            box-shadow: 0 14px 34px rgba(245, 158, 11, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.36);
         }
 
         .main-section:not(.hidden) {
@@ -2228,8 +2228,8 @@
         .stat-box.highlight {
             background:
                 linear-gradient(155deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.075)),
-                rgba(79, 154, 255, 0.22);
-            border-color: rgba(147, 197, 253, 0.34);
+                rgba(245, 158, 11, 0.2);
+            border-color: rgba(251, 191, 36, 0.34);
         }
 
         .progress-bar-bg,
@@ -2288,7 +2288,7 @@
 
         .checkbox-wrapper {
             border-radius: 9px;
-            border-color: rgba(96, 165, 250, 0.76);
+            border-color: rgba(245, 158, 11, 0.72);
             background: rgba(255, 255, 255, 0.08);
         }
 
@@ -2298,7 +2298,7 @@
         }
 
         .modal-overlay {
-            background: rgba(4, 7, 14, 0.54);
+            background: rgba(8, 8, 8, 0.54);
             backdrop-filter: blur(24px) saturate(160%);
             -webkit-backdrop-filter: blur(24px) saturate(160%);
         }
@@ -2430,12 +2430,12 @@
 
         /* Darker Liquid tuning for readability */
         :root {
-            --card-bg: rgba(8, 14, 28, 0.62);
+            --card-bg: rgba(17, 17, 18, 0.62);
             --card-border: rgba(255, 255, 255, 0.16);
             --text-main: rgba(255, 255, 255, 0.96);
             --text-muted: rgba(226, 232, 240, 0.74);
-            --input-bg: rgba(8, 14, 28, 0.48);
-            --stat-bg: rgba(8, 14, 28, 0.52);
+            --input-bg: rgba(17, 17, 18, 0.48);
+            --stat-bg: rgba(17, 17, 18, 0.52);
             --liquid-highlight: linear-gradient(155deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.055) 42%, rgba(255, 255, 255, 0.012) 72%);
             --liquid-shadow: 0 22px 70px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -22px 34px rgba(0, 0, 0, 0.16);
             --liquid-button-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -14px 24px rgba(0, 0, 0, 0.12);
@@ -2443,11 +2443,11 @@
 
         body {
             background:
-                radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(96, 165, 250, 0.13), transparent 17rem),
-                radial-gradient(circle at 16% 10%, rgba(59, 130, 246, 0.2), transparent 22rem),
-                radial-gradient(circle at 88% 18%, rgba(20, 184, 166, 0.13), transparent 20rem),
+                radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(245, 158, 11, 0.13), transparent 17rem),
+                radial-gradient(circle at 16% 10%, rgba(251, 191, 36, 0.16), transparent 22rem),
+                radial-gradient(circle at 88% 18%, rgba(16, 185, 129, 0.12), transparent 20rem),
                 radial-gradient(circle at 18% 88%, rgba(168, 85, 247, 0.12), transparent 20rem),
-                linear-gradient(155deg, #050711 0%, #0a1020 38%, #07111f 72%, #070912 100%);
+                linear-gradient(155deg, #080807 0%, #11100d 38%, #101010 72%, #0b0a09 100%);
         }
 
         .header-glass,
@@ -2462,7 +2462,7 @@
         .savings-summary {
             background:
                 linear-gradient(155deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.045) 42%, rgba(255, 255, 255, 0.01) 72%),
-                rgba(8, 14, 28, 0.66);
+                rgba(17, 17, 18, 0.66);
             border-color: rgba(255, 255, 255, 0.16);
         }
 
@@ -2484,7 +2484,7 @@
         select,
         textarea,
         .quick-expense-select {
-            background: rgba(7, 13, 26, 0.58);
+            background: rgba(18, 18, 19, 0.58);
             border-color: rgba(255, 255, 255, 0.16);
             color: rgba(255, 255, 255, 0.95);
         }
@@ -2501,7 +2501,7 @@
         .nav-tab {
             background:
                 linear-gradient(155deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05)),
-                rgba(9, 16, 31, 0.62);
+                rgba(18, 18, 19, 0.62);
             border-color: rgba(255, 255, 255, 0.16);
             color: rgba(255, 255, 255, 0.9);
         }
@@ -2511,14 +2511,14 @@
         .modal-actions .btn-cancel {
             background:
                 linear-gradient(155deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.055)),
-                rgba(47, 115, 214, 0.58);
-            border-color: rgba(147, 197, 253, 0.46);
+                rgba(245, 158, 11, 0.5);
+            border-color: rgba(251, 191, 36, 0.46);
         }
 
         .stat-box.highlight {
             background:
                 linear-gradient(155deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04)),
-                rgba(30, 64, 122, 0.38);
+                rgba(120, 53, 15, 0.34);
         }
 
         .notif-overlay {
@@ -2529,8 +2529,8 @@
 
         .notif-panel {
             background:
-                linear-gradient(155deg, rgba(30, 41, 59, 0.94), rgba(5, 10, 22, 0.96)),
-                #070d1b;
+                linear-gradient(155deg, rgba(31, 31, 34, 0.94), rgba(10, 10, 10, 0.96)),
+                #11100d;
             border-color: rgba(255, 255, 255, 0.16);
             box-shadow: 0 28px 80px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.14);
             color: rgba(255, 255, 255, 0.94);
@@ -2565,18 +2565,606 @@
         }
 
         .notif-item.unread {
-            background: rgba(37, 99, 235, 0.18);
-            border-right-color: rgba(147, 197, 253, 0.9);
+            background: rgba(245, 158, 11, 0.16);
+            border-right-color: rgba(251, 191, 36, 0.9);
         }
 
         .notif-item-meta {
-            color: rgba(203, 213, 225, 0.78);
+            color: rgba(212, 212, 216, 0.78);
         }
 
         .type-add { background: rgba(16, 185, 129, 0.92); }
-        .type-edit { background: rgba(59, 130, 246, 0.92); }
+        .type-edit { background: rgba(245, 158, 11, 0.92); }
         .type-delete { background: rgba(239, 68, 68, 0.92); }
         .type-login { background: rgba(245, 158, 11, 0.92); }
+
+        .notif-panel {
+            position: fixed;
+            top: 50%;
+            right: 50%;
+            left: auto;
+            width: min(430px, calc(100vw - 28px));
+            max-height: min(72vh, 580px);
+            transform: translate(50%, -46%) scale(0.96);
+            transform-origin: center;
+            pointer-events: none;
+            z-index: 4200;
+        }
+
+        .notif-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(50%, -50%) scale(1);
+            pointer-events: auto;
+        }
+
+        .notif-header {
+            padding: 16px 18px;
+            gap: 12px;
+        }
+
+        .notif-header .notif-close-btn {
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            flex: 0 0 auto;
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .notif-header .notif-close-btn:hover {
+            color: white;
+            background: rgba(245, 158, 11, 0.18);
+            border-color: rgba(251, 191, 36, 0.42);
+        }
+
+        .notif-list {
+            min-height: 180px;
+            max-height: calc(min(72vh, 580px) - 72px);
+        }
+
+        .notif-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .notif-list::-webkit-scrollbar-thumb {
+            background: rgba(245, 158, 11, 0.42);
+            border-radius: 999px;
+        }
+
+        .notif-item-header {
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .notif-type {
+            flex: 0 0 auto;
+            border-radius: 999px;
+            min-width: 76px;
+            justify-content: center;
+        }
+
+        .notif-item-name {
+            flex: 1;
+            min-width: 0;
+            text-align: right;
+            overflow-wrap: anywhere;
+            line-height: 1.5;
+        }
+
+        .notif-item-meta span {
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        body.light-mode .notif-header .notif-close-btn {
+            color: rgba(17, 24, 39, 0.82);
+            background: rgba(0, 0, 0, 0.04);
+            border-color: rgba(0, 0, 0, 0.08);
+        }
+
+        @media (max-width: 600px) {
+            .notif-panel {
+                top: 50%;
+                right: 50%;
+                left: auto;
+                width: calc(100vw - 20px);
+                max-width: calc(100vw - 20px);
+                max-height: min(78vh, 560px);
+                transform: translate(50%, -46%) scale(0.96);
+            }
+
+            .notif-panel.active {
+                transform: translate(50%, -50%) scale(1);
+            }
+
+            .notif-list {
+                max-height: calc(min(78vh, 560px) - 70px);
+            }
+
+            .notif-item {
+                padding: 14px 16px;
+            }
+        }
+
+        /* Semantic accent system: active surfaces turn white, icon/text carry the color. */
+        :root {
+            --section-expenses: #f59e0b;
+            --section-shopping: #3b82f6;
+            --section-debts: #ef4444;
+            --section-savings: #10b981;
+            --action-edit: #f59e0b;
+            --action-delete: #ef4444;
+            --control-accent: var(--section-expenses);
+            --control-tint: rgba(245, 158, 11, 0.14);
+            --control-border: rgba(245, 158, 11, 0.34);
+        }
+
+        .nav-tab {
+            --tab-accent: var(--section-expenses);
+            --tab-tint: rgba(245, 158, 11, 0.14);
+            color: rgba(255, 255, 255, 0.68);
+        }
+
+        .nav-tab[data-section="shopping-section"] {
+            --tab-accent: var(--section-shopping);
+            --tab-tint: rgba(59, 130, 246, 0.14);
+        }
+
+        .nav-tab[data-section="debts-section"] {
+            --tab-accent: var(--section-debts);
+            --tab-tint: rgba(239, 68, 68, 0.14);
+        }
+
+        .nav-tab[data-section="savings-section"] {
+            --tab-accent: var(--section-savings);
+            --tab-tint: rgba(16, 185, 129, 0.14);
+        }
+
+        .nav-tab i,
+        .nav-tab span {
+            transition: color 0.18s ease, opacity 0.18s ease;
+        }
+
+        .nav-tab:not(.active) i {
+            color: var(--tab-accent);
+            opacity: 0.82;
+        }
+
+        .nav-tab:not(.active):hover {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.055)),
+                var(--tab-tint);
+            border-color: rgba(255, 255, 255, 0.28);
+        }
+
+        .nav-tab:not(.active):hover span {
+            color: rgba(255, 255, 255, 0.94);
+        }
+
+        .nav-tab.active {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.88)),
+                #ffffff;
+            border-color: rgba(255, 255, 255, 0.96);
+            color: var(--tab-accent);
+            box-shadow:
+                0 16px 34px rgba(0, 0, 0, 0.18),
+                0 0 28px var(--tab-tint),
+                inset 0 1px 0 rgba(255, 255, 255, 0.96);
+        }
+
+        .nav-tab.active i,
+        .nav-tab.active span {
+            color: var(--tab-accent);
+        }
+
+        .btn-primary,
+        .btn-success,
+        .btn-danger,
+        .modal-actions .btn-cancel,
+        .icon-btn,
+        .cat-btn,
+        .toggle-trans-btn,
+        .file-chip {
+            --control-accent: var(--section-expenses);
+            --control-tint: rgba(245, 158, 11, 0.14);
+            --control-border: rgba(245, 158, 11, 0.34);
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.055)),
+                rgba(18, 18, 19, 0.62);
+            border-color: var(--control-border);
+            color: rgba(255, 255, 255, 0.92);
+        }
+
+        .btn-primary i,
+        .btn-success i,
+        .btn-danger i,
+        .modal-actions .btn-cancel i,
+        .icon-btn i,
+        .cat-btn i,
+        .toggle-trans-btn i,
+        .file-chip i {
+            color: var(--control-accent);
+        }
+
+        .btn-success {
+            --control-accent: var(--section-savings);
+            --control-tint: rgba(16, 185, 129, 0.14);
+            --control-border: rgba(16, 185, 129, 0.36);
+        }
+
+        .btn-danger,
+        .cat-btn.delete,
+        .del-trans-btn {
+            --control-accent: var(--action-delete);
+            --control-tint: rgba(239, 68, 68, 0.14);
+            --control-border: rgba(239, 68, 68, 0.38);
+        }
+
+        .cat-btn.edit {
+            --control-accent: var(--action-edit);
+            --control-tint: rgba(245, 158, 11, 0.14);
+            --control-border: rgba(245, 158, 11, 0.34);
+        }
+
+        #shopping-section .btn-primary,
+        #shopping-section .file-chip,
+        #shopping-section .checkbox-wrapper {
+            --control-accent: var(--section-shopping);
+            --control-tint: rgba(59, 130, 246, 0.14);
+            --control-border: rgba(59, 130, 246, 0.38);
+        }
+
+        #debts-section .btn-success,
+        #debts-section .debt-entry-card {
+            --control-accent: var(--section-debts);
+            --control-tint: rgba(239, 68, 68, 0.14);
+            --control-border: rgba(239, 68, 68, 0.36);
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover,
+        .btn-success:hover,
+        .btn-danger:hover,
+        .modal-actions .btn-cancel:hover,
+        .icon-btn:hover,
+        .cat-btn:hover,
+        .toggle-trans-btn:hover,
+        .file-chip:hover {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.08)),
+                var(--control-tint);
+            border-color: var(--control-border);
+            color: white;
+            box-shadow:
+                0 14px 30px rgba(0, 0, 0, 0.24),
+                0 0 24px var(--control-tint),
+                inset 0 1px 0 rgba(255, 255, 255, 0.24);
+        }
+
+        .btn-primary:active,
+        .btn-secondary:active,
+        .btn-success:active,
+        .btn-danger:active,
+        .modal-actions .btn-cancel:active,
+        .icon-btn:active,
+        .cat-btn:active,
+        .toggle-trans-btn.active,
+        .toggle-trans-btn:active,
+        .file-chip:active {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.88)),
+                #ffffff;
+            color: var(--control-accent);
+            border-color: rgba(255, 255, 255, 0.94);
+            transform: translateY(1px) scale(0.99);
+        }
+
+        .btn-primary:active i,
+        .btn-secondary:active i,
+        .btn-success:active i,
+        .btn-danger:active i,
+        .modal-actions .btn-cancel:active i,
+        .icon-btn:active i,
+        .cat-btn:active i,
+        .toggle-trans-btn.active i,
+        .toggle-trans-btn:active i,
+        .file-chip:active i,
+        .toggle-trans-btn.active span,
+        .toggle-trans-btn:active span {
+            color: var(--control-accent);
+        }
+
+        .cat-btn.delete,
+        .del-trans-btn {
+            color: var(--action-delete);
+        }
+
+        .cat-btn.edit {
+            color: var(--action-edit);
+        }
+
+        .cat-btn.pin.active {
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--section-expenses);
+            border-radius: 12px;
+        }
+
+        #shopping-section .section-header h2,
+        #shopping-section .shopping-date i,
+        #shopping-section .item-text {
+            color: var(--section-shopping);
+        }
+
+        #debts-section .section-header h2,
+        #debts-section .debt-total,
+        #debts-section .debt-name {
+            color: var(--section-debts);
+        }
+
+        #savings-section .section-header h2,
+        #savings-section .savings-total,
+        #savings-section .savings-note,
+        .savings-amount {
+            color: var(--section-savings);
+        }
+
+        #shopping-section .glass-card,
+        .shopping-item {
+            border-color: rgba(59, 130, 246, 0.24);
+        }
+
+        #debts-section .savings-summary,
+        #debts-section .debt-entry-card,
+        .debt-card {
+            border-color: rgba(239, 68, 68, 0.24);
+        }
+
+        #savings-section .savings-summary,
+        .savings-item {
+            border-color: rgba(16, 185, 129, 0.24);
+        }
+
+        .checkbox-wrapper {
+            border-color: var(--control-border);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .shopping-item.checked .checkbox-wrapper {
+            background: rgba(255, 255, 255, 0.96);
+            border-color: rgba(255, 255, 255, 0.96);
+        }
+
+        .shopping-item.checked .checkbox-wrapper i {
+            color: var(--section-shopping);
+        }
+
+        .type-add,
+        .type-done,
+        .type-pay { background: rgba(16, 185, 129, 0.92); }
+        .type-edit { background: rgba(245, 158, 11, 0.92); }
+        .type-delete { background: rgba(239, 68, 68, 0.92); }
+        .type-login { background: rgba(59, 130, 246, 0.92); }
+
+        :root {
+            --neutral-control: rgba(236, 236, 236, 0.88);
+            --neutral-control-muted: rgba(212, 212, 216, 0.72);
+            --neutral-control-tint: rgba(255, 255, 255, 0.105);
+            --neutral-control-border: rgba(255, 255, 255, 0.22);
+        }
+
+        #settings-btn,
+        #notif-btn,
+        .salary-input-wrapper .edit-amount-btn,
+        .salary-input-wrapper .salary-pin-btn,
+        .toggle-trans-btn,
+        .cat-btn.edit,
+        .cat-btn.pin {
+            --control-accent: var(--neutral-control);
+            --control-tint: var(--neutral-control-tint);
+            --control-border: var(--neutral-control-border);
+            border-color: var(--neutral-control-border);
+        }
+
+        #settings-btn i,
+        #notif-btn i,
+        .salary-input-wrapper .edit-amount-btn i,
+        .salary-input-wrapper .salary-pin-btn i,
+        .toggle-trans-btn i,
+        .cat-btn.edit i,
+        .cat-btn.pin i,
+        .cat-title i {
+            color: var(--neutral-control) !important;
+        }
+
+        .toggle-trans-btn {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .toggle-trans-btn.active,
+        .toggle-trans-btn:active {
+            color: #3f3f46;
+        }
+
+        .toggle-trans-btn.active i,
+        .toggle-trans-btn:active i,
+        .toggle-trans-btn.active span,
+        .toggle-trans-btn:active span {
+            color: #3f3f46 !important;
+        }
+
+        .cat-btn.edit,
+        .cat-btn.pin {
+            color: var(--neutral-control-muted);
+        }
+
+        .cat-btn.edit:hover,
+        .cat-btn.pin:hover {
+            color: var(--neutral-control);
+        }
+
+        .cat-btn.pin.active {
+            background: rgba(255, 255, 255, 0.16);
+            color: var(--neutral-control);
+            border-color: var(--neutral-control-border);
+        }
+
+        .cat-btn.pin.active i {
+            color: #1d4ed8 !important;
+        }
+
+        .cat-actions .cat-btn,
+        .cat-actions .cat-btn:hover,
+        .cat-actions .cat-btn:active {
+            background: transparent !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            transform: none !important;
+        }
+
+        .cat-actions .cat-btn::before {
+            display: none !important;
+        }
+
+        .cat-actions .cat-btn.pin.active {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.055)),
+                rgba(255, 255, 255, 0.16) !important;
+            border-color: var(--neutral-control-border) !important;
+            box-shadow: var(--liquid-button-shadow) !important;
+            backdrop-filter: blur(12px) saturate(140%) !important;
+            -webkit-backdrop-filter: blur(12px) saturate(140%) !important;
+            border-radius: 18px;
+        }
+
+        .cat-title i {
+            background: rgba(255, 255, 255, 0.095);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .stat-box.highlight {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.045) 42%, rgba(255, 255, 255, 0.012) 72%),
+                rgba(255, 255, 255, 0.065);
+            border-color: var(--neutral-control-border);
+            box-shadow:
+                0 16px 38px rgba(0, 0, 0, 0.24),
+                inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        }
+
+        .stat-box.highlight::before {
+            opacity: 0.32;
+        }
+
+        .stat-box.highlight .stat-label {
+            color: var(--neutral-control-muted);
+        }
+
+        /* Plain black page background, no colored ambient gradients. */
+        html,
+        body {
+            background: #000 !important;
+            background-color: #000 !important;
+            background-image: none !important;
+        }
+
+        body::before,
+        body::after {
+            display: none !important;
+            background: none !important;
+            animation: none !important;
+        }
+
+        @media (max-width: 768px), (hover: none), (pointer: coarse) {
+            :root {
+                --glass-blur: blur(10px) saturate(135%);
+                --liquid-shadow: 0 12px 28px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+                --liquid-button-shadow: 0 8px 18px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+                --transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, opacity 0.16s ease;
+            }
+
+            body {
+                background-attachment: scroll;
+            }
+
+            body::before {
+                animation: none;
+                filter: none;
+                opacity: 0.55;
+            }
+
+            .main-section:not(.hidden),
+            .quick-expense-card,
+            .category-card,
+            .debt-card,
+            .shopping-item,
+            .savings-item,
+            .stat-box,
+            .savings-summary,
+            .debt-entry-card,
+            .next-salary-card {
+                animation: none;
+            }
+
+            .glass-card,
+            .header-glass,
+            .stat-box,
+            .next-salary-card,
+            .shopping-item,
+            .savings-item,
+            .debt-card,
+            .quick-expense-card,
+            .debt-entry-card,
+            .savings-summary,
+            .modal-content,
+            .notif-panel,
+            .main-nav,
+            .month-selector,
+            input,
+            select,
+            textarea,
+            .quick-expense-select {
+                backdrop-filter: blur(10px) saturate(135%);
+                -webkit-backdrop-filter: blur(10px) saturate(135%);
+            }
+
+            .main-nav {
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+            }
+
+            .quick-expense-card:hover,
+            .category-card:hover,
+            .debt-card:hover,
+            .shopping-item:hover,
+            .savings-item:hover,
+            .stat-box:hover,
+            .savings-summary:hover,
+            .nav-tab:not(.active):hover,
+            .btn-primary:hover,
+            .btn-secondary:hover,
+            .btn-success:hover,
+            .btn-danger:hover,
+            .icon-btn:hover,
+            .cat-btn:hover,
+            .toggle-trans-btn:hover,
+            .file-chip:hover {
+                transform: none;
+            }
+
+            .notif-overlay,
+            .modal-overlay {
+                backdrop-filter: blur(6px);
+                -webkit-backdrop-filter: blur(6px);
+            }
+        }
 
         @media (prefers-reduced-motion: reduce) {
             *,
@@ -2594,6 +3182,16 @@
 <body>
 
     <div id="notif-overlay" class="notif-overlay"></div>
+    <div id="notif-panel" class="notif-panel">
+        <div class="notif-header">
+            <h3>سجل النشاطات</h3>
+            <button id="notif-close-btn" class="notif-close-btn" type="button" title="إغلاق الإشعارات" aria-label="إغلاق الإشعارات">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="notif-list" class="notif-list">
+        </div>
+    </div>
     
     <div id="offline-banner" class="offline-banner">
         <i class="fa-solid fa-cloud-slash"></i> عذراً، أنت في وضع عدم الاتصال. يتم عرض البيانات من الذاكرة المحلية فقط.
@@ -2611,13 +3209,6 @@
                             <i class="fa-solid fa-bell"></i>
                         </button>
                         <span id="notif-badge" class="notif-badge hidden">0</span>
-                        <div id="notif-panel" class="notif-panel">
-                            <div class="notif-header">
-                                <h3>سجل النشاطات</h3>
-                            </div>
-                            <div id="notif-list" class="notif-list">
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -3005,6 +3596,7 @@
         const notifBadge = document.getElementById('notif-badge');
         const notifList = document.getElementById('notif-list');
         const notifOverlay = document.getElementById('notif-overlay');
+        const notifCloseBtn = document.getElementById('notif-close-btn');
         const offlineBanner = document.getElementById('offline-banner');
 
         const expenseModal = document.getElementById('expense-modal');
@@ -3307,38 +3899,49 @@
         updateSalaryCycleInfo();
         setInterval(updateSalaryCycleInfo, 60000);
 
+        function closeNotifPanel() {
+            notifPanel.classList.remove('active');
+            notifOverlay.classList.remove('active');
+            header.classList.remove('active-notif');
+        }
+
+        function openNotifPanel() {
+            notifPanel.classList.add('active');
+            notifOverlay.classList.add('active');
+            header.classList.remove('active-notif');
+            const logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
+            if (logs.length > 0) {
+                localStorage.setItem('notif_last_seen_time', getLogMillis(logs[0]).toString());
+            }
+            updateNotifUI(logs);
+        }
+
         notifBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
-            notifPanel.classList.toggle('active');
-            notifOverlay.classList.toggle('active');
-            header.classList.toggle('active-notif');
             if (notifPanel.classList.contains('active')) {
-                // Get current logs
-                let logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-                if (logs.length > 0) {
-                    // Mark as read locally by saving the latest log's time
-                    localStorage.setItem('notif_last_seen_time', getLogMillis(logs[0]).toString());
-                }
-                updateNotifUI(logs);
+                closeNotifPanel();
+            } else {
+                openNotifPanel();
             }
         });
 
         document.addEventListener('click', (e) => {
-            if (!notifPanel.contains(e.target) && e.target !== notifBtn) {
-                notifPanel.classList.remove('active');
-                notifOverlay.classList.remove('active');
-                header.classList.remove('active-notif');
+            if (notifPanel.classList.contains('active') && !notifPanel.contains(e.target) && !notifBtn.contains(e.target)) {
+                closeNotifPanel();
             }
         });
 
-        notifOverlay.addEventListener('click', () => {
-            notifPanel.classList.remove('active');
-            notifOverlay.classList.remove('active');
-            header.classList.remove('active-notif');
-        });
+        notifOverlay.addEventListener('click', closeNotifPanel);
+        notifCloseBtn.addEventListener('click', closeNotifPanel);
 
         notifPanel.addEventListener('click', (e) => {
             e.stopPropagation(); // Prevent closing when clicking inside
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && notifPanel.classList.contains('active')) {
+                closeNotifPanel();
+            }
         });
 
         // --- Tab Switching Logic ---
@@ -4347,10 +4950,10 @@
                 const div = document.createElement('div');
                 div.className = `shopping-item ${item.checked ? 'checked' : ''}`;
                 div.innerHTML = `
-                    ${item.image ? `<img class="shopping-thumb" src="${item.image}" alt="" onclick="openImageModal('${item.image}')" style="cursor: zoom-in;">` : ''}
                     <div class="checkbox-wrapper" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">
                         <i class="fa-solid fa-check"></i>
                     </div>
+                    ${item.image ? `<img class="shopping-thumb" src="${item.image}" alt="" onclick="openImageModal('${item.image}')" style="cursor: zoom-in;">` : ''}
                     <div class="shopping-details" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">
                         <span class="item-text">${item.text}</span>
                         ${item.date ? `<span class="shopping-date"><i class="fa-regular fa-clock"></i> ${item.date}</span>` : ''}
@@ -4565,7 +5168,7 @@
                 let transHtml = '';
                 if (cat.transactions && cat.transactions.length > 0) {
                     transHtml = `
-                        <button class="toggle-trans-btn" onclick="toggleTransactions('${cat.id}', this)">
+                        <button class="toggle-trans-btn" data-count="${cat.transactions.length}" onclick="toggleTransactions('${cat.id}', this)">
                             <div class="btn-text">
                                 <i class="fa-solid fa-list-ul"></i>
                                 <span>عرض السجل (${cat.transactions.length})</span>
@@ -4658,20 +5261,21 @@
 
         window.toggleTransactions = (id, btn) => {
             const wrapper = document.getElementById(`wrapper-${id}`);
+            if (!wrapper) return;
             const isExpanded = wrapper.classList.contains('expanded');
+            const nextExpanded = !isExpanded;
             
-            // Toggle classes
-            wrapper.classList.toggle('expanded');
-            btn.classList.toggle('active');
+            wrapper.classList.toggle('expanded', nextExpanded);
+            btn.classList.toggle('active', nextExpanded);
             
-            // Update text
             const span = btn.querySelector('.btn-text span');
-            const count = span.textContent.match(/\d+/)[0];
-            span.textContent = isExpanded ? `عرض السجل (${count})` : `إخفاء السجل`;
+            const count = btn.dataset.count || wrapper.querySelectorAll('.transaction-item').length || 0;
+            if (span) span.textContent = nextExpanded ? 'إخفاء السجل' : `عرض السجل (${count})`;
         };
 
         function initLiquidPointerGlow() {
             if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (window.matchMedia('(max-width: 768px), (hover: none), (pointer: coarse)').matches) return;
             let pending = false;
             let nextX = 50;
             let nextY = 22;
