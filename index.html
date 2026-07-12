@@ -159,33 +159,6 @@
             margin-bottom: 0;
         }
 
-        .live-info-bar {
-            display: flex;
-            gap: 10px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .live-info-bar span {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            background: var(--input-bg);
-            padding: 8px 14px;
-            min-width: 96px;
-            border-radius: 999px;
-            border: 1px solid var(--card-border);
-            font-weight: 700;
-        }
-
-        .live-info-bar i {
-            color: var(--primary-color);
-            font-size: 0.75rem;
-        }
-
         .header-actions {
             display: flex;
             align-items: center;
@@ -237,8 +210,8 @@
 
         .notif-badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
+            top: -9px;
+            right: -9px;
             background: linear-gradient(135deg, #ff416c, #ff4b2b);
             color: white;
             font-size: 0.7rem;
@@ -250,8 +223,9 @@
             justify-content: center;
             border-radius: 50%;
             border: 2px solid var(--bg-color);
-            z-index: 10;
-            box-shadow: 0 0 10px rgba(255, 75, 43, 0.4);
+            z-index: 20;
+            pointer-events: none;
+            box-shadow: 0 4px 14px rgba(255, 75, 43, 0.46), 0 0 0 1px rgba(255, 255, 255, 0.12);
             animation: pulseBadge 2s infinite;
         }
 
@@ -311,6 +285,36 @@
         .amount-hidden {
             letter-spacing: 2px;
             direction: ltr;
+        }
+
+        .currency-amount {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.28em;
+            direction: ltr;
+            unicode-bidi: isolate;
+            white-space: nowrap;
+            letter-spacing: 0;
+        }
+
+        .omr-symbol {
+            display: inline-block;
+            width: 0.98em;
+            height: 0.65em;
+            flex: 0 0 auto;
+            background: currentColor;
+            -webkit-mask: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABKCAYAAABjAdCAAAACFklEQVR42u2dzW7DMAyDTaHv/8raZQOGIlvTNIlF+fOl6CFoKoa0/qxo9Fj5/amn73vX7+vk9MfVBLyjwG3ZI51soybg5QU2sWCjAO8lG0vbKABv6m8sCeCdhi0Poky9zRl2KuncODJQkz1dJNRUzkrKqZBOb+80kE5vJgbS6X1PQjq97RgYx/veZMw+TWZyCWfmYcC+/CfZfCRB3UreZeS46I/a37v1wuwUSqi5dN4BJGHETsOoSK1PlR7+KMq+vPjhOCqB5WqEsbBrfgSMJJk9l32fgFhKOqsyUKNucjopJ9Vi3zsglmRfNQZq1C0TJT0xHhWALRDLsm+MGqm0auUibTQLl80ZP8agqcm5QztoaHoZ8A8AXKzZFgBZNgDCKFrrAZBlvLR4NxkAnniOIBc8XVwOQPYnYwABrYETg6zdTMBAOpFQQJtYNQmkc1gPNwrzVojVlfOUPRD2TayLBuzzZd8ZEgr7JjdeBWHDemEEoBVqewyk07uhKwDPz3FZeUqFGgy1Pf20q+te0sJX0aK9L3ajlZ0H/VwJouWgcyY1NWKjaCP8eIQJABbK/NgBKRp6d092kiOAuXgYoBttobMvSvNheEuolag2eG9nQaHWW1WChLX3lhCwr3a14QgDYZ+RQxY4Lr7s44Bng5eIBOzzjmUDx8VTOp8ZiONimkkK2OfLvh8AYZ9xHjdgny/7CCMavHvwC92Kmojlmp64AAAAAElFTkSuQmCC") center / contain no-repeat;
+            mask: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHAAAABKCAYAAABjAdCAAAACFklEQVR42u2dzW7DMAyDTaHv/8raZQOGIlvTNIlF+fOl6CFoKoa0/qxo9Fj5/amn73vX7+vk9MfVBLyjwG3ZI51soybg5QU2sWCjAO8lG0vbKABv6m8sCeCdhi0Poky9zRl2KuncODJQkz1dJNRUzkrKqZBOb+80kE5vJgbS6X1PQjq97RgYx/veZMw+TWZyCWfmYcC+/CfZfCRB3UreZeS46I/a37v1wuwUSqi5dN4BJGHETsOoSK1PlR7+KMq+vPjhOCqB5WqEsbBrfgSMJJk9l32fgFhKOqsyUKNucjopJ9Vi3zsglmRfNQZq1C0TJT0xHhWALRDLsm+MGqm0auUibTQLl80ZP8agqcm5QztoaHoZ8A8AXKzZFgBZNgDCKFrrAZBlvLR4NxkAnniOIBc8XVwOQPYnYwABrYETg6zdTMBAOpFQQJtYNQmkc1gPNwrzVojVlfOUPRD2TayLBuzzZd8ZEgr7JjdeBWHDemEEoBVqewyk07uhKwDPz3FZeUqFGgy1Pf20q+te0sJX0aK9L3ajlZ0H/VwJouWgcyY1NWKjaCP8eIQJABbK/NgBKRp6d092kiOAuXgYoBttobMvSvNheEuolag2eG9nQaHWW1WChLX3lhCwr3a14QgDYZ+RQxY4Lr7s44Bng5eIBOzzjmUDx8VTOp8ZiONimkkK2OfLvh8AYZ9xHjdgny/7CCMavHvwC92Kmojlmp64AAAAAElFTkSuQmCC") center / contain no-repeat;
+            transform: translateY(0.04em);
+        }
+
+        .currency-value {
+            line-height: 1;
+        }
+
+        .amount-hidden .currency-value {
+            letter-spacing: 2px;
         }
 
         input {
@@ -425,6 +429,58 @@
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
+        }
+
+        .category-summary {
+            margin-bottom: 16px;
+        }
+
+        .category-add-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .next-salary-card {
+            background: var(--stat-bg);
+            padding: 14px 16px;
+            border-radius: var(--border-radius-md);
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+        }
+
+        .next-salary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .next-salary-item + .next-salary-item {
+            border-right: 1px solid var(--card-border);
+        }
+
+        .next-salary-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .next-salary-value {
+            color: var(--text-main);
+            font-size: 1.2rem;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        .next-salary-value.warning {
+            color: var(--warning-color);
         }
 
         .stat-box {
@@ -766,8 +822,10 @@
 
         .nav-tab {
             flex: 1;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
+            background:
+                linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05)),
+                rgba(15, 23, 42, 0.34);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             color: var(--text-muted);
             padding: 12px;
             border-radius: var(--border-radius-md);
@@ -779,22 +837,67 @@
             transition: var(--transition);
             font-size: 0.9rem;
             font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(18px) saturate(170%);
+            -webkit-backdrop-filter: blur(18px) saturate(170%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.22),
+                inset 0 -18px 28px rgba(255, 255, 255, 0.035),
+                0 10px 24px rgba(0, 0, 0, 0.16);
+        }
+
+        .nav-tab::before {
+            content: "";
+            position: absolute;
+            inset: 1px 1px auto 1px;
+            height: 42%;
+            border-radius: calc(var(--border-radius-md) - 2px);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
+            pointer-events: none;
+        }
+
+        body.light-mode .nav-tab {
+            background:
+                linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.26)),
+                rgba(255, 255, 255, 0.34);
+            border-color: rgba(255, 255, 255, 0.72);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.82),
+                inset 0 -18px 28px rgba(255, 255, 255, 0.16),
+                0 10px 24px rgba(15, 23, 42, 0.08);
         }
 
         .nav-tab i {
             font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-tab span {
+            position: relative;
+            z-index: 1;
         }
 
         .nav-tab.active {
-            background: var(--primary-color);
+            background:
+                linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.09)),
+                rgba(59, 130, 246, 0.52);
             color: white;
-            border-color: var(--primary-color);
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            border-color: rgba(147, 197, 253, 0.62);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.34),
+                inset 0 -18px 34px rgba(37, 99, 235, 0.18),
+                0 10px 26px rgba(59, 130, 246, 0.28);
         }
 
         .nav-tab:not(.active):hover {
-            background: rgba(255, 255, 255, 0.05);
+            background:
+                linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.07)),
+                rgba(15, 23, 42, 0.42);
             color: var(--text-main);
+            border-color: rgba(255, 255, 255, 0.26);
+            transform: translateY(-1px);
         }
 
         /* Debt Stat Style */
@@ -918,6 +1021,35 @@
             font-size: 1.7rem;
             font-weight: 800;
             color: var(--success-color);
+        }
+
+        .debt-total {
+            color: var(--danger-color);
+        }
+
+        .debt-entry-card {
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .debt-entry-form {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .debt-entry-amount {
+            grid-column: 1 / -1;
+        }
+
+        .debt-entry-form input {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .debt-entry-submit {
+            min-width: 108px;
         }
 
         .savings-list {
@@ -1350,20 +1482,6 @@
                 flex: 0 0 42px;
             }
 
-            .live-info-bar {
-                flex-wrap: nowrap;
-                gap: 6px;
-                width: 100%;
-            }
-
-            .live-info-bar span {
-                flex: 1 1 0;
-                min-width: 0;
-                padding: 7px 6px;
-                font-size: 0.72rem;
-                white-space: nowrap;
-            }
-
             .salary-input-wrapper {
                 display: flex;
                 flex-wrap: nowrap;
@@ -1423,6 +1541,15 @@
 
             .input-wrapper {
                 flex-wrap: wrap;
+            }
+
+            .debt-entry-form {
+                grid-template-columns: minmax(0, 1fr) auto;
+            }
+
+            .debt-entry-amount,
+            .debt-entry-person {
+                grid-column: 1 / -1;
             }
 
             .shopping-item,
@@ -1498,7 +1625,8 @@
         .notif-panel {
             position: absolute;
             top: calc(100% + 15px);
-            left: 0;
+            right: 0;
+            left: auto;
             width: 360px;
             max-height: 550px;
             z-index: 3000;
@@ -1509,7 +1637,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: var(--border-radius-lg);
             box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-            transform-origin: top left;
+            transform-origin: top right;
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             opacity: 0;
             visibility: hidden;
@@ -1648,11 +1776,12 @@
         @media (max-width: 600px) {
             .notif-panel {
                 position: fixed;
-                top: 80px;
-                left: 15px;
-                right: 15px;
+                top: max(88px, calc(env(safe-area-inset-top) + 78px));
+                left: 12px;
+                right: 12px;
                 width: auto;
-                max-height: 75vh;
+                max-width: calc(100vw - 24px);
+                max-height: min(70vh, 520px);
                 transform-origin: top center;
             }
         }
@@ -1675,6 +1804,790 @@
             opacity: 1;
             visibility: visible;
         }
+
+        /* Liquid Glass refresh */
+        :root {
+            --primary-color: #5fa8ff;
+            --primary-hover: #8fc4ff;
+            --success-color: #22d7a7;
+            --danger-color: #ff4f67;
+            --danger-hover: #ff7185;
+            --warning-color: #ffbd4a;
+            --bg-color: #080b14;
+            --card-bg: rgba(255, 255, 255, 0.105);
+            --card-border: rgba(255, 255, 255, 0.22);
+            --text-main: rgba(255, 255, 255, 0.94);
+            --text-muted: rgba(226, 232, 240, 0.66);
+            --input-bg: rgba(255, 255, 255, 0.075);
+            --stat-bg: rgba(255, 255, 255, 0.095);
+            --glass-blur: blur(28px) saturate(190%);
+            --border-radius-lg: 34px;
+            --border-radius-md: 24px;
+            --border-radius-sm: 18px;
+            --liquid-highlight: linear-gradient(155deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.09) 38%, rgba(255, 255, 255, 0.02) 68%);
+            --liquid-shadow: 0 22px 70px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.28), inset 0 -22px 34px rgba(255, 255, 255, 0.035);
+            --liquid-button-shadow: 0 12px 30px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.34), inset 0 -14px 24px rgba(255, 255, 255, 0.055);
+            --pointer-x: 50%;
+            --pointer-y: 22%;
+            --transition: all 0.24s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        body.light-mode {
+            --bg-color: #eef5ff;
+            --card-bg: rgba(255, 255, 255, 0.46);
+            --card-border: rgba(255, 255, 255, 0.72);
+            --text-main: rgba(15, 23, 42, 0.92);
+            --text-muted: rgba(51, 65, 85, 0.66);
+            --input-bg: rgba(255, 255, 255, 0.48);
+            --stat-bg: rgba(255, 255, 255, 0.42);
+            --liquid-shadow: 0 20px 58px rgba(31, 41, 55, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.82), inset 0 -20px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        html {
+            background: var(--bg-color);
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, 0.18), transparent 18rem),
+                radial-gradient(circle at 18% 12%, rgba(96, 165, 250, 0.28), transparent 22rem),
+                radial-gradient(circle at 88% 22%, rgba(45, 212, 191, 0.22), transparent 20rem),
+                radial-gradient(circle at 16% 82%, rgba(244, 114, 182, 0.14), transparent 20rem),
+                linear-gradient(150deg, #070a12 0%, #101321 38%, #0b1320 70%, #111015 100%);
+            background-attachment: fixed;
+            isolation: isolate;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -20%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        body::before {
+            background:
+                radial-gradient(circle at 24% 30%, rgba(96, 165, 250, 0.18), transparent 22%),
+                radial-gradient(circle at 76% 22%, rgba(34, 211, 238, 0.14), transparent 24%),
+                radial-gradient(circle at 62% 82%, rgba(251, 191, 36, 0.08), transparent 23%);
+            filter: blur(10px);
+            animation: liquidDrift 18s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            z-index: -1;
+            opacity: 0.23;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: radial-gradient(circle at center, black, transparent 74%);
+        }
+
+        @keyframes liquidDrift {
+            from { transform: translate3d(-1.5%, -1%, 0) scale(1); }
+            to { transform: translate3d(1.8%, 1.2%, 0) scale(1.04); }
+        }
+
+        @keyframes glassEnter {
+            from {
+                opacity: 0;
+                transform: translateY(14px) scale(0.985);
+                filter: blur(7px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes sectionSlide {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .app-container {
+            width: min(100%, 860px);
+            padding: clamp(12px, 2.6vw, 26px);
+            gap: 18px;
+        }
+
+        .glass-card,
+        .header-glass,
+        .stat-box,
+        .next-salary-card,
+        .shopping-item,
+        .savings-item,
+        .debt-card,
+        .quick-expense-card,
+        .debt-entry-card,
+        .savings-summary,
+        .modal-content,
+        .notif-panel {
+            position: relative;
+            overflow: hidden;
+            background: var(--liquid-highlight), var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius-lg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: var(--liquid-shadow);
+        }
+
+        .glass-card::before,
+        .header-glass::before,
+        .stat-box::before,
+        .next-salary-card::before,
+        .shopping-item::before,
+        .savings-item::before,
+        .debt-card::before,
+        .quick-expense-card::before,
+        .debt-entry-card::before,
+        .savings-summary::before,
+        .modal-content::before,
+        .notif-panel::before {
+            content: "";
+            position: absolute;
+            inset: 1px;
+            border-radius: inherit;
+            background:
+                radial-gradient(circle at 22% 0%, rgba(255, 255, 255, 0.28), transparent 36%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 44%);
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        .header-glass {
+            padding: clamp(18px, 3vw, 28px);
+            gap: 18px;
+            border-radius: 38px;
+            animation: glassEnter 0.42s ease both;
+        }
+
+        .glass-card > *,
+        .header-glass > *,
+        .stat-box > *,
+        .next-salary-card > *,
+        .quick-expense-card > *,
+        .category-card > *,
+        .debt-card > *,
+        .debt-entry-card > *,
+        .savings-summary > *,
+        .savings-item > *,
+        .shopping-item > *,
+        .modal-content > *,
+        .notif-panel > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-glass {
+            min-height: 0;
+            align-self: stretch;
+            overflow: visible;
+        }
+
+        .header-top {
+            gap: 12px;
+        }
+
+        .header-actions {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 48px 48px;
+            align-items: center;
+            gap: 10px;
+            direction: ltr;
+        }
+
+        .header-actions .month-selector {
+            grid-column: 1;
+            width: 100%;
+            min-width: 0;
+            max-width: none;
+            direction: rtl;
+        }
+
+        #settings-btn {
+            grid-column: 2;
+        }
+
+        .notif-container {
+            grid-column: 3;
+            width: 48px;
+            height: 48px;
+            overflow: visible;
+        }
+
+        .notif-container .icon-btn,
+        #settings-btn {
+            width: 48px;
+            height: 48px;
+        }
+
+        .next-salary-card,
+        .salary-input-section,
+        .stats-section {
+            margin-top: 0;
+        }
+
+        .header-top h1 {
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 800;
+            letter-spacing: 0;
+            text-shadow: 0 8px 28px rgba(96, 165, 250, 0.3);
+        }
+
+        .header-top h1 i {
+            color: var(--primary-color);
+            filter: drop-shadow(0 0 18px rgba(96, 165, 250, 0.45));
+        }
+
+        .month-selector,
+        input,
+        select,
+        textarea,
+        .quick-expense-select {
+            background: rgba(255, 255, 255, 0.105);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-main);
+            border-radius: 22px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 10px 24px rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(18px) saturate(170%);
+            -webkit-backdrop-filter: blur(18px) saturate(170%);
+        }
+
+        input::placeholder {
+            color: rgba(226, 232, 240, 0.46);
+        }
+
+        input:focus,
+        .quick-expense-select:focus,
+        .month-selector:focus {
+            border-color: rgba(147, 197, 253, 0.72);
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .btn-primary,
+        .btn-secondary,
+        .btn-success,
+        .btn-danger,
+        .modal-actions .btn-cancel,
+        .icon-btn,
+        .cat-btn,
+        .toggle-trans-btn,
+        .file-chip {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.23);
+            border-radius: 22px;
+            color: rgba(255, 255, 255, 0.94);
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08)),
+                rgba(255, 255, 255, 0.11);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: var(--liquid-button-shadow);
+        }
+
+        .btn-primary::before,
+        .btn-secondary::before,
+        .btn-success::before,
+        .btn-danger::before,
+        .modal-actions .btn-cancel::before,
+        .icon-btn::before,
+        .cat-btn::before,
+        .toggle-trans-btn::before,
+        .file-chip::before {
+            content: "";
+            position: absolute;
+            inset: 1px 1px auto 1px;
+            height: 46%;
+            border-radius: inherit;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+            pointer-events: none;
+        }
+
+        .btn-primary,
+        .modal-actions .btn-cancel {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.1)),
+                rgba(79, 154, 255, 0.5);
+            border-color: rgba(147, 197, 253, 0.62);
+        }
+
+        .btn-success {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.09)),
+                rgba(34, 215, 167, 0.48);
+            border-color: rgba(94, 234, 212, 0.55);
+        }
+
+        .btn-danger {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.08)),
+                rgba(255, 79, 103, 0.52);
+            border-color: rgba(253, 164, 175, 0.58);
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover,
+        .btn-success:hover,
+        .btn-danger:hover,
+        .modal-actions .btn-cancel:hover,
+        .icon-btn:hover,
+        .cat-btn:hover,
+        .toggle-trans-btn:hover,
+        .file-chip:hover {
+            transform: translateY(-2px) scale(1.015);
+            color: white;
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.12)),
+                rgba(255, 255, 255, 0.15);
+            box-shadow: 0 16px 38px rgba(0, 0, 0, 0.26), 0 0 34px rgba(96, 165, 250, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+        }
+
+        .btn-primary:active,
+        .btn-secondary:active,
+        .btn-success:active,
+        .btn-danger:active,
+        .icon-btn:active,
+        .cat-btn:active,
+        .nav-tab:active {
+            transform: translateY(1px) scale(0.985);
+        }
+
+        .main-nav {
+            position: sticky;
+            top: 10px;
+            z-index: 850;
+            gap: 8px;
+            padding: 6px;
+            margin-bottom: 4px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            box-shadow: 0 18px 46px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        }
+
+        .nav-tab {
+            min-height: 70px;
+            border-radius: 22px;
+        }
+
+        .nav-tab.active {
+            box-shadow: 0 14px 34px rgba(79, 154, 255, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.36);
+        }
+
+        .main-section:not(.hidden) {
+            animation: sectionSlide 0.28s ease both;
+        }
+
+        .quick-expense-card,
+        .category-card,
+        .debt-card,
+        .shopping-item,
+        .savings-item,
+        .stat-box,
+        .savings-summary,
+        .debt-entry-card,
+        .next-salary-card {
+            animation: glassEnter 0.4s ease both;
+        }
+
+        .quick-expense-card:hover,
+        .category-card:hover,
+        .debt-card:hover,
+        .shopping-item:hover,
+        .savings-item:hover,
+        .stat-box:hover,
+        .savings-summary:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.32);
+            box-shadow: 0 28px 78px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.32);
+        }
+
+        .next-salary-card {
+            border-radius: 30px;
+        }
+
+        .next-salary-item + .next-salary-item {
+            border-right: 1px solid rgba(255, 255, 255, 0.14);
+        }
+
+        .stat-box {
+            border-radius: 28px;
+        }
+
+        .stat-box.highlight {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.075)),
+                rgba(79, 154, 255, 0.22);
+            border-color: rgba(147, 197, 253, 0.34);
+        }
+
+        .progress-bar-bg,
+        .cat-progress {
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .progress-bar-fill,
+        .cat-progress-fill {
+            border-radius: inherit;
+            box-shadow: 0 0 22px currentColor;
+        }
+
+        .section-header {
+            justify-content: center;
+            margin: 10px 0 16px;
+            text-align: center;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.35rem, 4.5vw, 1.75rem);
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.95);
+            text-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+        }
+
+        .category-summary {
+            gap: 12px;
+        }
+
+        .category-add-row {
+            margin-top: 2px;
+        }
+
+        .cat-header {
+            border-bottom-color: rgba(255, 255, 255, 0.13);
+        }
+
+        .cat-title i,
+        .quick-expense-title i {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        }
+
+        .shopping-item.checked {
+            opacity: 0.72;
+            filter: saturate(0.8);
+        }
+
+        .checkbox-wrapper {
+            border-radius: 9px;
+            border-color: rgba(96, 165, 250, 0.76);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .shopping-item.checked .checkbox-wrapper {
+            background: rgba(34, 215, 167, 0.55);
+            border-color: rgba(94, 234, 212, 0.7);
+        }
+
+        .modal-overlay {
+            background: rgba(4, 7, 14, 0.54);
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
+        }
+
+        .modal-content {
+            border-radius: 36px;
+            animation: modalSlideUp 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .close-modal-btn,
+        .close-delete-btn,
+        .close-expense-btn,
+        .close-debt-btn,
+        .close-image-btn {
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+
+        .notif-panel {
+            border-radius: 28px;
+        }
+
+        .notif-header,
+        .notif-item {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .notif-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .image-modal-content {
+            border-radius: 36px;
+        }
+
+        #preview-img {
+            border-radius: 28px;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+
+            .app-container {
+                padding: 10px;
+                gap: 14px;
+            }
+
+            .header-glass,
+            .quick-expense-card,
+            .category-card,
+            .debt-entry-card,
+            .savings-summary,
+            .stat-box {
+                border-radius: 28px;
+            }
+
+            .header-glass {
+                padding: 16px;
+                gap: 14px;
+                min-height: auto;
+            }
+
+            .header-top {
+                gap: 12px;
+            }
+
+            .header-actions {
+                grid-template-columns: minmax(0, 1fr) 44px 44px;
+                gap: 8px;
+                width: 100%;
+            }
+
+            .notif-container,
+            .notif-container .icon-btn,
+            #settings-btn {
+                width: 44px;
+                height: 44px;
+            }
+
+            .header-actions .month-selector {
+                height: 44px;
+                font-size: 0.86rem;
+                padding-inline: 10px;
+            }
+
+            .main-nav {
+                top: 8px;
+                gap: 5px;
+                padding: 5px;
+                border-radius: 26px;
+            }
+
+            .nav-tab {
+                min-height: 62px;
+                padding: 9px 5px;
+                font-size: 0.72rem;
+                border-radius: 19px;
+            }
+
+            .nav-tab i {
+                font-size: 1.05rem;
+            }
+
+            .stats-grid,
+            .next-salary-card {
+                gap: 10px;
+            }
+
+            .stat-value,
+            .savings-total {
+                font-size: 1.26rem;
+            }
+
+            .debt-entry-form {
+                gap: 10px;
+            }
+
+            .modal-content {
+                border-radius: 30px;
+                padding: 20px;
+            }
+        }
+
+        /* Darker Liquid tuning for readability */
+        :root {
+            --card-bg: rgba(8, 14, 28, 0.62);
+            --card-border: rgba(255, 255, 255, 0.16);
+            --text-main: rgba(255, 255, 255, 0.96);
+            --text-muted: rgba(226, 232, 240, 0.74);
+            --input-bg: rgba(8, 14, 28, 0.48);
+            --stat-bg: rgba(8, 14, 28, 0.52);
+            --liquid-highlight: linear-gradient(155deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.055) 42%, rgba(255, 255, 255, 0.012) 72%);
+            --liquid-shadow: 0 22px 70px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -22px 34px rgba(0, 0, 0, 0.16);
+            --liquid-button-shadow: 0 12px 30px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -14px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            background:
+                radial-gradient(circle at var(--pointer-x) var(--pointer-y), rgba(96, 165, 250, 0.13), transparent 17rem),
+                radial-gradient(circle at 16% 10%, rgba(59, 130, 246, 0.2), transparent 22rem),
+                radial-gradient(circle at 88% 18%, rgba(20, 184, 166, 0.13), transparent 20rem),
+                radial-gradient(circle at 18% 88%, rgba(168, 85, 247, 0.12), transparent 20rem),
+                linear-gradient(155deg, #050711 0%, #0a1020 38%, #07111f 72%, #070912 100%);
+        }
+
+        .header-glass,
+        .stat-box,
+        .next-salary-card,
+        .quick-expense-card,
+        .category-card,
+        .shopping-item,
+        .savings-item,
+        .debt-card,
+        .debt-entry-card,
+        .savings-summary {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.045) 42%, rgba(255, 255, 255, 0.01) 72%),
+                rgba(8, 14, 28, 0.66);
+            border-color: rgba(255, 255, 255, 0.16);
+        }
+
+        .header-glass::before,
+        .stat-box::before,
+        .next-salary-card::before,
+        .quick-expense-card::before,
+        .category-card::before,
+        .shopping-item::before,
+        .savings-item::before,
+        .debt-card::before,
+        .debt-entry-card::before,
+        .savings-summary::before {
+            opacity: 0.42;
+        }
+
+        .month-selector,
+        input,
+        select,
+        textarea,
+        .quick-expense-select {
+            background: rgba(7, 13, 26, 0.58);
+            border-color: rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .btn-primary,
+        .btn-secondary,
+        .btn-success,
+        .btn-danger,
+        .modal-actions .btn-cancel,
+        .icon-btn,
+        .cat-btn,
+        .toggle-trans-btn,
+        .file-chip,
+        .nav-tab {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.05)),
+                rgba(9, 16, 31, 0.62);
+            border-color: rgba(255, 255, 255, 0.16);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .nav-tab.active,
+        .btn-primary,
+        .modal-actions .btn-cancel {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.055)),
+                rgba(47, 115, 214, 0.58);
+            border-color: rgba(147, 197, 253, 0.46);
+        }
+
+        .stat-box.highlight {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04)),
+                rgba(30, 64, 122, 0.38);
+        }
+
+        .notif-overlay {
+            background: rgba(0, 0, 0, 0.62);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .notif-panel {
+            background:
+                linear-gradient(155deg, rgba(30, 41, 59, 0.94), rgba(5, 10, 22, 0.96)),
+                #070d1b;
+            border-color: rgba(255, 255, 255, 0.16);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.72), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+            color: rgba(255, 255, 255, 0.94);
+            z-index: 4200;
+        }
+
+        .notif-panel::before {
+            opacity: 0.18;
+        }
+
+        .notif-header {
+            background: rgba(255, 255, 255, 0.055);
+            border-bottom-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .notif-header h3,
+        .notif-item-name {
+            color: rgba(255, 255, 255, 0.96);
+        }
+
+        .notif-list {
+            background: rgba(0, 0, 0, 0.08);
+        }
+
+        .notif-item {
+            background: rgba(255, 255, 255, 0.025);
+            border-bottom-color: rgba(255, 255, 255, 0.09);
+        }
+
+        .notif-item:hover {
+            background: rgba(255, 255, 255, 0.075);
+        }
+
+        .notif-item.unread {
+            background: rgba(37, 99, 235, 0.18);
+            border-right-color: rgba(147, 197, 253, 0.9);
+        }
+
+        .notif-item-meta {
+            color: rgba(203, 213, 225, 0.78);
+        }
+
+        .type-add { background: rgba(16, 185, 129, 0.92); }
+        .type-edit { background: rgba(59, 130, 246, 0.92); }
+        .type-delete { background: rgba(239, 68, 68, 0.92); }
+        .type-login { background: rgba(245, 158, 11, 0.92); }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
     </style>
 </head>
 
@@ -1696,8 +2609,8 @@
                     <div class="notif-container">
                         <button id="notif-btn" class="icon-btn" title="الإشعارات">
                             <i class="fa-solid fa-bell"></i>
-                            <span id="notif-badge" class="notif-badge hidden">0</span>
                         </button>
+                        <span id="notif-badge" class="notif-badge hidden">0</span>
                         <div id="notif-panel" class="notif-panel">
                             <div class="notif-header">
                                 <h3>سجل النشاطات</h3>
@@ -1709,14 +2622,19 @@
                 </div>
             </div>
 
-            <div class="live-info-bar">
-                <span id="live-day"><i class="fa-solid fa-calendar-day"></i> ---</span>
-                <span id="live-date"><i class="fa-solid fa-calendar-alt"></i> ---</span>
-                <span id="live-time"><i class="fa-solid fa-clock"></i> ---</span>
+            <div class="next-salary-card">
+                <div class="next-salary-item">
+                    <span class="next-salary-label">الراتب القادم</span>
+                    <span id="next-salary-date" class="next-salary-value">22 يوليو 2026</span>
+                </div>
+                <div class="next-salary-item">
+                    <span class="next-salary-label">المتبقي على الراتب</span>
+                    <span id="next-salary-days" class="next-salary-value warning">-- يوم</span>
+                </div>
             </div>
 
             <div class="salary-input-section">
-                <label for="total-salary">الراتب بالريال العماني:</label>
+                <label for="total-salary">الراتب:</label>
                 <div class="input-wrapper salary-input-wrapper">
                     <input type="text" inputmode="decimal" pattern="[0-9.]*" id="total-salary" readonly value="***" autocomplete="off">
                     <button id="toggle-salary-visibility-btn" class="btn-secondary salary-toggle-btn" title="إظهار المبالغ" aria-label="إظهار المبالغ"><i class="fa-solid fa-eye"></i></button>
@@ -1728,23 +2646,9 @@
             </div>
 
             <div id="stats-card" class="stats-section">
-            <div class="stats-grid">
-                <div class="stat-box">
-                    <span class="stat-label">المخصص للأقسام</span>
-                    <span id="stat-allocated" class="stat-value amount-hidden">OMR ***</span>
-                    <div id="stat-debt-container" class="debt-line hidden">
-                        <span>الدين</span>
-                        <span id="stat-debt-value" class="amount-hidden">- OMR ***</span>
-                    </div>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-label">إجمالي المصروفات</span>
-                    <span id="stat-used" class="stat-value amount-hidden">OMR ***</span>
-                </div>
-            </div>
             <div class="stat-box highlight stat-wide">
                 <span class="stat-label">المتبقي من الراتب</span>
-                <span id="stat-remaining" class="stat-value success amount-hidden">OMR ***</span>
+                <span id="stat-remaining" class="stat-value success amount-hidden"><span class="currency-amount"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">***</span></span></span>
             </div>
 
             <div class="progress-container">
@@ -1765,13 +2669,13 @@
                 <i class="fa-solid fa-layer-group"></i>
                 <span>الأقسام</span>
             </div>
-            <div class="nav-tab" data-section="debts-section">
-                <i class="fa-solid fa-hand-holding-dollar"></i>
-                <span>الديون</span>
-            </div>
             <div class="nav-tab" data-section="shopping-section">
                 <i class="fa-solid fa-cart-shopping"></i>
                 <span>المشتريات</span>
+            </div>
+            <div class="nav-tab" data-section="debts-section">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <span>الديون</span>
             </div>
             <div class="nav-tab" data-section="savings-section">
                 <i class="fa-solid fa-piggy-bank"></i>
@@ -1783,13 +2687,6 @@
         <main>
             <!-- Categories & Expenses Section -->
             <section id="categories-section" class="main-section">
-                <div class="section-header">
-                    <h2>الأقسام والمصروفات</h2>
-                    <button id="add-category-btn" class="btn-primary">
-                        <i class="fa-solid fa-plus"></i>
-                        إضافة قسم
-                    </button>
-                </div>
                 <div id="quick-expense-card" class="quick-expense-card glass-card">
                     <div class="quick-expense-title">
                         <i class="fa-solid fa-receipt"></i>
@@ -1811,6 +2708,25 @@
                         <button type="submit" class="btn-success quick-expense-submit"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
                     </form>
                 </div>
+                <div class="section-header">
+                    <h2>الأقسام والمصروفات</h2>
+                </div>
+                <div class="stats-grid category-summary">
+                    <div class="stat-box">
+                        <span class="stat-label">المخصص للأقسام</span>
+                        <span id="stat-allocated" class="stat-value amount-hidden"><span class="currency-amount"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">***</span></span></span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">إجمالي المصروفات</span>
+                        <span id="stat-used" class="stat-value amount-hidden"><span class="currency-amount"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">***</span></span></span>
+                    </div>
+                </div>
+                <div class="category-add-row">
+                    <button id="add-category-btn" class="btn-primary">
+                        <i class="fa-solid fa-plus"></i>
+                        إضافة قسم
+                    </button>
+                </div>
                 <div id="categories-grid" class="categories-grid">
                     <!-- Categories will be injected here -->
                 </div>
@@ -1819,11 +2735,19 @@
             <!-- Debts Section -->
             <section id="debts-section" class="main-section hidden">
                 <div class="section-header">
-                    <h2>الديون المستحقة</h2>
-                    <button id="add-debt-btn" class="btn-primary">
-                        <i class="fa-solid fa-plus"></i>
-                        تسجيل دين
-                    </button>
+                    <h2>الديون</h2>
+                </div>
+                <div class="savings-summary glass-card">
+                    <span class="stat-label">مجموع الديون</span>
+                    <span id="debt-total" class="savings-total debt-total amount-hidden"><span class="currency-amount"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">***</span></span></span>
+                </div>
+                <div id="debt-entry-card" class="debt-entry-card glass-card">
+                    <form id="debt-inline-form" class="debt-entry-form">
+                        <input class="debt-entry-amount" type="number" inputmode="decimal" id="debt-inline-amount" required min="0" step="any" placeholder="المبلغ">
+                        <input class="debt-entry-person" type="text" id="debt-inline-person" required placeholder="اسم الدين">
+                        <input type="text" id="debt-inline-note" placeholder="ملاحظة اختيارية">
+                        <button type="submit" class="btn-success debt-entry-submit"><i class="fa-solid fa-plus"></i> إضافة</button>
+                    </form>
                 </div>
                 <div id="debts-list" class="categories-grid">
                     <!-- Debts will be injected here -->
@@ -1857,7 +2781,7 @@
                 </div>
                 <div class="savings-summary glass-card">
                     <span class="stat-label">مجموع المدخرات</span>
-                    <span id="savings-total" class="savings-total amount-hidden">OMR ***</span>
+                    <span id="savings-total" class="savings-total amount-hidden"><span class="currency-amount"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">***</span></span></span>
                 </div>
                 <div class="glass-card" style="padding: 20px; margin-bottom: 20px;">
                     <form id="savings-form" class="input-wrapper">
@@ -2048,6 +2972,8 @@
         const pinSalaryBtn = document.getElementById('pin-salary-btn');
         const toggleSalaryVisibilityBtn = document.getElementById('toggle-salary-visibility-btn');
         const settingsBtn = document.getElementById('settings-btn');
+        const nextSalaryDate = document.getElementById('next-salary-date');
+        const nextSalaryDays = document.getElementById('next-salary-days');
 
         const statAllocated = document.getElementById('stat-allocated');
         const statUsed = document.getElementById('stat-used');
@@ -2100,6 +3026,12 @@
         const statDebtValue = document.getElementById('stat-debt-value');
 
         const debtsList = document.getElementById('debts-list');
+        const debtTotal = document.getElementById('debt-total');
+        const debtEntryCard = document.getElementById('debt-entry-card');
+        const debtInlineForm = document.getElementById('debt-inline-form');
+        const debtInlineAmountInput = document.getElementById('debt-inline-amount');
+        const debtInlinePersonInput = document.getElementById('debt-inline-person');
+        const debtInlineNoteInput = document.getElementById('debt-inline-note');
         const addDebtBtn = document.getElementById('add-debt-btn');
         const debtModal = document.getElementById('debt-modal');
         const debtForm = document.getElementById('debt-form');
@@ -2162,6 +3094,39 @@
 
         const currentFinancialMonth = getFinancialMonth();
         let isEditableMonth = true;
+        const SALARY_DAY = 22;
+
+        function getSalaryDateForFinancialMonth(monthValue) {
+            const [year, month] = monthValue.split('-').map(Number);
+            return new Date(year, month - 2, SALARY_DAY);
+        }
+
+        function getNextSalaryDateForFinancialMonth(monthValue) {
+            const [year, month] = monthValue.split('-').map(Number);
+            return new Date(year, month - 1, SALARY_DAY);
+        }
+
+        function formatSalaryDate(date) {
+            const day = date.toLocaleDateString('en-US', { day: 'numeric' });
+            const month = date.toLocaleDateString('ar-OM', { month: 'long' });
+            const year = date.toLocaleDateString('en-US', { year: 'numeric' });
+            return `${day} ${month} ${year}`;
+        }
+
+        function getDaysUntilSalary(date) {
+            const today = new Date();
+            const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const salaryStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            return Math.max(0, Math.ceil((salaryStart - todayStart) / 86400000));
+        }
+
+        function updateSalaryCycleInfo() {
+            if (!monthSelector) return;
+            const monthValue = monthSelector.value || currentFinancialMonth;
+            const nextDate = getNextSalaryDateForFinancialMonth(monthValue);
+            if (nextSalaryDate) nextSalaryDate.textContent = formatSalaryDate(nextDate);
+            if (nextSalaryDays) nextSalaryDays.textContent = `${getDaysUntilSalary(nextDate)} يوم`;
+        }
 
         // --- Theme System ---
         async function initTheme() {
@@ -2339,22 +3304,8 @@
             }).join('');
         }
 
-        // تحديث الوقت واليوم
-        function updateLiveInfo() {
-            const now = new Date();
-            const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-            
-            document.getElementById('live-day').innerHTML = `<i class="fa-solid fa-calendar-day"></i> ${days[now.getDay()]}`;
-            
-            const day = now.toLocaleDateString('en-US', { day: 'numeric' });
-            const month = now.toLocaleDateString('ar-OM', { month: 'long' });
-            const year = now.toLocaleDateString('en-US', { year: 'numeric' });
-            
-            document.getElementById('live-date').innerHTML = `<i class="fa-solid fa-calendar-alt"></i> ${day} ${month} ${year}`;
-            document.getElementById('live-time').innerHTML = `<i class="fa-solid fa-clock"></i> ${now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`;
-        }
-        setInterval(updateLiveInfo, 1000);
-        updateLiveInfo();
+        updateSalaryCycleInfo();
+        setInterval(updateSalaryCycleInfo, 60000);
 
         notifBtn.addEventListener('click', async (e) => {
             e.stopPropagation();
@@ -2491,15 +3442,14 @@
             const [year, month] = currentFinancialMonth.split('-').map(Number);
             for (let i = -3; i <= 3; i++) {
                 const date = new Date(year, month - 1 + i, 1);
-                const y = date.toLocaleDateString('en-US', { year: 'numeric' });
-                const mArabic = date.toLocaleDateString('ar-OM', { month: 'long' });
                 const monthVal = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
                 const option = document.createElement('option');
                 option.value = monthVal;
-                option.textContent = `${mArabic} ${y}`;
+                option.textContent = `راتب: ${formatSalaryDate(getSalaryDateForFinancialMonth(monthVal))}`;
                 monthSelector.appendChild(option);
                 if (monthVal === currentFinancialMonth) option.selected = true;
             }
+            updateSalaryCycleInfo();
         }
 
         let unsubscribeFirebase = null;
@@ -2748,6 +3698,7 @@
 
         async function loadData() {
             const month = monthSelector.value;
+            updateSalaryCycleInfo();
             await startGlobalDataSync();
             initLogsSync(); // تشغيل مزامنة الإشعارات فوراً بشكل مستقل
             isEditableMonth = (month >= currentFinancialMonth);
@@ -2755,7 +3706,8 @@
             if (!isEditableMonth) {
                 editSalaryBtn.classList.add('hidden');
                 addCategoryBtn.classList.add('hidden');
-                addDebtBtn.classList.add('hidden');
+                if (addDebtBtn) addDebtBtn.classList.add('hidden');
+                if (debtEntryCard) debtEntryCard.classList.add('hidden');
                 shoppingForm.classList.add('hidden');
                 savingsForm.classList.add('hidden');
                 quickExpenseCard.classList.add('hidden');
@@ -2763,7 +3715,8 @@
             } else {
                 editSalaryBtn.classList.remove('hidden');
                 addCategoryBtn.classList.remove('hidden');
-                addDebtBtn.classList.remove('hidden');
+                if (addDebtBtn) addDebtBtn.classList.remove('hidden');
+                if (debtEntryCard) debtEntryCard.classList.remove('hidden');
                 shoppingForm.classList.remove('hidden');
                 savingsForm.classList.remove('hidden');
                 quickExpenseCard.classList.remove('hidden');
@@ -3199,19 +4152,19 @@
             let totalDebtsAmount = 0;
             debts.forEach(d => totalDebtsAmount += parseFloat(d.amount || 0));
 
-            if (totalDebtsAmount > 0) {
+            if (statDebtContainer && statDebtValue && totalDebtsAmount > 0) {
                 statDebtContainer.classList.remove('hidden');
-                statDebtValue.textContent = `- ${formatCurrency(totalDebtsAmount)}`;
-            } else {
+                statDebtValue.innerHTML = `- ${formatCurrencyHtml(totalDebtsAmount)}`;
+            } else if (statDebtContainer) {
                 statDebtContainer.classList.add('hidden');
             }
 
             const remainingFromSalary = totalSalary - totalUsed;
             let percentage = totalSalary > 0 ? Math.round((totalUsed / totalSalary) * 100) : 0;
 
-            statAllocated.textContent = formatCurrency(totalAllocated);
-            statUsed.textContent = formatCurrency(totalUsed);
-            statRemaining.textContent = formatCurrency(remainingFromSalary);
+            if (statAllocated) statAllocated.innerHTML = formatCurrencyHtml(totalAllocated);
+            if (statUsed) statUsed.innerHTML = formatCurrencyHtml(totalUsed);
+            statRemaining.innerHTML = formatCurrencyHtml(remainingFromSalary);
             spendingPercentage.textContent = `${percentage}%`;
 
             let safePercentage = percentage > 100 ? 100 : percentage;
@@ -3228,7 +4181,7 @@
                 statRemaining.className = "stat-value success";
             }
 
-            [statAllocated, statUsed, statRemaining, statDebtValue].forEach(toggleAmountClass);
+            [statAllocated, statUsed, statRemaining, statDebtValue].filter(Boolean).forEach(toggleAmountClass);
 
             renderQuickExpenseCategories();
             renderCategories();
@@ -3239,6 +4192,12 @@
 
         // --- Debt Management ---
         function renderDebts() {
+            const totalDebts = debts.reduce((sum, debt) => sum + parseFloat(debt.amount || 0), 0);
+            if (debtTotal) {
+                debtTotal.innerHTML = formatCurrencyHtml(totalDebts);
+                toggleAmountClass(debtTotal);
+            }
+
             debtsList.innerHTML = '';
             if (debts.length === 0) {
                 debtsList.innerHTML = '<div class="glass-card" style="padding: 30px; text-align: center; color: var(--text-muted); grid-column: 1/-1;">لا توجد ديون مسجلة.</div>';
@@ -3251,7 +4210,7 @@
                 card.innerHTML = `
                     <div class="debt-info">
                         <span class="debt-name">${debt.person}</span>
-                        <span class="debt-amount${amountHiddenClass()}">${formatCurrency(debt.amount)}</span>
+                        <span class="debt-amount${amountHiddenClass()}">${formatCurrencyHtml(debt.amount)}</span>
                     </div>
                     ${debt.note ? `<div class="debt-note">${debt.note}</div>` : ''}
                     <div class="debt-footer">
@@ -3269,15 +4228,39 @@
             });
         }
 
-        addDebtBtn.addEventListener('click', () => {
-            debtForm.reset();
-            debtIdInput.value = '';
-            debtModalTitle.textContent = 'تسجيل دين جديد';
-            debtModal.classList.remove('hidden');
-            setTimeout(() => debtPersonInput.focus(), 100);
-        });
+        if (addDebtBtn) {
+            addDebtBtn.addEventListener('click', () => {
+                debtForm.reset();
+                debtIdInput.value = '';
+                debtModalTitle.textContent = 'تسجيل دين جديد';
+                debtModal.classList.remove('hidden');
+                setTimeout(() => debtPersonInput.focus(), 100);
+            });
+        }
 
         closeDebtBtns.forEach(btn => btn.addEventListener('click', () => debtModal.classList.add('hidden')));
+
+        if (debtInlineForm) {
+            debtInlineForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const amount = parseFloat(debtInlineAmountInput.value || 0);
+                const person = debtInlinePersonInput.value.trim();
+                if (!amount || !person) return;
+
+                const debtData = {
+                    person,
+                    amount,
+                    note: debtInlineNoteInput.value.trim(),
+                    date: getNowStamp()
+                };
+
+                debts.push({ id: makeId('debt_'), ...debtData });
+                debtInlineForm.reset();
+                syncGlobalData();
+                updateUI();
+                logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون');
+            });
+        }
 
         debtForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -3488,7 +4471,7 @@
         function renderSavingsItems() {
             if (!savingsList || !savingsTotal) return;
             const totalSavings = savingsItems.reduce((sum, item) => sum + parseFloat(item.amount || 0), 0);
-            savingsTotal.textContent = formatCurrency(totalSavings);
+            savingsTotal.innerHTML = formatCurrencyHtml(totalSavings);
             toggleAmountClass(savingsTotal);
 
             savingsList.innerHTML = '';
@@ -3506,7 +4489,7 @@
                         <span class="savings-date"><i class="fa-regular fa-clock"></i> ${item.date || ''}</span>
                     </div>
                     <div class="cat-actions">
-                        <span class="savings-amount${amountHiddenClass()}">${formatCurrency(item.amount)}</span>
+                        <span class="savings-amount${amountHiddenClass()}">${formatCurrencyHtml(item.amount)}</span>
                         ${isEditableMonth ? `<button class="cat-btn delete" onclick="deleteSavingsItem('${item.id}')"><i class="fa-solid fa-trash-can"></i></button>` : ''}
                     </div>
                 `;
@@ -3596,7 +4579,7 @@
                         transHtml += `
                         <div class="transaction-item">
                             <div class="trans-details">
-                                <span class="trans-amount${amountHiddenClass()}">- ${formatCurrency(t.amount)}</span>
+                                <span class="trans-amount${amountHiddenClass()}">- ${formatCurrencyHtml(t.amount)}</span>
                                 <span class="trans-note">${t.note}</span>
                                 <span class="trans-date"><i class="fa-regular fa-clock"></i> ${t.date}</span>
                             </div>
@@ -3628,9 +4611,9 @@
                         </div>
                     </div>
                     <div class="cat-body">
-                        <div class="cat-row"><span class="label">المخصص:</span><span class="value${amountHiddenClass()}">${formatCurrency(allocated)}</span></div>
-                        <div class="cat-row"><span class="label">المستخدم (المجموع):</span><span class="value${amountHiddenClass()}">${formatCurrency(used)}</span></div>
-                        <div class="cat-row"><span class="label">المتبقي:</span><span class="value ${remaining < 0 ? 'danger' : (remaining == 0 ? 'warning' : 'success')}${amountHiddenClass()}">${formatCurrency(remaining)}</span></div>
+                        <div class="cat-row"><span class="label">المخصص:</span><span class="value${amountHiddenClass()}">${formatCurrencyHtml(allocated)}</span></div>
+                        <div class="cat-row"><span class="label">المستخدم (المجموع):</span><span class="value${amountHiddenClass()}">${formatCurrencyHtml(used)}</span></div>
+                        <div class="cat-row"><span class="label">المتبقي:</span><span class="value ${remaining < 0 ? 'danger' : (remaining == 0 ? 'warning' : 'success')}${amountHiddenClass()}">${formatCurrencyHtml(remaining)}</span></div>
                         <div class="cat-progress"><div class="cat-progress-fill" style="width: ${safePercentage}%; background: ${progressColor};"></div></div>
                         ${transHtml}
                     </div>
@@ -3639,15 +4622,21 @@
             });
         }
 
-        function formatCurrency(amount) {
-            if (!areAmountsVisible) return 'OMR ***';
-            // استخدام en-OM للحصول على أرقام إنجليزية مع سياق العملة العمانية
+        function formatCurrencyValue(amount) {
+            const value = parseFloat(amount);
             return new Intl.NumberFormat('en-OM', {
-                style: 'currency',
-                currency: 'OMR',
                 minimumFractionDigits: 3,
                 maximumFractionDigits: 3
-            }).format(amount);
+            }).format(Number.isFinite(value) ? value : 0);
+        }
+
+        function formatCurrency(amount) {
+            return `ر.ع ${areAmountsVisible ? formatCurrencyValue(amount) : '***'}`;
+        }
+
+        function formatCurrencyHtml(amount) {
+            const value = areAmountsVisible ? formatCurrencyValue(amount) : '***';
+            return `<span class="currency-amount" aria-label="${formatCurrency(amount)}"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">${value}</span></span>`;
         }
 
         function amountHiddenClass() {
@@ -3681,7 +4670,27 @@
             span.textContent = isExpanded ? `عرض السجل (${count})` : `إخفاء السجل`;
         };
 
+        function initLiquidPointerGlow() {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            let pending = false;
+            let nextX = 50;
+            let nextY = 22;
+
+            window.addEventListener('pointermove', (event) => {
+                nextX = Math.round((event.clientX / window.innerWidth) * 100);
+                nextY = Math.round((event.clientY / window.innerHeight) * 100);
+                if (pending) return;
+                pending = true;
+                requestAnimationFrame(() => {
+                    document.documentElement.style.setProperty('--pointer-x', `${nextX}%`);
+                    document.documentElement.style.setProperty('--pointer-y', `${nextY}%`);
+                    pending = false;
+                });
+            }, { passive: true });
+        }
+
         // Start
+        initLiquidPointerGlow();
         initializeMonths();
         loadData();
     </script>
