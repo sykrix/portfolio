@@ -3176,6 +3176,294 @@
                 transition-duration: 0.01ms !important;
             }
         }
+
+        /* Settings Page Custom Styles */
+        #settings-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            direction: rtl;
+        }
+
+        .settings-content {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-top: 20px;
+            padding-bottom: 60px;
+        }
+
+        .settings-card {
+            padding: 24px;
+            border-radius: var(--border-radius-lg);
+            position: relative;
+        }
+
+        .settings-card.border-danger {
+            border-color: rgba(239, 68, 68, 0.4);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.05);
+        }
+
+        .settings-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 12px;
+        }
+
+        .settings-card-header i {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+        }
+
+        .settings-card-header.text-danger i {
+            color: var(--danger-color);
+        }
+
+        .settings-card-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .settings-note {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .settings-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Notif Settings Checkboxes Grid */
+        .notif-settings-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        @media (min-width: 600px) {
+            .notif-settings-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .notif-settings-group {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--border-radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .notif-settings-group h4 {
+            margin: 0 0 4px 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 8px;
+        }
+
+        .setting-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            cursor: pointer;
+            position: relative;
+            padding: 4px 0;
+        }
+
+        .setting-checkbox-label input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            display: inline-block;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .setting-checkbox-label:hover .custom-checkbox {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .setting-checkbox-label input:checked ~ .custom-checkbox {
+            background: var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        .setting-checkbox-label input:checked ~ .custom-checkbox::after {
+            content: "";
+            position: absolute;
+            display: block;
+            left: 6.5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Fixed Categories Manager List */
+        .fixed-categories-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .fixed-cat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--border-radius-sm);
+            padding: 12px 18px;
+            transition: var(--transition);
+        }
+
+        .fixed-cat-item:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .fixed-cat-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .fixed-cat-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+        }
+
+        .fixed-cat-details {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: right;
+        }
+
+        .fixed-cat-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .fixed-cat-amount {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Mock WhatsApp Notification styling */
+        .whatsapp-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-150px);
+            background: #128c7e;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10000;
+            width: 90%;
+            max-width: 400px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            direction: rtl;
+        }
+
+        .whatsapp-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .whatsapp-toast-icon {
+            font-size: 1.8rem;
+            color: #25d366;
+            background: white;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .whatsapp-toast-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-align: right;
+        }
+
+        .whatsapp-toast-title {
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .whatsapp-toast-body {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .whatsapp-toast-copy {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .whatsapp-toast-copy:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 
@@ -3386,6 +3674,273 @@
                 </div>
             </section>
         </main>
+    </div>
+
+    <!-- WhatsApp Simulated Toast -->
+    <div id="whatsapp-toast" class="whatsapp-toast">
+        <div class="whatsapp-toast-icon"><i class="fa-brands fa-whatsapp"></i></div>
+        <div class="whatsapp-toast-content">
+            <div class="whatsapp-toast-title">WhatsApp</div>
+            <div id="whatsapp-toast-body" class="whatsapp-toast-body">رمز التحقق لحذف حسابك هو: 123456</div>
+        </div>
+        <button id="whatsapp-toast-copy-btn" class="whatsapp-toast-copy">نسخ</button>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settings-page" class="app-container hidden">
+        <header class="header-glass">
+            <div class="header-top">
+                <button id="settings-back-btn" class="icon-btn" title="رجوع" aria-label="رجوع"><i class="fa-solid fa-arrow-right"></i></button>
+                <h1><i class="fa-solid fa-gears"></i> إعدادات الحساب والموقع</h1>
+                <div style="width: 42px;"></div> <!-- Spacer for visual balance -->
+            </div>
+        </header>
+
+        <main class="settings-content">
+            <!-- 1. البيانات الشخصية -->
+            <section class="glass-card settings-card">
+                <div class="settings-card-header">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <h3>البيانات الشخصية</h3>
+                </div>
+                <form id="personal-info-form" class="settings-form">
+                    <div class="form-group">
+                        <label for="profile-name">تغيير الاسم</label>
+                        <input type="text" id="profile-name" placeholder="أدخل اسمك الكامل">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-phone">تغيير رقم الهاتف</label>
+                        <input type="tel" id="profile-phone" placeholder="مثال: 96899999999">
+                    </div>
+                    <div class="form-group">
+                        <label for="profile-email">تغيير البريد الإلكتروني</label>
+                        <input type="email" id="profile-email" placeholder="مثال: user@example.com">
+                    </div>
+                    <button type="submit" class="btn-primary" style="align-self: flex-start; min-width: 140px;"><i class="fa-solid fa-floppy-disk"></i> حفظ البيانات</button>
+                </form>
+            </section>
+
+            <!-- 2. الإشعارات -->
+            <section class="glass-card settings-card">
+                <div class="settings-card-header">
+                    <i class="fa-solid fa-bell-concierge"></i>
+                    <h3>إعدادات الإشعارات</h3>
+                </div>
+                <p class="settings-note">حدد الأنشطة التي ترغب في تلقي إشعارات وسجلات نشاط عنها داخل الموقع (عند عدم تحديد صح، لن يتم تسجيل أي تنبيه لها):</p>
+                
+                <div class="notif-settings-grid">
+                    <!-- الأقسام -->
+                    <div class="notif-settings-group">
+                        <h4>الأقسام والمصروفات</h4>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-add-category" checked>
+                            <span class="custom-checkbox"></span>
+                            إضافة قسم جديد
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-delete-category" checked>
+                            <span class="custom-checkbox"></span>
+                            حذف قسم
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-add-category-amount" checked>
+                            <span class="custom-checkbox"></span>
+                            إضافة أو تعديل مبلغ في قسم
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-delete-category-amount" checked>
+                            <span class="custom-checkbox"></span>
+                            حذف مصروف من سجل قسم
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-edit-category-contents" checked>
+                            <span class="custom-checkbox"></span>
+                            تعديل في محتويات القسم
+                        </label>
+                    </div>
+
+                    <!-- المشتريات -->
+                    <div class="notif-settings-group">
+                        <h4>قائمة المشتريات</h4>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-add-purchase" checked>
+                            <span class="custom-checkbox"></span>
+                            إضافة مشتريات
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-delete-purchase" checked>
+                            <span class="custom-checkbox"></span>
+                            حذف مشتريات
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-confirm-purchase" checked>
+                            <span class="custom-checkbox"></span>
+                            تأكيد شراء مشتريات
+                        </label>
+                    </div>
+
+                    <!-- الديون -->
+                    <div class="notif-settings-group">
+                        <h4>الديون والالتزامات</h4>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-add-debt" checked>
+                            <span class="custom-checkbox"></span>
+                            إضافة دين
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-delete-debt" checked>
+                            <span class="custom-checkbox"></span>
+                            حذف دين
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-edit-debt" checked>
+                            <span class="custom-checkbox"></span>
+                            تعديل دين
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-confirm-pay-debt" checked>
+                            <span class="custom-checkbox"></span>
+                            تأكيد دفع دين
+                        </label>
+                    </div>
+
+                    <!-- المدخرات -->
+                    <div class="notif-settings-group">
+                        <h4>المدخرات</h4>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-add-saving" checked>
+                            <span class="custom-checkbox"></span>
+                            إضافة مبلغ مدخر جديد
+                        </label>
+                        <label class="setting-checkbox-label">
+                            <input type="checkbox" id="notif-delete-saving" checked>
+                            <span class="custom-checkbox"></span>
+                            حذف مبلغ مدخر
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. إعدادات الموقع -->
+            <section class="glass-card settings-card">
+                <div class="settings-card-header">
+                    <i class="fa-solid fa-sliders"></i>
+                    <h3>إعدادات الموقع</h3>
+                </div>
+                
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label for="settings-default-salary">كتابة كم الراتب ليكون تلقائيًا لكل شهر (ر.ع)</label>
+                        <input type="number" inputmode="decimal" id="settings-default-salary" min="0" step="any" placeholder="مثال: 600.000">
+                        <small class="help-text">يكتب الراتب ليكون تلقائيًا لكل شهر (مثال: 600.000 ريال عماني)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="settings-salary-day">تاريخ نزول الراتب من كل شهر</label>
+                        <input type="number" id="settings-salary-day" min="1" max="31" placeholder="مثال: 25">
+                        <small class="help-text">مثال: إذا سويت تاريخ 25 خلاص شهريا ينزل ذا التاريخ ويتغير في الموقع تلقائيًا بذا التاريخ.</small>
+                    </div>
+                    
+                    <div class="fixed-categories-manager" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px;">
+                        <h4>تخصيص أقسام ثابتة لكل شهر</h4>
+                        <p class="settings-note" style="margin-top: 5px;">إذا سويت الأقسام خلاص تلقائي تجي كل شهر، ولكن ما تحذف الأقسام العادية اللي سويتها لأشهر معينة (ما ثابتة).</p>
+                        
+                        <div id="fixed-categories-list" class="fixed-categories-list">
+                            <!-- سيتم إدراج الأقسام الثابتة هنا برمجياً -->
+                        </div>
+                        
+                        <button type="button" id="add-fixed-cat-btn" class="btn-success" style="margin-top: 15px; align-self: flex-start;"><i class="fa-solid fa-plus-circle"></i> إضافة قسم ثابت جديد</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. حذف الحساب -->
+            <section class="glass-card settings-card border-danger">
+                <div class="settings-card-header text-danger">
+                    <i class="fa-solid fa-user-slash"></i>
+                    <h3>حذف حسابي</h3>
+                </div>
+                <p class="settings-note">تنبيه: لا يمكن حذف الحساب غير إذا كتبت رقم الهاتف ويرسل لك كود OTP في الرقم بالواتساب لإتمام الحذف النهائي.</p>
+                
+                <div class="settings-form delete-account-container">
+                    <div id="delete-step-1">
+                        <div class="form-group">
+                            <label for="delete-phone-input">أدخل رقم الهاتف لتلقي رمز OTP</label>
+                            <input type="tel" id="delete-phone-input" placeholder="مثال: 96899999999">
+                        </div>
+                        <button type="button" id="send-otp-btn" class="btn-danger" style="margin-top: 10px;"><i class="fa-solid fa-paper-plane"></i> إرسال رمز التحقق (OTP)</button>
+                    </div>
+                    
+                    <div id="delete-step-2" class="hidden" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label for="otp-verification-input">أدخل رمز التحقق (OTP) المكون من 6 أرقام</label>
+                            <input type="text" id="otp-verification-input" pattern="[0-9]*" inputmode="numeric" maxlength="6" placeholder="******" style="letter-spacing: 4px; text-align: center;">
+                        </div>
+                        <div class="modal-actions" style="margin-top: 15px;">
+                            <button type="button" id="confirm-delete-account-btn" class="btn-danger"><i class="fa-solid fa-trash-can"></i> تأكيد حذف الحساب نهائيًا</button>
+                            <button type="button" id="cancel-delete-step-btn" class="btn-secondary">إلغاء</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. تسجيل الخروج -->
+            <section class="glass-card settings-card text-center" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px;">
+                <div class="settings-card-header" style="border: none; margin-bottom: 15px;">
+                    <i class="fa-solid fa-right-from-bracket" style="font-size: 2rem; color: var(--danger-color);"></i>
+                </div>
+                <h3 style="color: var(--text-main);">تسجيل الخروج</h3>
+                <p class="settings-note" style="margin-bottom: 20px;">الخروج من الحساب الحالي المفتوح على المتصفح.</p>
+                <button type="button" id="logout-btn" class="btn-secondary" style="border-color: var(--danger-color); color: var(--danger-color); min-width: 180px;"><i class="fa-solid fa-arrow-right-from-bracket"></i> تسجيل خروج</button>
+            </section>
+        </main>
+    </div>
+
+    <!-- Fixed Category Add/Edit Modal -->
+    <div id="fixed-category-modal" class="modal-overlay hidden">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="fixed-modal-title">إضافة قسم ثابت جديد</h3>
+                <button class="close-fixed-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="fixed-category-form">
+                    <input type="hidden" id="fixed-cat-id">
+                    <div class="form-group">
+                        <label for="fixed-cat-name">اسم القسم</label>
+                        <input type="text" id="fixed-cat-name" required placeholder="مثال: الإيجار">
+                    </div>
+                    <div class="form-group">
+                        <label for="fixed-cat-allocated">المبلغ المخصص (عماني)</label>
+                        <input type="number" inputmode="decimal" id="fixed-cat-allocated" required min="0" step="any" placeholder="مثال: 150">
+                    </div>
+                    <div class="form-group">
+                        <label for="fixed-cat-icon">أيقونة القسم</label>
+                        <select id="fixed-cat-icon" class="month-selector" style="width: 100%; height: 45px; border-radius: var(--border-radius-md);">
+                            <option value="auto">تلقائي (حسب الاسم)</option>
+                            <option value="fa-house">🏠 سكن / إيجار</option>
+                            <option value="fa-wifi">🌐 إنترنت</option>
+                            <option value="fa-gas-pump">⛽ بنزين</option>
+                            <option value="fa-cart-shopping">🛒 راشن / بقالة</option>
+                            <option value="fa-bolt">⚡ كهرباء</option>
+                            <option value="fa-droplet">💧 ماء</option>
+                            <option value="fa-heart-pulse">🏥 صحة</option>
+                            <option value="fa-graduation-cap">🎓 تعليم</option>
+                            <option value="fa-clapperboard">🎬 ترفيه</option>
+                            <option value="fa-utensils">🍽️ مطاعم</option>
+                            <option value="fa-bag-shopping">🛍️ تسوق</option>
+                            <option value="fa-car">🚗 سيارة</option>
+                            <option value="fa-mobile-screen">📱 هاتف / رصيد</option>
+                            <option value="fa-hand-holding-dollar">💰 ديون / أقساط</option>
+                            <option value="fa-plane">✈️ سفر</option>
+                            <option value="fa-gift">🎁 هدايا</option>
+                            <option value="fa-folder-open">📁 أخرى</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary full-width">حفظ القسم الثابت</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Modals -->
@@ -3644,6 +4199,66 @@
         const savingsList = document.getElementById('savings-list');
         const savingsTotal = document.getElementById('savings-total');
 
+        // Settings Page Elements
+        const settingsPage = document.getElementById('settings-page');
+        const mainApp = document.getElementById('main-app');
+        const settingsBackBtn = document.getElementById('settings-back-btn');
+        
+        // Personal Info
+        const personalInfoForm = document.getElementById('personal-info-form');
+        const profileNameInput = document.getElementById('profile-name');
+        const profilePhoneInput = document.getElementById('profile-phone');
+        const profileEmailInput = document.getElementById('profile-email');
+        
+        // Notifications checkboxes
+        const notifAddCategory = document.getElementById('notif-add-category');
+        const notifDeleteCategory = document.getElementById('notif-delete-category');
+        const notifAddCategoryAmount = document.getElementById('notif-add-category-amount');
+        const notifDeleteCategoryAmount = document.getElementById('notif-delete-category-amount');
+        const notifEditCategoryContents = document.getElementById('notif-edit-category-contents');
+        const notifAddPurchase = document.getElementById('notif-add-purchase');
+        const notifDeletePurchase = document.getElementById('notif-delete-purchase');
+        const notifConfirmPurchase = document.getElementById('notif-confirm-purchase');
+        const notifAddDebt = document.getElementById('notif-add-debt');
+        const notifDeleteDebt = document.getElementById('notif-delete-debt');
+        const notifEditDebt = document.getElementById('notif-edit-debt');
+        const notifConfirmPayDebt = document.getElementById('notif-confirm-pay-debt');
+        const notifAddSaving = document.getElementById('notif-add-saving');
+        const notifDeleteSaving = document.getElementById('notif-delete-saving');
+        
+        // Site settings
+        const settingsDefaultSalary = document.getElementById('settings-default-salary');
+        const settingsSalaryDay = document.getElementById('settings-salary-day');
+        const fixedCategoriesList = document.getElementById('fixed-categories-list');
+        const addFixedCatBtn = document.getElementById('add-fixed-cat-btn');
+        
+        // Delete My Account
+        const deleteStep1 = document.getElementById('delete-step-1');
+        const deleteStep2 = document.getElementById('delete-step-2');
+        const deletePhoneInput = document.getElementById('delete-phone-input');
+        const sendOtpBtn = document.getElementById('send-otp-btn');
+        const otpVerificationInput = document.getElementById('otp-verification-input');
+        const confirmDeleteAccountBtn = document.getElementById('confirm-delete-account-btn');
+        const cancelDeleteStepBtn = document.getElementById('cancel-delete-step-btn');
+        
+        // Log out
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        // Fixed Category Modal Elements
+        const fixedCategoryModal = document.getElementById('fixed-category-modal');
+        const fixedCategoryForm = document.getElementById('fixed-category-form');
+        const closeFixedModalBtns = document.querySelectorAll('.close-fixed-modal-btn');
+        const fixedModalTitle = document.getElementById('fixed-modal-title');
+        const fixedCatIdInput = document.getElementById('fixed-cat-id');
+        const fixedCatNameInput = document.getElementById('fixed-cat-name');
+        const fixedCatAllocatedInput = document.getElementById('fixed-cat-allocated');
+        const fixedCatIconInput = document.getElementById('fixed-cat-icon');
+
+        // WhatsApp toast elements
+        const whatsappToast = document.getElementById('whatsapp-toast');
+        const whatsappToastBody = document.getElementById('whatsapp-toast-body');
+        const whatsappToastCopyBtn = document.getElementById('whatsapp-toast-copy-btn');
+
         // منع كتابة الحروف والرموز (e, -, +) في حقول الأرقام
         document.querySelectorAll('input[type="number"]').forEach(input => {
             input.addEventListener('keydown', function(e) {
@@ -3669,12 +4284,14 @@
         let unsubscribeGlobalData = null;
 
         // --- Financial Month Logic ---
+        let SALARY_DAY = parseInt(localStorage.getItem('salary_day') || '22');
+
         function getFinancialMonth(date = new Date()) {
             let y = date.getFullYear();
             let m = date.getMonth(); // 0-11
             let d = date.getDate();
 
-            if (d >= 22) {
+            if (d >= SALARY_DAY) {
                 m++;
                 if (m > 11) {
                     m = 0;
@@ -3686,7 +4303,6 @@
 
         const currentFinancialMonth = getFinancialMonth();
         let isEditableMonth = true;
-        const SALARY_DAY = 22;
 
         function getSalaryDateForFinancialMonth(monthValue) {
             const [year, month] = monthValue.split('-').map(Number);
@@ -3732,6 +4348,33 @@
 
         initTheme();
 
+        // --- Notification Settings State ---
+        let notifSettings = {
+            add_category: true,
+            delete_category: true,
+            add_category_amount: true,
+            delete_category_amount: true,
+            edit_category_contents: true,
+            add_purchase: true,
+            delete_purchase: true,
+            confirm_purchase: true,
+            add_debt: true,
+            delete_debt: true,
+            edit_debt: true,
+            confirm_pay_debt: true,
+            add_saving: true,
+            delete_saving: true
+        };
+
+        const savedNotifSettings = localStorage.getItem('notif_settings');
+        if (savedNotifSettings) {
+            try {
+                notifSettings = { ...notifSettings, ...JSON.parse(savedNotifSettings) };
+            } catch (e) {
+                console.error("Failed to parse notification settings", e);
+            }
+        }
+
         // --- Activity Logging System ---
         function getDeviceInfo() {
             const ua = navigator.userAgent;
@@ -3748,7 +4391,11 @@
             return `${device} (${browser})`;
         }
 
-        async function logAction(type, name, section) {
+        async function logAction(type, name, section, actionKey) {
+            if (actionKey && notifSettings[actionKey] === false) {
+                console.log(`Action ${actionKey} is muted by settings. Not logging.`);
+                return;
+            }
             const newLog = {
                 type,
                 name,
@@ -4231,6 +4878,10 @@
                 const nextPinnedSalary = parseFloat(data.salaryPin.amount);
                 pinnedSalary = Number.isFinite(nextPinnedSalary) ? nextPinnedSalary : null;
             }
+            if (data.salaryDay !== undefined) {
+                SALARY_DAY = parseInt(data.salaryDay || '22');
+                localStorage.setItem('salary_day', SALARY_DAY.toString());
+            }
             if (mergePinnedCategoriesIntoCategories() && monthSelector.value) {
                 localStorage.setItem(`categories_${monthSelector.value}`, JSON.stringify(categories));
             }
@@ -4253,6 +4904,7 @@
             isSalaryPinned = localStorage.getItem('salary_pinned') === 'true';
             const nextPinnedSalary = parseFloat(localStorage.getItem('pinned_salary') || '');
             pinnedSalary = Number.isFinite(nextPinnedSalary) ? nextPinnedSalary : null;
+            SALARY_DAY = parseInt(localStorage.getItem('salary_day') || '22');
         }
 
         async function startGlobalDataSync() {
@@ -4292,6 +4944,7 @@
                         pinned: isSalaryPinned,
                         amount: pinnedSalary
                     },
+                    salaryDay: SALARY_DAY,
                     lastUpdated: new Date().toISOString()
                 }, { merge: true });
             } catch (e) {
@@ -4503,7 +5156,7 @@
                 categories = categories.filter(c => c.id !== id);
                 syncData();
                 updateUI();
-                logAction('delete', name, 'إدارة الأقسام');
+                logAction('delete', name, 'إدارة الأقسام', 'delete_category');
             });
         };
 
@@ -4527,7 +5180,7 @@
                     syncGlobalData();
                     syncData();
                     updateUI();
-                    logAction('edit', cat.pinned ? `تثبيت ${cat.name}` : `إلغاء تثبيت ${cat.name}`, 'تثبيت الأقسام');
+                    logAction('edit', cat.pinned ? `تثبيت ${cat.name}` : `إلغاء تثبيت ${cat.name}`, 'تثبيت الأقسام', 'edit_category_contents');
                 },
                 {
                     title: willPin ? 'تأكيد التثبيت' : 'تأكيد إلغاء التثبيت',
@@ -4546,7 +5199,7 @@
                     cat.transactions = cat.transactions.filter(t => t.id !== transId);
                     syncData();
                     updateUI();
-                    logAction('delete', transName, `قسم ${cat.name}`);
+                    logAction('delete', transName, `قسم ${cat.name}`, 'delete_category_amount');
                 }
             });
         };
@@ -4611,7 +5264,7 @@
                     if (oldName !== catData.name) detail = `${oldName} ➔ ${catData.name}`;
                     if (oldAlloc !== catData.allocated) detail += ` (${oldAlloc} ➔ ${catData.allocated})`;
                     
-                    logAction('edit', detail, 'إدارة الأقسام');
+                    logAction('edit', detail, 'إدارة الأقسام', 'edit_category_contents');
                     syncData();
                     updateUI();
                     categoryModal.classList.add('hidden');
@@ -4619,7 +5272,7 @@
                 return;
             } else {
                 categories.push({ id: makeId('cat_'), ...catData });
-                logAction('add', catData.name, 'إدارة الأقسام');
+                logAction('add', catData.name, 'إدارة الأقسام', 'add_category');
             }
 
             syncData();
@@ -4714,7 +5367,7 @@
 
             syncData();
             updateUI();
-            logAction('add', `${note} (${newAmount})`, `قسم ${cat.name}`);
+            logAction('add', `${note} (${newAmount})`, `قسم ${cat.name}`, 'add_category_amount');
             return true;
         }
 
@@ -4861,7 +5514,7 @@
                 debtInlineForm.reset();
                 syncGlobalData();
                 updateUI();
-                logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون');
+                logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون', 'add_debt');
             });
         }
 
@@ -4882,7 +5535,7 @@
                 if (index !== -1) {
                     openEditConfirmDialog('هل تريد حفظ تعديل هذا الدين؟', () => {
                         debts[index] = { ...debts[index], ...debtData, date: debts[index].date }; 
-                        logAction('edit', `${debtData.person} (${debtData.amount})`, 'الديون');
+                        logAction('edit', `${debtData.person} (${debtData.amount})`, 'الديون', 'edit_debt');
                         syncGlobalData();
                         updateUI();
                         debtModal.classList.add('hidden');
@@ -4891,7 +5544,7 @@
                 return;
             } else {
                 debts.push({ id: makeId('debt_'), ...debtData });
-                logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون');
+                logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون', 'add_debt');
             }
 
             syncGlobalData();
@@ -4918,7 +5571,7 @@
                 debts = debts.filter(d => d.id !== id);
                 syncGlobalData();
                 updateUI();
-                logAction('delete', name, 'الديون');
+                logAction('delete', name, 'الديون', 'delete_debt');
             });
         };
 
@@ -4929,7 +5582,7 @@
                 debts = debts.filter(d => d.id !== id);
                 syncGlobalData();
                 updateUI();
-                logAction('pay', `${debt.person} (${debt.amount})`, 'الديون');
+                logAction('pay', `${debt.person} (${debt.amount})`, 'الديون', 'confirm_pay_debt');
             }, {
                 title: 'تأكيد السداد',
                 confirmText: 'نعم، تم السداد',
@@ -5034,7 +5687,7 @@
             if (shoppingImageInput) shoppingImageInput.value = '';
             syncGlobalData();
             updateUI();
-            logAction('add', text, 'المشتريات');
+            logAction('add', text, 'المشتريات', 'add_purchase');
         });
 
         window.toggleShoppingItem = (id) => {
@@ -5051,7 +5704,7 @@
                     item.checkedAt = item.checked ? getNowStamp() : '';
                     syncGlobalData();
                     updateUI();
-                    logAction(item.checked ? 'done' : 'edit', item.text, item.checked ? 'تم شراء غرض' : 'إلغاء شراء غرض');
+                    logAction(item.checked ? 'done' : 'edit', item.text, item.checked ? 'تم شراء غرض' : 'إلغاء شراء غرض', 'confirm_purchase');
                 },
                 {
                     title: willCheck ? 'تأكيد الشراء' : 'تأكيد إلغاء الشراء',
@@ -5067,7 +5720,7 @@
                 shoppingItems = shoppingItems.filter(i => i.id !== id);
                 syncGlobalData();
                 updateUI();
-                logAction('delete', item ? item.text : 'غرض', 'المشتريات');
+                logAction('delete', item ? item.text : 'غرض', 'المشتريات', 'delete_purchase');
             });
         };
 
@@ -5116,7 +5769,7 @@
             savingsNoteInput.value = '';
             syncGlobalData();
             updateUI();
-            logAction('add', `${note} (${amount})`, 'المدخرات');
+            logAction('add', `${note} (${amount})`, 'المدخرات', 'add_saving');
         });
 
         window.deleteSavingsItem = (id) => {
@@ -5125,7 +5778,7 @@
                 savingsItems = savingsItems.filter(i => i.id !== id);
                 syncGlobalData();
                 updateUI();
-                logAction('delete', item ? `${item.note} (${item.amount})` : 'مدخرات', 'المدخرات');
+                logAction('delete', item ? `${item.note} (${item.amount})` : 'مدخرات', 'المدخرات', 'delete_saving');
             });
         };
 
@@ -5292,6 +5945,408 @@
                 });
             }, { passive: true });
         }
+
+        // ==========================================
+        // --- Settings Page Logic ---
+        // ==========================================
+
+        let generatedDeleteOTP = null;
+
+        function openSettingsPage() {
+            mainApp.classList.add('hidden');
+            settingsPage.classList.remove('hidden');
+            loadSettingsToUI();
+        }
+
+        function closeSettingsPage() {
+            settingsPage.classList.add('hidden');
+            mainApp.classList.remove('hidden');
+            refreshAmountDisplays();
+        }
+
+        settingsBtn.addEventListener('click', openSettingsPage);
+        settingsBackBtn.addEventListener('click', closeSettingsPage);
+
+        function loadSettingsToUI() {
+            // Personal Info
+            profileNameInput.value = localStorage.getItem('profile_name') || '';
+            profilePhoneInput.value = localStorage.getItem('profile_phone') || '';
+            profileEmailInput.value = localStorage.getItem('profile_email') || '';
+
+            // Notification Checkboxes
+            notifAddCategory.checked = notifSettings.add_category !== false;
+            notifDeleteCategory.checked = notifSettings.delete_category !== false;
+            notifAddCategoryAmount.checked = notifSettings.add_category_amount !== false;
+            notifDeleteCategoryAmount.checked = notifSettings.delete_category_amount !== false;
+            notifEditCategoryContents.checked = notifSettings.edit_category_contents !== false;
+            notifAddPurchase.checked = notifSettings.add_purchase !== false;
+            notifDeletePurchase.checked = notifSettings.delete_purchase !== false;
+            notifConfirmPurchase.checked = notifSettings.confirm_purchase !== false;
+            notifAddDebt.checked = notifSettings.add_debt !== false;
+            notifDeleteDebt.checked = notifSettings.delete_debt !== false;
+            notifEditDebt.checked = notifSettings.edit_debt !== false;
+            notifConfirmPayDebt.checked = notifSettings.confirm_pay_debt !== false;
+            notifAddSaving.checked = notifSettings.add_saving !== false;
+            notifDeleteSaving.checked = notifSettings.delete_saving !== false;
+
+            // Site Settings
+            settingsDefaultSalary.value = (isSalaryPinned && pinnedSalary !== null) ? pinnedSalary : '';
+            settingsSalaryDay.value = SALARY_DAY;
+
+            // Fixed Categories
+            renderFixedCategoriesSettings();
+
+            // Reset Delete Account step
+            deleteStep1.classList.remove('hidden');
+            deleteStep2.classList.add('hidden');
+            deletePhoneInput.value = '';
+            otpVerificationInput.value = '';
+            generatedDeleteOTP = null;
+        }
+
+        // Sync Profile and Notification Settings from Firestore on load
+        async function syncSettingsFromFirestore() {
+            if (!db) return;
+            try {
+                await authReady;
+                // Profile
+                const profileSnap = await db.collection('budgets').doc("my_budget").collection('system').doc('profile').get();
+                if (profileSnap.exists) {
+                    const data = profileSnap.data();
+                    if (data.name) localStorage.setItem('profile_name', data.name);
+                    if (data.phone) localStorage.setItem('profile_phone', data.phone);
+                    if (data.email) localStorage.setItem('profile_email', data.email);
+                }
+                // Notification Settings
+                const notifSnap = await db.collection('budgets').doc("my_budget").collection('system').doc('notifSettings').get();
+                if (notifSnap.exists) {
+                    notifSettings = { ...notifSettings, ...notifSnap.data() };
+                    localStorage.setItem('notif_settings', JSON.stringify(notifSettings));
+                }
+            } catch(e) {
+                console.error("Error syncing settings from Firestore:", e);
+            }
+        }
+        syncSettingsFromFirestore();
+
+        // Submit Personal Info Form
+        personalInfoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = profileNameInput.value.trim();
+            const phone = profilePhoneInput.value.trim();
+            const email = profileEmailInput.value.trim();
+
+            localStorage.setItem('profile_name', name);
+            localStorage.setItem('profile_phone', phone);
+            localStorage.setItem('profile_email', email);
+
+            if (db) {
+                try {
+                    await authReady;
+                    await db.collection('budgets').doc("my_budget").collection('system').doc('profile').set({
+                        name,
+                        phone,
+                        email,
+                        lastUpdated: new Date().toISOString()
+                    }, { merge: true });
+                } catch(err) {
+                    console.error("Failed to sync profile:", err);
+                }
+            }
+
+            openInfoDialog('تم حفظ البيانات الشخصية بنجاح.', 'تم الحفظ');
+            logAction('edit', name || 'تحديث البيانات الشخصية', 'البيانات الشخصية');
+        });
+
+        // Notifications checkboxes events
+        const notifCheckboxes = [
+            { el: notifAddCategory, key: 'add_category' },
+            { el: notifDeleteCategory, key: 'delete_category' },
+            { el: notifAddCategoryAmount, key: 'add_category_amount' },
+            { el: notifDeleteCategoryAmount, key: 'delete_category_amount' },
+            { el: notifEditCategoryContents, key: 'edit_category_contents' },
+            { el: notifAddPurchase, key: 'add_purchase' },
+            { el: notifDeletePurchase, key: 'delete_purchase' },
+            { el: notifConfirmPurchase, key: 'confirm_purchase' },
+            { el: notifAddDebt, key: 'add_debt' },
+            { el: notifDeleteDebt, key: 'delete_debt' },
+            { el: notifEditDebt, key: 'edit_debt' },
+            { el: notifConfirmPayDebt, key: 'confirm_pay_debt' },
+            { el: notifAddSaving, key: 'add_saving' },
+            { el: notifDeleteSaving, key: 'delete_saving' }
+        ];
+
+        notifCheckboxes.forEach(item => {
+            item.el.addEventListener('change', () => {
+                notifSettings[item.key] = item.el.checked;
+                localStorage.setItem('notif_settings', JSON.stringify(notifSettings));
+                if (db) {
+                    authReady.then(() => {
+                        db.collection('budgets').doc("my_budget").collection('system').doc('notifSettings').set(notifSettings, { merge: true })
+                            .catch(err => console.error("Error syncing notification settings:", err));
+                    });
+                }
+            });
+        });
+
+        // Default Salary input event
+        settingsDefaultSalary.addEventListener('input', () => {
+            const val = parseFloat(settingsDefaultSalary.value);
+            if (Number.isFinite(val) && val >= 0) {
+                pinnedSalary = val;
+                isSalaryPinned = true;
+            } else {
+                pinnedSalary = null;
+                isSalaryPinned = false;
+            }
+            saveSalaryPinLocal();
+            syncGlobalData();
+            refreshAmountDisplays();
+        });
+
+        // Salary Day input event
+        settingsSalaryDay.addEventListener('input', () => {
+            const val = parseInt(settingsSalaryDay.value);
+            if (Number.isFinite(val) && val >= 1 && val <= 31) {
+                SALARY_DAY = val;
+                localStorage.setItem('salary_day', val.toString());
+                if (db) {
+                    authReady.then(() => {
+                        db.collection('budgets').doc("my_budget").collection('system').doc('globalData').set({
+                            salaryDay: val
+                        }, { merge: true }).catch(err => console.error("Error syncing salary day:", err));
+                    });
+                }
+                updateSalaryCycleInfo();
+                refreshAmountDisplays();
+            } else {
+                if (settingsSalaryDay.value !== '') {
+                    openInfoDialog('الرجاء إدخال يوم صالح بين 1 و 31.', 'خطأ في القيمة');
+                    settingsSalaryDay.value = SALARY_DAY;
+                }
+            }
+        });
+
+        // --- Fixed Categories Management ---
+        function renderFixedCategoriesSettings() {
+            fixedCategoriesList.innerHTML = '';
+            if (pinnedCategories.length === 0) {
+                fixedCategoriesList.innerHTML = '<div style="padding: 15px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">لا توجد أقسام ثابتة مخصصة بعد.</div>';
+                return;
+            }
+
+            pinnedCategories.forEach(cat => {
+                const item = document.createElement('div');
+                item.className = 'fixed-cat-item';
+                item.innerHTML = `
+                    <div class="fixed-cat-info">
+                        <div class="fixed-cat-icon">
+                            <i class="fa-solid ${cat.icon && cat.icon !== 'auto' ? cat.icon : getCategoryIcon(cat.name)}"></i>
+                        </div>
+                        <div class="fixed-cat-details">
+                            <span class="fixed-cat-name">${cat.name}</span>
+                            <span class="fixed-cat-amount">${formatCurrency(cat.allocated)}</span>
+                        </div>
+                    </div>
+                    <div class="cat-actions">
+                        <button class="cat-btn edit" onclick="requestEditFixedCategory('${cat.id}')" title="تعديل"><i class="fa-solid fa-pen"></i></button>
+                        <button class="cat-btn delete" onclick="requestDeleteFixedCategory('${cat.id}')" title="حذف"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                fixedCategoriesList.appendChild(item);
+            });
+        }
+
+        // Add Fixed Category Modal trigger
+        addFixedCatBtn.addEventListener('click', () => {
+            fixedCategoryForm.reset();
+            fixedCatIdInput.value = '';
+            fixedModalTitle.textContent = 'إضافة قسم ثابت جديد';
+            fixedCategoryModal.classList.remove('hidden');
+        });
+
+        // Close Fixed Modal
+        closeFixedModalBtns.forEach(btn => btn.addEventListener('click', () => fixedCategoryModal.classList.add('hidden')));
+
+        // Edit Fixed Category
+        window.requestEditFixedCategory = (id) => {
+            const cat = pinnedCategories.find(c => c.id === id);
+            if (cat) {
+                fixedCatIdInput.value = cat.id;
+                fixedCatNameInput.value = cat.name;
+                fixedCatAllocatedInput.value = cat.allocated;
+                fixedCatIconInput.value = cat.icon || 'auto';
+                fixedModalTitle.textContent = 'تعديل بيانات القسم الثابت';
+                fixedCategoryModal.classList.remove('hidden');
+            }
+        };
+
+        // Delete Fixed Category
+        window.requestDeleteFixedCategory = (id) => {
+            openConfirmDialog('هل أنت متأكد من إزالة هذا القسم الثابت؟ لن يظهر تلقائيًا في الأشهر الجديدة.', () => {
+                pinnedCategories = pinnedCategories.filter(c => c.id !== id);
+                syncGlobalData();
+                renderFixedCategoriesSettings();
+                mergePinnedCategoriesIntoCategories();
+                refreshAmountDisplays();
+                logAction('delete', 'قسم ثابت', 'إعدادات الموقع');
+            }, {
+                title: 'تأكيد الحذف',
+                confirmText: 'نعم، احذف',
+                confirmClass: 'btn-danger'
+            });
+        };
+
+        // Submit Fixed Category Form
+        fixedCategoryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = fixedCatIdInput.value;
+            const catData = {
+                name: fixedCatNameInput.value.trim(),
+                allocated: parseFloat(fixedCatAllocatedInput.value || 0),
+                icon: fixedCatIconInput.value,
+                pinned: true
+            };
+
+            if (id) {
+                const index = pinnedCategories.findIndex(c => c.id === id);
+                if (index !== -1) {
+                    pinnedCategories[index] = { ...pinnedCategories[index], ...catData };
+                    logAction('edit', catData.name, 'إعدادات الموقع');
+                }
+            } else {
+                pinnedCategories.push({ id: makeId('cat_'), ...catData, transactions: [] });
+                logAction('add', catData.name, 'إعدادات الموقع');
+            }
+
+            syncGlobalData();
+            renderFixedCategoriesSettings();
+            mergePinnedCategoriesIntoCategories();
+            refreshAmountDisplays();
+            fixedCategoryModal.classList.add('hidden');
+        });
+
+        // --- Simulated OTP WhatsApp Deletion Flow ---
+        sendOtpBtn.addEventListener('click', () => {
+            const phone = deletePhoneInput.value.trim();
+            if (!phone) {
+                openInfoDialog('الرجاء إدخال رقم الهاتف أولاً.', 'رقم الهاتف مطلوب');
+                return;
+            }
+
+            // Generate random 6 digit OTP
+            generatedDeleteOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // Simulate sending WhatsApp message
+            showWhatsAppNotification(generatedDeleteOTP, phone);
+
+            // Switch to step 2
+            deleteStep1.classList.add('hidden');
+            deleteStep2.classList.remove('hidden');
+            otpVerificationInput.focus();
+        });
+
+        function showWhatsAppNotification(code, phone) {
+            whatsappToastBody.textContent = `رسالة جديدة من واتساب لحساب ${phone}: رمز التحقق لحذف حسابك هو: ${code}`;
+            whatsappToast.classList.add('show');
+
+            // Hide after 15 seconds
+            setTimeout(() => {
+                whatsappToast.classList.remove('show');
+            }, 15000);
+        }
+
+        // Copy OTP function
+        whatsappToastCopyBtn.addEventListener('click', () => {
+            if (generatedDeleteOTP) {
+                navigator.clipboard.writeText(generatedDeleteOTP).then(() => {
+                    whatsappToastCopyBtn.textContent = 'تم النسخ';
+                    setTimeout(() => {
+                        whatsappToastCopyBtn.textContent = 'نسخ';
+                    }, 2000);
+                }).catch(err => {
+                    console.error("Could not copy OTP:", err);
+                });
+            }
+        });
+
+        cancelDeleteStepBtn.addEventListener('click', () => {
+            deleteStep1.classList.remove('hidden');
+            deleteStep2.classList.add('hidden');
+            otpVerificationInput.value = '';
+            generatedDeleteOTP = null;
+        });
+
+        confirmDeleteAccountBtn.addEventListener('click', () => {
+            const enteredOTP = otpVerificationInput.value.trim();
+            if (enteredOTP !== generatedDeleteOTP) {
+                openInfoDialog('رمز التحقق (OTP) غير صحيح، يرجى المحاولة مرة أخرى.', 'خطأ في التحقق');
+                return;
+            }
+
+            openConfirmDialog('تنبيه أخير: هل أنت متأكد تمامًا من حذف حسابك وكل بياناتك نهائيًا؟ لن تتمكن من استعادتها أبداً.', async () => {
+                // Delete data from Firebase if active
+                if (db) {
+                    await deleteFirestoreAccountData();
+                }
+                
+                // Clear all LocalStorage data
+                localStorage.clear();
+
+                // Show success dialog and reload
+                openInfoDialog('تم حذف حسابك وجميع بياناتك بنجاح. سيتم الآن تحديث التطبيق.', 'تم الحذف بنجاح', () => {
+                    window.location.reload();
+                });
+            }, {
+                title: 'تأكيد الحذف النهائي',
+                confirmText: 'نعم، احذف نهائياً',
+                confirmClass: 'btn-danger'
+            });
+        });
+
+        async function deleteFirestoreAccountData() {
+            try {
+                await authReady;
+                const batch = db.batch();
+                
+                // Get all month documents and delete them
+                const monthsSnap = await db.collection('budgets').doc("my_budget").collection('months').get();
+                monthsSnap.forEach(doc => batch.delete(doc.ref));
+
+                // Get all logs and delete them
+                const logsSnap = await db.collection('budgets').doc("my_budget").collection('logs').get();
+                logsSnap.forEach(doc => batch.delete(doc.ref));
+
+                // Delete system configuration documents
+                batch.delete(db.collection('budgets').doc("my_budget").collection('system').doc('globalData'));
+                batch.delete(db.collection('budgets').doc("my_budget").collection('system').doc('profile'));
+                batch.delete(db.collection('budgets').doc("my_budget").collection('system').doc('notifSettings'));
+
+                await batch.commit();
+            } catch(e) {
+                console.error("Firestore deletion failed:", e);
+            }
+        }
+
+        // --- Log out logic ---
+        logoutBtn.addEventListener('click', () => {
+            openConfirmDialog('هل تريد تسجيل الخروج؟', async () => {
+                if (db) {
+                    try {
+                        await firebase.auth().signOut();
+                    } catch(err) {
+                        console.error("Failed to sign out from Firebase:", err);
+                    }
+                }
+                // Clear session details and reload
+                localStorage.clear();
+                window.location.reload();
+            }, {
+                title: 'تسجيل الخروج',
+                confirmText: 'نعم، خروج',
+                confirmClass: 'btn-danger'
+            });
+        });
 
         // Start
         initLiquidPointerGlow();
