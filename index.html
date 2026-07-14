@@ -551,7 +551,6 @@
             font-size: 0.9rem;
         }
 
-        .progress-metric,
         .progress-expenses {
             color: var(--text-main);
             display: flex;
@@ -2924,12 +2923,35 @@
         }
 
         .cat-btn.delete,
-        .del-trans-btn {
-            color: var(--action-delete);
+        .del-trans-btn,
+        .cat-btn.delete:hover,
+        .del-trans-btn:hover,
+        .cat-btn.delete:active,
+        .del-trans-btn:active {
+            color: #ffffff !important;
+            background: transparent !important;
+            border-color: transparent !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+
+        .cat-btn.delete i,
+        .del-trans-btn i {
+            color: #ffffff !important;
+        }
+
+        .cat-btn.delete::before {
+            display: none !important;
         }
 
         .cat-btn.edit {
             color: var(--action-edit);
+        }
+
+        .cat-btn.pay,
+        .cat-btn.pay i {
+            color: #ffffff !important;
         }
 
         .cat-btn.pin.active {
@@ -3691,7 +3713,6 @@
             <div class="progress-container">
                 <div class="progress-labels">
                     <span id="progress-total-used" class="progress-expenses">إجمالي المصروفات: <span class="progress-expenses-value amount-hidden"><span class="currency-amount"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">***</span></span></span></span>
-                    <span class="progress-metric">نسبة الصرف: <strong id="spending-percentage">0%</strong></span>
                 </div>
                 <div class="progress-bar-bg">
                     <div id="progress-bar-fill" class="progress-bar-fill"></div>
@@ -3884,24 +3905,24 @@
                     <div class="profile-name-grid">
                         <div class="form-group">
                             <label for="profile-first-name">الاسم الأول</label>
-                            <input type="text" id="profile-first-name" placeholder="مثال: محمد" autocomplete="given-name">
+                            <input type="text" id="profile-first-name" placeholder="الأسم" autocomplete="given-name">
                         </div>
                         <div class="form-group">
                             <label for="profile-middle-name">الاسم الأوسط</label>
-                            <input type="text" id="profile-middle-name" placeholder="مثال: علي">
+                            <input type="text" id="profile-middle-name" placeholder="أسم الأب">
                         </div>
                         <div class="form-group">
                             <label for="profile-family-name">اسم العائلة</label>
-                            <input type="text" id="profile-family-name" placeholder="مثال: البلوشي" autocomplete="family-name">
+                            <input type="text" id="profile-family-name" placeholder="القبيلة" autocomplete="family-name">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="profile-phone">تغيير رقم الهاتف</label>
-                        <input type="tel" id="profile-phone" placeholder="مثال: 96899999999">
+                        <input type="tel" id="profile-phone" placeholder="أكتب رقم الهاتف">
                     </div>
                     <div class="form-group">
                         <label for="profile-email">تغيير البريد الإلكتروني</label>
-                        <input type="email" id="profile-email" placeholder="مثال: user@example.com">
+                        <input type="email" id="profile-email" placeholder="أكتب البريد الإلكتروني">
                     </div>
                     <button type="submit" class="btn-primary" style="align-self: flex-start; min-width: 140px;"><i class="fa-solid fa-floppy-disk"></i> حفظ البيانات</button>
                 </form>
@@ -4035,20 +4056,19 @@
                 
                 <div class="settings-form">
                     <div class="form-group">
-                        <label for="settings-default-salary">كتابة كم الراتب ليكون تلقائيًا لكل شهر (ر.ع)</label>
+                        <label for="settings-default-salary">الراتب الشهري</label>
                         <input type="number" inputmode="decimal" id="settings-default-salary" min="0" step="any" placeholder="مثال: 600.000">
-                        <small class="help-text">يكتب الراتب ليكون تلقائيًا لكل شهر (مثال: 600.000 ريال عماني)</small>
                     </div>
                     
                     <div class="form-group">
                         <label for="settings-salary-day">تاريخ نزول الراتب من كل شهر</label>
                         <input type="number" id="settings-salary-day" min="1" max="31" placeholder="مثال: 25">
-                        <small class="help-text">مثال: إذا سويت تاريخ 25 خلاص شهريا ينزل ذا التاريخ ويتغير في الموقع تلقائيًا بذا التاريخ.</small>
+                        <small class="help-text">حدد اليوم الذي ينزل فيه الراتب من كل شهر</small>
                     </div>
                     
                     <div class="fixed-categories-manager" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px;">
                         <h4>تخصيص التزامات ثابتة لكل شهر</h4>
-                        <p class="settings-note" style="margin-top: 5px;">إذا سويت الالتزامات خلاص تلقائي تجي كل شهر، ولكن ما تحذف الالتزامات العادية اللي سويتها لأشهر معينة (ما ثابتة).</p>
+                        <p class="settings-note" style="margin-top: 5px;">يمكنك تثبيت إلتزامات تتجدد كل شهر.</p>
                         
                         <div id="fixed-categories-list" class="fixed-categories-list">
                             <!-- سيتم إدراج الالتزامات الثابتة هنا برمجياً -->
@@ -4330,7 +4350,6 @@
 
         const statAllocated = document.getElementById('stat-allocated');
         const statRemaining = document.getElementById('stat-remaining');
-        const spendingPercentage = document.getElementById('spending-percentage');
         const progressTotalUsed = document.getElementById('progress-total-used');
         const progressBarFill = document.getElementById('progress-bar-fill');
         const categoriesGrid = document.getElementById('categories-grid');
@@ -4480,6 +4499,8 @@
         });
 
         let totalSalary = 529;
+        let summarySalary = 529;
+        let summaryCategories = [];
         let areAmountsVisible = localStorage.getItem('amounts_visible') === 'true';
         let isSalaryPinned = localStorage.getItem('salary_pinned') === 'true';
         let pinnedSalary = parseFloat(localStorage.getItem('pinned_salary') || '');
@@ -4514,6 +4535,7 @@
 
         const currentFinancialMonth = getFinancialMonth();
         let isEditableMonth = true;
+        let canManageCategories = true;
 
         function getSalaryDateForFinancialMonth(monthValue) {
             const [year, month] = monthValue.split('-').map(Number);
@@ -4533,6 +4555,10 @@
 
         function isMonthEditable(monthValue) {
             return monthValue === currentFinancialMonth;
+        }
+
+        function canManageCategoriesForMonth(monthValue) {
+            return monthValue >= currentFinancialMonth;
         }
 
         function getMonthLockedMessage(monthValue) {
@@ -4559,6 +4585,13 @@
             return Math.max(0, Math.ceil((salaryStart - todayStart) / 86400000));
         }
 
+        function getSalaryDayDistance(date) {
+            const today = new Date();
+            const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            const salaryStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            return Math.ceil((salaryStart - todayStart) / 86400000);
+        }
+
         function getRemainingSalaryDaysParts(days) {
             const value = Math.max(0, Math.round(days));
             if (value === 0) return { number: '', word: 'اليوم' };
@@ -4568,7 +4601,8 @@
             return { number: value, word: 'يوم' };
         }
 
-        function formatRemainingSalaryDays(days) {
+        function formatRemainingSalaryDays(days, isPast = false) {
+            if (isPast) return '<span class="remaining-days-word">انتهى</span>';
             const parts = getRemainingSalaryDaysParts(days);
             if (!parts.number) return `<span class="remaining-days-word">${parts.word}</span>`;
             return `<span class="remaining-days-number">${parts.number}</span><span class="remaining-days-word">${parts.word}</span>`;
@@ -4604,7 +4638,8 @@
             return `rgb(${color.r}, ${color.g}, ${color.b})`;
         }
 
-        function getSalaryDaysColor(days) {
+        function getSalaryDaysColor(days, isPast = false) {
+            if (isPast) return getThemeColor('--text-muted', '#a3a3a3');
             const value = Math.max(0, Math.min(30, Math.round(days)));
             const successColor = parseHexColor(getThemeColor('--success-color', '#10b981'));
             const warningColor = parseHexColor(getThemeColor('--warning-color', '#f59e0b'));
@@ -4628,13 +4663,14 @@
 
         function updateSalaryCycleInfo() {
             if (!monthSelector) return;
-            const monthValue = monthSelector.value || currentFinancialMonth;
-            const nextDate = getNextSalaryDateForFinancialMonth(monthValue);
+            const nextDate = getNextSalaryDateForFinancialMonth(currentFinancialMonth);
             if (nextSalaryDate) nextSalaryDate.textContent = formatSalaryDate(nextDate);
             if (nextSalaryDays) {
-                const daysUntilSalary = getDaysUntilSalary(nextDate);
-                nextSalaryDays.style.setProperty('--salary-days-color', getSalaryDaysColor(daysUntilSalary));
-                nextSalaryDays.innerHTML = formatRemainingSalaryDays(daysUntilSalary);
+                const dayDistance = getSalaryDayDistance(nextDate);
+                const isPastSalary = dayDistance < 0;
+                const daysUntilSalary = Math.max(0, dayDistance);
+                nextSalaryDays.style.setProperty('--salary-days-color', getSalaryDaysColor(daysUntilSalary, isPastSalary));
+                nextSalaryDays.innerHTML = formatRemainingSalaryDays(daysUntilSalary, isPastSalary);
             }
         }
 
@@ -4974,7 +5010,7 @@
             const isEditing = !totalSalaryInput.hasAttribute('readonly');
             const shouldShowAmount = areAmountsVisible || isEditing;
             if (!isEditing || document.activeElement !== totalSalaryInput) {
-                totalSalaryInput.value = shouldShowAmount ? formatPlainAmount(totalSalary) : '***';
+                totalSalaryInput.value = shouldShowAmount ? formatPlainAmount(summarySalary) : '***';
             }
             totalSalaryInput.classList.toggle('amount-hidden', !shouldShowAmount);
             if (toggleSalaryVisibilityBtn) {
@@ -4983,7 +5019,7 @@
                 toggleSalaryVisibilityBtn.setAttribute('aria-label', toggleSalaryVisibilityBtn.title);
             }
             if (pinSalaryBtn) {
-                pinSalaryBtn.classList.toggle('hidden', !isEditing || !isEditableMonth);
+                pinSalaryBtn.classList.toggle('hidden', !isEditing);
                 pinSalaryBtn.classList.toggle('active', isSalaryPinned);
                 const pinTitle = isSalaryPinned && pinnedSalary !== null
                     ? `الراتب مثبت للشهور القادمة: ${formatPlainAmount(pinnedSalary)}`
@@ -5201,6 +5237,80 @@
             return { categories: normalized, migrated };
         }
 
+        function cloneCategoriesList(list = []) {
+            return JSON.parse(JSON.stringify(Array.isArray(list) ? list : []));
+        }
+
+        function normalizeSummaryCategories(rawCategories = []) {
+            const normalizedResult = normalizeMonthCategories(rawCategories);
+            const nextCategories = cloneCategoriesList(normalizedResult.categories);
+
+            pinnedCategories.forEach(pin => {
+                const existing = nextCategories.find(cat => cat.id === pin.id);
+                if (existing) {
+                    existing.pinned = true;
+                } else {
+                    nextCategories.push(clonePinnedCategory(pin));
+                }
+            });
+
+            nextCategories.forEach(cat => {
+                cat.pinned = isPinnedCategory(cat);
+            });
+
+            return nextCategories;
+        }
+
+        function setCurrentSummaryData(salary, rawCategories = []) {
+            const parsedSalary = parseFloat(salary);
+            summarySalary = Number.isFinite(parsedSalary) ? parsedSalary : getDefaultSalaryForMonth(currentFinancialMonth);
+            summaryCategories = normalizeSummaryCategories(rawCategories);
+        }
+
+        function loadCurrentSummaryDataLocal() {
+            const salaryKey = `salary_${currentFinancialMonth}`;
+            const categoryKey = `categories_${currentFinancialMonth}`;
+            const salary = localStorage.getItem(salaryKey)
+                ? parseFloat(localStorage.getItem(salaryKey))
+                : getDefaultSalaryForMonth(currentFinancialMonth);
+            let rawCategories = [];
+
+            if (localStorage.getItem(categoryKey)) {
+                try { rawCategories = JSON.parse(localStorage.getItem(categoryKey)); }
+                catch (e) { rawCategories = []; }
+            } else if (monthSelector.value === currentFinancialMonth && categories.length > 0) {
+                rawCategories = categories;
+            } else {
+                rawCategories = getInitialCategoriesForMonth(currentFinancialMonth);
+            }
+
+            setCurrentSummaryData(salary, rawCategories);
+        }
+
+        function syncCurrentSummaryData() {
+            localStorage.setItem(`salary_${currentFinancialMonth}`, summarySalary);
+            localStorage.setItem(`categories_${currentFinancialMonth}`, JSON.stringify(summaryCategories));
+
+            if (monthSelector.value === currentFinancialMonth) {
+                totalSalary = summarySalary;
+                categories = cloneCategoriesList(summaryCategories);
+            }
+
+            if (!db) return;
+            authReady.then(() => {
+                db.collection('budgets').doc("my_budget").collection('months').doc(currentFinancialMonth).set({
+                    totalSalary: summarySalary,
+                    categories: summaryCategories,
+                    lastUpdated: new Date().toISOString()
+                }).catch(e => console.error("Failed to sync current summary data:", e));
+            });
+        }
+
+        function updateCurrentSummaryFromSelected(month) {
+            if (month !== currentFinancialMonth) return;
+            setCurrentSummaryData(totalSalary, categories);
+        }
+
         function saveSalaryPinLocal() {
             localStorage.setItem('salary_pinned', isSalaryPinned ? 'true' : 'false');
             if (pinnedSalary === null || !Number.isFinite(pinnedSalary)) {
@@ -5261,6 +5371,7 @@
             globalDataLoaded = true;
 
             loadGlobalDataLocal();
+            loadCurrentSummaryDataLocal();
             updateUI();
 
             if (!db) return;
@@ -5270,6 +5381,7 @@
             unsubscribeGlobalData = globalRef.onSnapshot(snap => {
                 if (snap.exists) {
                     normalizeGlobalData(snap.data());
+                    loadCurrentSummaryDataLocal();
                     updateUI();
                 } else {
                     console.info("Global data document not found. Waiting for a manual change before creating it.");
@@ -5307,26 +5419,24 @@
             await startGlobalDataSync();
             initLogsSync(); // تشغيل مزامنة الإشعارات فوراً بشكل مستقل
             isEditableMonth = isMonthEditable(month);
+            canManageCategories = canManageCategoriesForMonth(month);
+
+            if (!canManageCategories) {
+                addCategoryBtn.classList.add('hidden');
+            } else {
+                addCategoryBtn.classList.remove('hidden');
+            }
 
             if (!isEditableMonth) {
-                totalSalaryInput.setAttribute('readonly', 'true');
-                editSalaryBtn.classList.add('hidden');
-                addCategoryBtn.classList.add('hidden');
-                if (addDebtBtn) addDebtBtn.classList.add('hidden');
-                if (debtEntryCard) debtEntryCard.classList.add('hidden');
-                shoppingForm.classList.add('hidden');
-                savingsForm.classList.add('hidden');
                 quickExpenseCard.classList.add('hidden');
-                saveSalaryBtn.classList.add('hidden');
             } else {
-                editSalaryBtn.classList.remove('hidden');
-                addCategoryBtn.classList.remove('hidden');
-                if (addDebtBtn) addDebtBtn.classList.remove('hidden');
-                if (debtEntryCard) debtEntryCard.classList.remove('hidden');
-                shoppingForm.classList.remove('hidden');
-                savingsForm.classList.remove('hidden');
                 quickExpenseCard.classList.remove('hidden');
             }
+            if (totalSalaryInput.hasAttribute('readonly')) editSalaryBtn.classList.remove('hidden');
+            if (addDebtBtn) addDebtBtn.classList.remove('hidden');
+            if (debtEntryCard) debtEntryCard.classList.remove('hidden');
+            shoppingForm.classList.remove('hidden');
+            savingsForm.classList.remove('hidden');
 
             if (unsubscribeFirebase) {
                 unsubscribeFirebase();
@@ -5346,6 +5456,7 @@
                             categories = normalizedResult.categories;
                             rememberCategoryHistory();
                             const pinsChanged = mergePinnedCategoriesIntoCategories();
+                            updateCurrentSummaryFromSelected(month);
                             renderSalaryInput();
                             updateLastModified(data.lastUpdated);
                             updateUI();
@@ -5391,6 +5502,7 @@
             const normalizedResult = normalizeMonthCategories(categories);
             categories = normalizedResult.categories;
             const pinsChanged = mergePinnedCategoriesIntoCategories();
+            updateCurrentSummaryFromSelected(month);
 
             if (isEditableMonth && (normalizedResult.migrated || pinsChanged || shouldSaveMonth)) {
                 rememberCategoryHistory();
@@ -5404,6 +5516,7 @@
 
         async function syncData() {
             const month = monthSelector.value;
+            updateCurrentSummaryFromSelected(month);
             // Always save locally
             localStorage.setItem(`categories_${month}`, JSON.stringify(categories));
             localStorage.setItem(`salary_${month}`, totalSalary);
@@ -5454,7 +5567,7 @@
         });
 
         pinSalaryBtn.addEventListener('click', () => {
-            const currentValue = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || totalSalary || 0);
+            const currentValue = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || summarySalary || 0);
             if (!currentValue || currentValue <= 0) {
                 openInfoDialog('اكتب الراتب أولًا ثم اضغط زر التثبيت.');
                 return;
@@ -5469,32 +5582,29 @@
         });
 
         saveSalaryBtn.addEventListener('click', () => {
-            if (!isEditableMonth) {
-                totalSalaryInput.setAttribute('readonly', 'true');
-                saveSalaryBtn.classList.add('hidden');
-                renderSalaryInput();
-                openInfoDialog(getMonthLockedMessage(monthSelector.value));
-                return;
-            }
             openEditConfirmDialog('هل تريد حفظ تعديل الراتب؟', () => {
-                const oldSalary = totalSalary;
-                totalSalary = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || 0);
+                const oldSalary = summarySalary;
+                summarySalary = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || 0);
                 if (isSalaryPinned) {
-                    pinnedSalary = totalSalary;
+                    pinnedSalary = summarySalary;
                     saveSalaryPinLocal();
                     syncGlobalData();
                 }
-                syncData();
+                syncCurrentSummaryData();
                 updateUI();
                 totalSalaryInput.setAttribute('readonly', 'true');
                 renderSalaryInput();
                 saveSalaryBtn.classList.add('hidden');
                 editSalaryBtn.classList.remove('hidden');
-                logAction('edit', `من ${oldSalary} إلى ${totalSalary}`, 'تعديل الراتب');
+                logAction('edit', `من ${oldSalary} إلى ${summarySalary}`, 'تعديل الراتب');
             });
         });
 
         window.requestEditCategory = (id) => {
+            if (!canManageCategories) {
+                openInfoDialog(getMonthLockedMessage(monthSelector.value));
+                return;
+            }
             const cat = categories.find(c => c.id === id);
             if (cat) {
                 catIdInput.value = cat.id;
@@ -5507,6 +5617,10 @@
         };
 
         window.requestDeleteCategory = (id) => {
+            if (!canManageCategories) {
+                openInfoDialog(getMonthLockedMessage(monthSelector.value));
+                return;
+            }
             openConfirmDialog('هل أنت متأكد من حذف هذا الالتزام بالكامل بما فيه من مصروفات؟', () => {
                 const cat = categories.find(c => c.id === id);
                 const name = cat ? cat.name : 'التزام';
@@ -5570,7 +5684,7 @@
         // --- Safe Operations ---
 
         addCategoryBtn.addEventListener('click', () => {
-            if (!isEditableMonth) {
+            if (!canManageCategories) {
                 openInfoDialog(getMonthLockedMessage(monthSelector.value));
                 return;
             }
@@ -5601,6 +5715,10 @@
         // Form Submissions
         categoryForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (!canManageCategories) {
+                openInfoDialog(getMonthLockedMessage(monthSelector.value));
+                return;
+            }
             const id = catIdInput.value;
             const catData = {
                 name: catNameInput.value,
@@ -5762,7 +5880,7 @@
         // --- UI & Math ---
         function updateUI() {
             let totalAllocated = 0, totalUsed = 0;
-            categories.forEach(cat => {
+            summaryCategories.forEach(cat => {
                 totalAllocated += parseFloat(cat.allocated || 0);
                 let catUsed = 0;
                 if (cat.transactions) cat.transactions.forEach(t => catUsed += t.amount);
@@ -5780,16 +5898,14 @@
                 statDebtContainer.classList.add('hidden');
             }
 
-            const remainingFromSalary = totalSalary - totalUsed;
-            let percentage = totalSalary > 0 ? Math.round((totalUsed / totalSalary) * 100) : 0;
+            const remainingFromSalary = summarySalary - totalUsed;
+            let percentage = summarySalary > 0 ? Math.round((totalUsed / summarySalary) * 100) : 0;
 
             if (statAllocated) statAllocated.innerHTML = formatCurrencyHtml(totalAllocated);
             if (progressTotalUsed) {
                 progressTotalUsed.innerHTML = `إجمالي المصروفات: <span class="progress-expenses-value${amountHiddenClass()}">${formatCurrencyHtml(totalUsed)}</span>`;
             }
             statRemaining.innerHTML = formatCurrencyHtml(remainingFromSalary);
-            spendingPercentage.textContent = `${percentage}%`;
-
             let safePercentage = percentage > 100 ? 100 : percentage;
             progressBarFill.style.width = `${safePercentage}%`;
 
@@ -5838,13 +5954,10 @@
                     ${debt.note ? `<div class="debt-note">${debt.note}</div>` : ''}
                     <div class="debt-footer">
                         <span class="debt-date"><i class="fa-solid fa-clock"></i> ${debt.date}</span>
-                        ${isEditableMonth ? `
                         <div class="cat-actions">
-                            <button class="cat-btn edit" onclick="requestEditDebt('${debt.id}')"><i class="fa-solid fa-pen-to-square"></i></button>
-                            <button class="cat-btn" style="color: var(--success-color);" title="تم دفع الدين" onclick="payDebt('${debt.id}')"><i class="fa-solid fa-circle-check"></i></button>
+                            <button class="cat-btn pay" title="تم دفع الدين" onclick="payDebt('${debt.id}')"><i class="fa-solid fa-circle-check"></i></button>
                             <button class="cat-btn delete" onclick="requestDeleteDebt('${debt.id}')"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
-                        ` : `<span style="font-size: 0.7rem; color: var(--text-muted);">${getReadOnlyMonthLabel()}</span>`}
                     </div>
                 `;
                 debtsList.appendChild(card);
@@ -5970,19 +6083,17 @@
                 const div = document.createElement('div');
                 div.className = `shopping-item ${item.checked ? 'checked' : ''}`;
                 div.innerHTML = `
-                    <div class="checkbox-wrapper" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">
+                    <div class="checkbox-wrapper" onclick="toggleShoppingItem('${item.id}')">
                         <i class="fa-solid fa-check"></i>
                     </div>
                     ${item.image ? `<img class="shopping-thumb" src="${item.image}" alt="" onclick="openImageModal('${item.image}')" style="cursor: zoom-in;">` : ''}
-                    <div class="shopping-details" onclick="${isEditableMonth ? `toggleShoppingItem('${item.id}')` : ''}">
+                    <div class="shopping-details" onclick="toggleShoppingItem('${item.id}')">
                         <span class="item-text">${item.text}</span>
                         ${item.date ? `<span class="shopping-date"><i class="fa-regular fa-clock"></i> ${item.date}</span>` : ''}
                     </div>
-                    ${isEditableMonth ? `
                     <button class="cat-btn delete" onclick="deleteShoppingItem('${item.id}')">
                         <i class="fa-solid fa-trash-can"></i>
                     </button>
-                    ` : ''}
                 `;
                 shoppingList.appendChild(div);
             });
@@ -6113,7 +6224,7 @@
                     </div>
                     <div class="cat-actions">
                         <span class="savings-amount${amountHiddenClass()}">${formatCurrencyHtml(item.amount)}</span>
-                        ${isEditableMonth ? `<button class="cat-btn delete" onclick="deleteSavingsItem('${item.id}')"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                        <button class="cat-btn delete" onclick="deleteSavingsItem('${item.id}')"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
                 savingsList.appendChild(row);
@@ -6226,8 +6337,7 @@
                             ${cat.name}
                         </div>
                         <div class="cat-actions">
-                            ${isEditableMonth ? `
-                            <button class="cat-btn pin ${cat.pinned ? 'active' : ''}" title="${cat.pinned ? 'إلغاء تثبيت الالتزام من الشهور القادمة' : 'تثبيت الالتزام للشهور القادمة'}" onclick="toggleCategoryPin('${cat.id}')"><i class="fa-solid fa-thumbtack"></i></button>
+                            ${canManageCategories ? `
                             <button class="cat-btn edit" title="تعديل اسم أو مخصص الالتزام" onclick="requestEditCategory('${cat.id}')"><i class="fa-solid fa-pen"></i></button>
                             <button class="cat-btn delete" title="حذف الالتزام بالكامل" onclick="requestDeleteCategory('${cat.id}')"><i class="fa-solid fa-trash"></i></button>
                             ` : `<span style="font-size: 0.7rem; color: var(--text-muted); border: 1px solid; padding: 2px 5px; border-radius: 4px;">${getReadOnlyMonthLabel()}</span>`}
