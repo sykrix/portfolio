@@ -152,11 +152,18 @@
             font-size: clamp(1.4rem, 5vw, 1.8rem);
             font-weight: 700;
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            max-width: 100%;
             color: var(--primary-color);
             margin-bottom: 0;
+        }
+
+        .header-top h1 span {
+            min-width: 0;
+            overflow-wrap: anywhere;
         }
 
         .header-actions {
@@ -484,7 +491,18 @@
         }
 
         .next-salary-value.warning {
-            color: var(--warning-color);
+            color: var(--salary-days-color, var(--warning-color));
+            transition: color 0.25s ease, text-shadow 0.25s ease;
+            text-shadow: 0 0 10px color-mix(in srgb, var(--salary-days-color, var(--warning-color)) 16%, transparent);
+        }
+
+        .next-salary-value.warning .remaining-days-number,
+        .next-salary-value.warning .remaining-days-word {
+            color: var(--salary-days-color, var(--warning-color));
+        }
+
+        .next-salary-value.warning .remaining-days-word {
+            margin-inline-start: 4px;
         }
 
         .stat-box {
@@ -527,16 +545,22 @@
 
         .progress-labels {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
             font-size: 0.9rem;
         }
 
         .progress-metric,
         .progress-expenses {
             color: var(--text-main);
-            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 6px;
+            direction: rtl;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
             font-weight: 700;
             line-height: 1.4;
         }
@@ -3324,6 +3348,22 @@
             gap: 20px;
         }
 
+        .profile-name-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .profile-name-grid .form-group {
+            margin-bottom: 0;
+        }
+
+        @media (min-width: 600px) {
+            .profile-name-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
         .help-text {
             font-size: 0.8rem;
             color: var(--text-muted);
@@ -3335,12 +3375,12 @@
         .notif-settings-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 12px;
         }
 
         @media (min-width: 600px) {
             .notif-settings-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr;
             }
         }
 
@@ -3348,19 +3388,55 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: var(--border-radius-md);
-            padding: 16px;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            gap: 12px;
         }
 
-        .notif-settings-group h4 {
-            margin: 0 0 4px 0;
+        .notif-settings-toggle {
+            width: 100%;
+            min-height: 52px;
+            padding: 14px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            text-align: start;
+            font-family: inherit;
+        }
+
+        .notif-settings-title {
+            margin: 0;
             font-size: 0.95rem;
-            font-weight: 600;
+            font-weight: 700;
             color: var(--primary-color);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 8px;
+        }
+
+        .notif-settings-toggle i {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            transition: transform 0.2s ease, color 0.2s ease;
+        }
+
+        .notif-settings-group.is-open .notif-settings-toggle i {
+            color: var(--primary-color);
+            transform: rotate(180deg);
+        }
+
+        .notif-settings-options {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 16px 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .notif-settings-group.is-open .notif-settings-options {
+            display: flex;
         }
 
         .setting-checkbox-label {
@@ -3570,7 +3646,7 @@
     <div id="main-app" class="app-container">
         <header class="header-glass">
             <div class="header-top">
-                <h1><i class="fa-solid fa-wallet"></i> تقسيم الراتب</h1>
+                <h1 id="header-greeting"><i id="header-greeting-icon" class="fa-solid fa-sun"></i> <span id="header-greeting-text">صباح الخير</span></h1>
                 <div class="header-actions">
                     <select id="month-selector" class="month-selector"></select>
                     <button id="settings-btn" class="icon-btn" title="الإعدادات" aria-label="الإعدادات"><i class="fa-solid fa-gear"></i></button>
@@ -3614,8 +3690,8 @@
 
             <div class="progress-container">
                 <div class="progress-labels">
-                    <span class="progress-metric">نسبة الصرف: <strong id="spending-percentage">0%</strong></span>
                     <span id="progress-total-used" class="progress-expenses">إجمالي المصروفات: <span class="progress-expenses-value amount-hidden"><span class="currency-amount"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">***</span></span></span></span>
+                    <span class="progress-metric">نسبة الصرف: <strong id="spending-percentage">0%</strong></span>
                 </div>
                 <div class="progress-bar-bg">
                     <div id="progress-bar-fill" class="progress-bar-fill"></div>
@@ -3628,7 +3704,7 @@
         <nav class="main-nav">
             <div class="nav-tab active" data-section="categories-section">
                 <i class="fa-solid fa-layer-group"></i>
-                <span>الأقسام</span>
+                <span>الالتزامات</span>
             </div>
             <div class="nav-tab" data-section="shopping-section">
                 <i class="fa-solid fa-cart-shopping"></i>
@@ -3663,25 +3739,25 @@
                             <input type="text" id="quick-expense-note" placeholder="مثال: قهوة">
                         </div>
                         <div class="quick-expense-field quick-expense-category-field">
-                            <label for="quick-expense-category">القسم</label>
+                            <label for="quick-expense-category">الالتزام</label>
                             <select id="quick-expense-category" class="quick-expense-select" required></select>
                         </div>
                         <button type="submit" class="btn-success quick-expense-submit"><i class="fa-solid fa-floppy-disk"></i> حفظ</button>
                     </form>
                 </div>
                 <div class="section-header">
-                    <h2>الأقسام والمصروفات</h2>
+                    <h2>الالتزامات والمصروفات</h2>
                 </div>
                 <div class="stats-grid category-summary">
                     <div class="stat-box">
-                        <span class="stat-label">المخصص للأقسام</span>
+                        <span class="stat-label">المخصص للالتزامات</span>
                         <span id="stat-allocated" class="stat-value amount-hidden"><span class="currency-amount"><span class="omr-symbol" aria-hidden="true"></span><span class="currency-value">***</span></span></span>
                     </div>
                 </div>
                 <div class="category-add-row">
                     <button id="add-category-btn" class="btn-primary">
                         <i class="fa-solid fa-plus"></i>
-                        إضافة قسم
+                        إضافة التزام
                     </button>
                 </div>
                 <div id="categories-grid" class="categories-grid">
@@ -3805,9 +3881,19 @@
                     <h3>البيانات الشخصية</h3>
                 </div>
                 <form id="personal-info-form" class="settings-form">
-                    <div class="form-group">
-                        <label for="profile-name">تغيير الاسم</label>
-                        <input type="text" id="profile-name" placeholder="أدخل اسمك الكامل">
+                    <div class="profile-name-grid">
+                        <div class="form-group">
+                            <label for="profile-first-name">الاسم الأول</label>
+                            <input type="text" id="profile-first-name" placeholder="مثال: محمد" autocomplete="given-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-middle-name">الاسم الأوسط</label>
+                            <input type="text" id="profile-middle-name" placeholder="مثال: علي">
+                        </div>
+                        <div class="form-group">
+                            <label for="profile-family-name">اسم العائلة</label>
+                            <input type="text" id="profile-family-name" placeholder="مثال: البلوشي" autocomplete="family-name">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="profile-phone">تغيير رقم الهاتف</label>
@@ -3827,97 +3913,115 @@
                     <i class="fa-solid fa-bell-concierge"></i>
                     <h3>الاشعارات</h3>
                 </div>
-                <p class="settings-note">حدد الأنشطة التي ترغب في تلقي إشعارات وسجلات نشاط عنها داخل الموقع (عند عدم تحديد صح، لن يتم تسجيل أي تنبيه لها):</p>
-                
                 <div class="notif-settings-grid">
-                    <!-- الأقسام -->
+                    <!-- الالتزامات -->
                     <div class="notif-settings-group">
-                        <h4>الأقسام والمصروفات</h4>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-add-category" checked>
-                            <span class="custom-checkbox"></span>
-                            إضافة قسم جديد
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-delete-category" checked>
-                            <span class="custom-checkbox"></span>
-                            حذف قسم
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-add-category-amount" checked>
-                            <span class="custom-checkbox"></span>
-                            إضافة أو تعديل مبلغ في قسم
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-delete-category-amount" checked>
-                            <span class="custom-checkbox"></span>
-                            حذف مصروف من سجل قسم
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-edit-category-contents" checked>
-                            <span class="custom-checkbox"></span>
-                            تعديل في محتويات القسم
-                        </label>
+                        <button type="button" class="notif-settings-toggle" aria-expanded="false" aria-controls="notif-options-categories">
+                            <span class="notif-settings-title">الالتزامات والمصروفات</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div id="notif-options-categories" class="notif-settings-options">
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-add-category" checked>
+                                <span class="custom-checkbox"></span>
+                                إضافة التزام جديد
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-delete-category" checked>
+                                <span class="custom-checkbox"></span>
+                                حذف التزام
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-add-category-amount" checked>
+                                <span class="custom-checkbox"></span>
+                                إضافة أو تعديل مبلغ في التزام
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-delete-category-amount" checked>
+                                <span class="custom-checkbox"></span>
+                                حذف مصروف من سجل التزام
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-edit-category-contents" checked>
+                                <span class="custom-checkbox"></span>
+                                تعديل في محتويات الالتزام
+                            </label>
+                        </div>
                     </div>
 
                     <!-- المشتريات -->
                     <div class="notif-settings-group">
-                        <h4>قائمة المشتريات</h4>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-add-purchase" checked>
-                            <span class="custom-checkbox"></span>
-                            إضافة مشتريات
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-delete-purchase" checked>
-                            <span class="custom-checkbox"></span>
-                            حذف مشتريات
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-confirm-purchase" checked>
-                            <span class="custom-checkbox"></span>
-                            تأكيد شراء مشتريات
-                        </label>
+                        <button type="button" class="notif-settings-toggle" aria-expanded="false" aria-controls="notif-options-shopping">
+                            <span class="notif-settings-title">قائمة المشتريات</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div id="notif-options-shopping" class="notif-settings-options">
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-add-purchase" checked>
+                                <span class="custom-checkbox"></span>
+                                إضافة مشتريات
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-delete-purchase" checked>
+                                <span class="custom-checkbox"></span>
+                                حذف مشتريات
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-confirm-purchase" checked>
+                                <span class="custom-checkbox"></span>
+                                تأكيد شراء مشتريات
+                            </label>
+                        </div>
                     </div>
 
                     <!-- الديون -->
                     <div class="notif-settings-group">
-                        <h4>الديون والالتزامات</h4>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-add-debt" checked>
-                            <span class="custom-checkbox"></span>
-                            إضافة دين
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-delete-debt" checked>
-                            <span class="custom-checkbox"></span>
-                            حذف دين
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-edit-debt" checked>
-                            <span class="custom-checkbox"></span>
-                            تعديل دين
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-confirm-pay-debt" checked>
-                            <span class="custom-checkbox"></span>
-                            تأكيد دفع دين
-                        </label>
+                        <button type="button" class="notif-settings-toggle" aria-expanded="false" aria-controls="notif-options-debts">
+                            <span class="notif-settings-title">الديون والالتزامات</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div id="notif-options-debts" class="notif-settings-options">
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-add-debt" checked>
+                                <span class="custom-checkbox"></span>
+                                إضافة دين
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-delete-debt" checked>
+                                <span class="custom-checkbox"></span>
+                                حذف دين
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-edit-debt" checked>
+                                <span class="custom-checkbox"></span>
+                                تعديل دين
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-confirm-pay-debt" checked>
+                                <span class="custom-checkbox"></span>
+                                تأكيد دفع دين
+                            </label>
+                        </div>
                     </div>
 
                     <!-- المدخرات -->
                     <div class="notif-settings-group">
-                        <h4>المدخرات</h4>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-add-saving" checked>
-                            <span class="custom-checkbox"></span>
-                            إضافة مبلغ مدخر جديد
-                        </label>
-                        <label class="setting-checkbox-label">
-                            <input type="checkbox" id="notif-delete-saving" checked>
-                            <span class="custom-checkbox"></span>
-                            حذف مبلغ مدخر
-                        </label>
+                        <button type="button" class="notif-settings-toggle" aria-expanded="false" aria-controls="notif-options-savings">
+                            <span class="notif-settings-title">المدخرات</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                        <div id="notif-options-savings" class="notif-settings-options">
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-add-saving" checked>
+                                <span class="custom-checkbox"></span>
+                                إضافة مبلغ مدخر جديد
+                            </label>
+                            <label class="setting-checkbox-label">
+                                <input type="checkbox" id="notif-delete-saving" checked>
+                                <span class="custom-checkbox"></span>
+                                حذف مبلغ مدخر
+                            </label>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -3943,14 +4047,14 @@
                     </div>
                     
                     <div class="fixed-categories-manager" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 20px;">
-                        <h4>تخصيص أقسام ثابتة لكل شهر</h4>
-                        <p class="settings-note" style="margin-top: 5px;">إذا سويت الأقسام خلاص تلقائي تجي كل شهر، ولكن ما تحذف الأقسام العادية اللي سويتها لأشهر معينة (ما ثابتة).</p>
+                        <h4>تخصيص التزامات ثابتة لكل شهر</h4>
+                        <p class="settings-note" style="margin-top: 5px;">إذا سويت الالتزامات خلاص تلقائي تجي كل شهر، ولكن ما تحذف الالتزامات العادية اللي سويتها لأشهر معينة (ما ثابتة).</p>
                         
                         <div id="fixed-categories-list" class="fixed-categories-list">
-                            <!-- سيتم إدراج الأقسام الثابتة هنا برمجياً -->
+                            <!-- سيتم إدراج الالتزامات الثابتة هنا برمجياً -->
                         </div>
                         
-                        <button type="button" id="add-fixed-cat-btn" class="btn-success" style="margin-top: 15px; align-self: flex-start;"><i class="fa-solid fa-plus-circle"></i> إضافة قسم ثابت جديد</button>
+                        <button type="button" id="add-fixed-cat-btn" class="btn-success" style="margin-top: 15px; align-self: flex-start;"><i class="fa-solid fa-plus-circle"></i> إضافة التزام ثابت جديد</button>
                     </div>
                 </div>
             </section>
@@ -4001,14 +4105,14 @@
     <div id="fixed-category-modal" class="modal-overlay hidden">
         <div class="modal-content glass-card">
             <div class="modal-header">
-                <h3 id="fixed-modal-title">إضافة قسم ثابت جديد</h3>
+                <h3 id="fixed-modal-title">إضافة التزام ثابت جديد</h3>
                 <button class="close-fixed-modal-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <form id="fixed-category-form">
                     <input type="hidden" id="fixed-cat-id">
                     <div class="form-group">
-                        <label for="fixed-cat-name">اسم القسم</label>
+                        <label for="fixed-cat-name">اسم الالتزام</label>
                         <input type="text" id="fixed-cat-name" required placeholder="مثال: الإيجار">
                     </div>
                     <div class="form-group">
@@ -4016,7 +4120,7 @@
                         <input type="number" inputmode="decimal" id="fixed-cat-allocated" required min="0" step="any" placeholder="مثال: 150">
                     </div>
                     <div class="form-group">
-                        <label for="fixed-cat-icon">أيقونة القسم</label>
+                        <label for="fixed-cat-icon">أيقونة الالتزام</label>
                         <select id="fixed-cat-icon" class="month-selector" style="width: 100%; height: 45px; border-radius: var(--border-radius-md);">
                             <option value="auto">تلقائي (حسب الاسم)</option>
                             <option value="fa-house">🏠 سكن / إيجار</option>
@@ -4038,7 +4142,7 @@
                             <option value="fa-folder-open">📁 أخرى</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-primary full-width">حفظ القسم الثابت</button>
+                    <button type="submit" class="btn-primary full-width">حفظ الالتزام الثابت</button>
                 </form>
             </div>
         </div>
@@ -4105,14 +4209,14 @@
     <div id="category-modal" class="modal-overlay hidden">
         <div class="modal-content glass-card">
             <div class="modal-header">
-                <h3 id="modal-title">إضافة قسم جديد</h3>
+                <h3 id="modal-title">إضافة التزام جديد</h3>
                 <button class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
                 <form id="category-form">
                     <input type="hidden" id="cat-id">
                     <div class="form-group">
-                        <label for="cat-name">اسم القسم</label>
+                        <label for="cat-name">اسم الالتزام</label>
                         <input type="text" id="cat-name" required placeholder="مثال: الإيجار">
                     </div>
                     <div class="form-group">
@@ -4120,7 +4224,7 @@
                         <input type="number" inputmode="decimal" id="cat-allocated" required min="0" step="any" placeholder="مثال: 150">
                     </div>
                     <div class="form-group">
-                        <label for="cat-icon">أيقونة القسم</label>
+                        <label for="cat-icon">أيقونة الالتزام</label>
                         <select id="cat-icon" class="month-selector" style="width: 100%; height: 45px; border-radius: var(--border-radius-md);">
                             <option value="auto">تلقائي (حسب الاسم)</option>
                             <option value="fa-house">🏠 سكن / إيجار</option>
@@ -4142,7 +4246,7 @@
                             <option value="fa-folder-open">📁 أخرى</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-primary full-width">حفظ القسم</button>
+                    <button type="submit" class="btn-primary full-width">حفظ الالتزام</button>
                 </form>
             </div>
         </div>
@@ -4156,7 +4260,7 @@
                 <button class="close-delete-btn"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <p id="delete-modal-message">هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟</p>
+                <p id="delete-modal-message">هل أنت متأكد من حذف هذا الالتزام بالكامل بما فيه من مصروفات؟</p>
                 <div class="modal-actions">
                     <button id="confirm-delete-btn" class="btn-danger">نعم، احذف</button>
                     <button class="btn-cancel close-delete-btn">إلغاء</button>
@@ -4212,6 +4316,8 @@
 
         // DOM Elements
         const header = document.querySelector('.header-glass');
+        const headerGreetingText = document.getElementById('header-greeting-text');
+        const headerGreetingIcon = document.getElementById('header-greeting-icon');
         const monthSelector = document.getElementById('month-selector');
         const totalSalaryInput = document.getElementById('total-salary');
         const saveSalaryBtn = document.getElementById('save-salary-btn');
@@ -4309,7 +4415,9 @@
         
         // Personal Info
         const personalInfoForm = document.getElementById('personal-info-form');
-        const profileNameInput = document.getElementById('profile-name');
+        const profileFirstNameInput = document.getElementById('profile-first-name');
+        const profileMiddleNameInput = document.getElementById('profile-middle-name');
+        const profileFamilyNameInput = document.getElementById('profile-family-name');
         const profilePhoneInput = document.getElementById('profile-phone');
         const profileEmailInput = document.getElementById('profile-email');
         
@@ -4417,6 +4525,26 @@
             return new Date(year, month - 1, SALARY_DAY);
         }
 
+        function addMonthsToFinancialMonth(monthValue, offset) {
+            const [year, month] = monthValue.split('-').map(Number);
+            const date = new Date(year, month - 1 + offset, 1);
+            return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+        }
+
+        function isMonthEditable(monthValue) {
+            return monthValue === currentFinancialMonth;
+        }
+
+        function getMonthLockedMessage(monthValue) {
+            return monthValue > currentFinancialMonth
+                ? 'لا يمكن إضافة أو تعديل مبالغ الراتب القادم إلا بعد نزوله.'
+                : 'لا يمكن تعديل راتب مؤرشف.';
+        }
+
+        function getReadOnlyMonthLabel(monthValue = monthSelector.value) {
+            return monthValue > currentFinancialMonth ? 'لم ينزل بعد' : 'مؤرشف';
+        }
+
         function formatSalaryDate(date) {
             const day = date.toLocaleDateString('en-US', { day: 'numeric' });
             const month = date.toLocaleDateString('ar-OM', { month: 'long' });
@@ -4431,13 +4559,132 @@
             return Math.max(0, Math.ceil((salaryStart - todayStart) / 86400000));
         }
 
+        function getRemainingSalaryDaysParts(days) {
+            const value = Math.max(0, Math.round(days));
+            if (value === 0) return { number: '', word: 'اليوم' };
+            if (value === 1) return { number: '', word: 'يوم' };
+            if (value === 2) return { number: '', word: 'يومين' };
+            if (value >= 3 && value <= 10) return { number: value, word: 'أيام' };
+            return { number: value, word: 'يوم' };
+        }
+
+        function formatRemainingSalaryDays(days) {
+            const parts = getRemainingSalaryDaysParts(days);
+            if (!parts.number) return `<span class="remaining-days-word">${parts.word}</span>`;
+            return `<span class="remaining-days-number">${parts.number}</span><span class="remaining-days-word">${parts.word}</span>`;
+        }
+
+        function getThemeColor(varName, fallback) {
+            const value = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+            return value || fallback;
+        }
+
+        function parseHexColor(hex) {
+            const clean = hex.replace('#', '').trim();
+            const normalized = clean.length === 3
+                ? clean.split('').map(char => char + char).join('')
+                : clean;
+
+            return {
+                r: parseInt(normalized.slice(0, 2), 16),
+                g: parseInt(normalized.slice(2, 4), 16),
+                b: parseInt(normalized.slice(4, 6), 16)
+            };
+        }
+
+        function mixRgb(start, end, amount) {
+            return {
+                r: Math.round(start.r + ((end.r - start.r) * amount)),
+                g: Math.round(start.g + ((end.g - start.g) * amount)),
+                b: Math.round(start.b + ((end.b - start.b) * amount))
+            };
+        }
+
+        function rgbToCss(color) {
+            return `rgb(${color.r}, ${color.g}, ${color.b})`;
+        }
+
+        function getSalaryDaysColor(days) {
+            const value = Math.max(0, Math.min(30, Math.round(days)));
+            const successColor = parseHexColor(getThemeColor('--success-color', '#10b981'));
+            const warningColor = parseHexColor(getThemeColor('--warning-color', '#f59e0b'));
+            const dangerColor = parseHexColor(getThemeColor('--danger-color', '#ef4444'));
+            const mutedColor = parseHexColor(getThemeColor('--text-muted', '#a3a3a3'));
+            let color;
+
+            if (value <= 10) {
+                const ratio = Math.pow(value / 10, 2) * 0.18;
+                color = mixRgb(successColor, warningColor, ratio);
+            } else if (value <= 20) {
+                const ratio = (value - 10) / 10;
+                color = mixRgb(warningColor, dangerColor, ratio * 0.25);
+            } else {
+                const ratio = (value - 20) / 10;
+                color = mixRgb(warningColor, dangerColor, 0.25 + (ratio * 0.75));
+            }
+
+            return rgbToCss(mixRgb(color, mutedColor, 0.22));
+        }
+
         function updateSalaryCycleInfo() {
             if (!monthSelector) return;
             const monthValue = monthSelector.value || currentFinancialMonth;
             const nextDate = getNextSalaryDateForFinancialMonth(monthValue);
             if (nextSalaryDate) nextSalaryDate.textContent = formatSalaryDate(nextDate);
-            if (nextSalaryDays) nextSalaryDays.textContent = `${getDaysUntilSalary(nextDate)} يوم`;
+            if (nextSalaryDays) {
+                const daysUntilSalary = getDaysUntilSalary(nextDate);
+                nextSalaryDays.style.setProperty('--salary-days-color', getSalaryDaysColor(daysUntilSalary));
+                nextSalaryDays.innerHTML = formatRemainingSalaryDays(daysUntilSalary);
+            }
         }
+
+        function getProfileNamePartsFromStorage() {
+            const legacyNameParts = (localStorage.getItem('profile_name') || '').trim().split(/\s+/).filter(Boolean);
+            return {
+                firstName: localStorage.getItem('profile_first_name') || legacyNameParts[0] || '',
+                middleName: localStorage.getItem('profile_middle_name') || legacyNameParts[1] || '',
+                familyName: localStorage.getItem('profile_family_name') || legacyNameParts.slice(2).join(' ') || ''
+            };
+        }
+
+        function buildProfileFullName(parts) {
+            return [
+                parts.firstName,
+                parts.middleName,
+                parts.familyName
+            ].map(part => (part || '').trim()).filter(Boolean).join(' ');
+        }
+
+        function saveProfileNamePartsLocal(parts) {
+            localStorage.setItem('profile_first_name', parts.firstName);
+            localStorage.removeItem('profile_father_name');
+            localStorage.setItem('profile_middle_name', parts.middleName);
+            localStorage.setItem('profile_family_name', parts.familyName);
+            localStorage.setItem('profile_name', buildProfileFullName(parts));
+        }
+
+        function getProfileGreetingName() {
+            const firstName = (localStorage.getItem('profile_first_name') || '').trim();
+            if (firstName) return firstName;
+            return (localStorage.getItem('profile_name') || '').trim().split(/\s+/)[0] || '';
+        }
+
+        function updateHeaderGreeting() {
+            if (!headerGreetingText) return;
+            const hour = new Date().getHours();
+            const isMorning = hour < 12;
+            const greeting = isMorning ? 'صباح الخير' : 'مساء الخير';
+            const profileName = getProfileGreetingName();
+            headerGreetingText.textContent = profileName ? `${greeting} ${profileName}` : greeting;
+
+            if (headerGreetingIcon) {
+                headerGreetingIcon.classList.toggle('fa-sun', isMorning);
+                headerGreetingIcon.classList.toggle('fa-moon', !isMorning);
+            }
+        }
+
+        updateHeaderGreeting();
+        setInterval(updateHeaderGreeting, 60000);
 
         // --- Theme System ---
         async function initTheme() {
@@ -4713,7 +4960,7 @@
                 });
                 
                 // Track opening sections for notifications (optional)
-                // logAction('edit', tab.textContent.trim(), 'فتح قسم');
+                // logAction('edit', tab.textContent.trim(), 'فتح التزام');
             });
         });
 
@@ -4792,10 +5039,9 @@
 
         // --- Init & Sync ---
         function initializeMonths() {
-            const [year, month] = currentFinancialMonth.split('-').map(Number);
-            for (let i = -3; i <= 3; i++) {
-                const date = new Date(year, month - 1 + i, 1);
-                const monthVal = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+            monthSelector.innerHTML = '';
+            for (let i = -2; i <= 1; i++) {
+                const monthVal = addMonthsToFinancialMonth(currentFinancialMonth, i);
                 const option = document.createElement('option');
                 option.value = monthVal;
                 option.textContent = `راتب: ${formatSalaryDate(getSalaryDateForFinancialMonth(monthVal))}`;
@@ -4841,7 +5087,7 @@
                 seen.add(cat.id);
                 result.push({
                     id: cat.id,
-                    name: cat.name || 'قسم',
+                    name: cat.name || 'التزام',
                     allocated: parseFloat(cat.allocated || 0),
                     icon: cat.icon || 'auto',
                     pinned: true,
@@ -4854,7 +5100,7 @@
         function clonePinnedCategory(cat) {
             return {
                 id: cat.id || makeId('cat_'),
-                name: cat.name || 'قسم',
+                name: cat.name || 'التزام',
                 allocated: parseFloat(cat.allocated || 0),
                 icon: cat.icon || 'auto',
                 pinned: true,
@@ -5060,9 +5306,10 @@
             updateSalaryCycleInfo();
             await startGlobalDataSync();
             initLogsSync(); // تشغيل مزامنة الإشعارات فوراً بشكل مستقل
-            isEditableMonth = (month >= currentFinancialMonth);
+            isEditableMonth = isMonthEditable(month);
 
             if (!isEditableMonth) {
+                totalSalaryInput.setAttribute('readonly', 'true');
                 editSalaryBtn.classList.add('hidden');
                 addCategoryBtn.classList.add('hidden');
                 if (addDebtBtn) addDebtBtn.classList.add('hidden');
@@ -5145,7 +5392,7 @@
             categories = normalizedResult.categories;
             const pinsChanged = mergePinnedCategoriesIntoCategories();
 
-            if (normalizedResult.migrated || pinsChanged || shouldSaveMonth) {
+            if (isEditableMonth && (normalizedResult.migrated || pinsChanged || shouldSaveMonth)) {
                 rememberCategoryHistory();
                 localStorage.setItem(`categories_${month}`, JSON.stringify(categories));
                 localStorage.setItem(`salary_${month}`, totalSalary);
@@ -5185,6 +5432,10 @@
         // --- Edit & Delete Interactions ---
 
         editSalaryBtn.addEventListener('click', () => {
+            if (!isEditableMonth) {
+                openInfoDialog(getMonthLockedMessage(monthSelector.value));
+                return;
+            }
             totalSalaryInput.removeAttribute('readonly');
             renderSalaryInput();
             totalSalaryInput.focus();
@@ -5218,6 +5469,13 @@
         });
 
         saveSalaryBtn.addEventListener('click', () => {
+            if (!isEditableMonth) {
+                totalSalaryInput.setAttribute('readonly', 'true');
+                saveSalaryBtn.classList.add('hidden');
+                renderSalaryInput();
+                openInfoDialog(getMonthLockedMessage(monthSelector.value));
+                return;
+            }
             openEditConfirmDialog('هل تريد حفظ تعديل الراتب؟', () => {
                 const oldSalary = totalSalary;
                 totalSalary = parseFloat(sanitizeDecimalInput(totalSalaryInput.value) || 0);
@@ -5243,15 +5501,15 @@
                 catNameInput.value = cat.name;
                 catAllocatedInput.value = cat.allocated;
                 catIconInput.value = cat.icon || 'auto';
-                modalTitle.textContent = 'تعديل بيانات القسم';
+                modalTitle.textContent = 'تعديل بيانات الالتزام';
                 categoryModal.classList.remove('hidden');
             }
         };
 
         window.requestDeleteCategory = (id) => {
-            openConfirmDialog('هل أنت متأكد من حذف هذا القسم بالكامل بما فيه من مصروفات؟', () => {
+            openConfirmDialog('هل أنت متأكد من حذف هذا الالتزام بالكامل بما فيه من مصروفات؟', () => {
                 const cat = categories.find(c => c.id === id);
-                const name = cat ? cat.name : 'قسم';
+                const name = cat ? cat.name : 'التزام';
                 if (cat && cat.pinned) {
                     removePinnedCategory(cat.id);
                     syncGlobalData();
@@ -5259,7 +5517,7 @@
                 categories = categories.filter(c => c.id !== id);
                 syncData();
                 updateUI();
-                logAction('delete', name, 'إدارة الأقسام', 'delete_category');
+                logAction('delete', name, 'إدارة الالتزامات', 'delete_category');
             });
         };
 
@@ -5270,8 +5528,8 @@
             const willPin = !cat.pinned;
             openConfirmDialog(
                 willPin
-                    ? `هل تريد تثبيت قسم "${cat.name}" للشهور القادمة؟`
-                    : `هل تريد إلغاء تثبيت قسم "${cat.name}" من الشهور القادمة؟`,
+                    ? `هل تريد تثبيت الالتزام "${cat.name}" للشهور القادمة؟`
+                    : `هل تريد إلغاء تثبيت الالتزام "${cat.name}" من الشهور القادمة؟`,
                 () => {
                     cat.pinned = willPin;
                     if (cat.pinned) {
@@ -5283,7 +5541,7 @@
                     syncGlobalData();
                     syncData();
                     updateUI();
-                    logAction('edit', cat.pinned ? `تثبيت ${cat.name}` : `إلغاء تثبيت ${cat.name}`, 'تثبيت الأقسام', 'edit_category_contents');
+                    logAction('edit', cat.pinned ? `تثبيت ${cat.name}` : `إلغاء تثبيت ${cat.name}`, 'تثبيت الالتزامات', 'edit_category_contents');
                 },
                 {
                     title: willPin ? 'تأكيد التثبيت' : 'تأكيد إلغاء التثبيت',
@@ -5302,7 +5560,7 @@
                     cat.transactions = cat.transactions.filter(t => t.id !== transId);
                     syncData();
                     updateUI();
-                    logAction('delete', transName, `قسم ${cat.name}`, 'delete_category_amount');
+                    logAction('delete', transName, `التزام ${cat.name}`, 'delete_category_amount');
                 }
             });
         };
@@ -5312,10 +5570,14 @@
         // --- Safe Operations ---
 
         addCategoryBtn.addEventListener('click', () => {
+            if (!isEditableMonth) {
+                openInfoDialog(getMonthLockedMessage(monthSelector.value));
+                return;
+            }
             categoryForm.reset();
             catIdInput.value = '';
             if (catIconInput) catIconInput.value = 'auto';
-            modalTitle.textContent = 'إضافة قسم جديد';
+            modalTitle.textContent = 'إضافة التزام جديد';
             categoryModal.classList.remove('hidden');
         });
 
@@ -5354,7 +5616,7 @@
                 const oldName = categories[index].name;
                 const oldAlloc = categories[index].allocated;
 
-                openEditConfirmDialog('هل تريد حفظ تعديل هذا القسم؟', () => {
+                openEditConfirmDialog('هل تريد حفظ تعديل هذا الالتزام؟', () => {
                     categories[index].name = catData.name;
                     categories[index].allocated = catData.allocated;
                     categories[index].icon = catData.icon;
@@ -5367,7 +5629,7 @@
                     if (oldName !== catData.name) detail = `${oldName} ➔ ${catData.name}`;
                     if (oldAlloc !== catData.allocated) detail += ` (${oldAlloc} ➔ ${catData.allocated})`;
                     
-                    logAction('edit', detail, 'إدارة الأقسام', 'edit_category_contents');
+                    logAction('edit', detail, 'إدارة الالتزامات', 'edit_category_contents');
                     syncData();
                     updateUI();
                     categoryModal.classList.add('hidden');
@@ -5375,7 +5637,7 @@
                 return;
             } else {
                 categories.push({ id: makeId('cat_'), ...catData });
-                logAction('add', catData.name, 'إدارة الأقسام', 'add_category');
+                logAction('add', catData.name, 'إدارة الالتزامات', 'add_category');
             }
 
             syncData();
@@ -5407,7 +5669,7 @@
             if (categories.length === 0) {
                 const option = document.createElement('option');
                 option.value = '';
-                option.textContent = 'أضف قسمًا أولًا';
+                option.textContent = 'أضف التزامًا أولًا';
                 quickExpenseCategoryInput.appendChild(option);
             } else {
                 categories.forEach(cat => {
@@ -5436,13 +5698,13 @@
 
         function addExpenseToCategory(categoryId, amountValue, noteValue) {
             if (!isEditableMonth) {
-                openInfoDialog('لا يمكن إضافة مصروف لشهر مؤرشف.');
+                openInfoDialog(getMonthLockedMessage(monthSelector.value));
                 return false;
             }
 
             const cat = categories.find(c => c.id === categoryId);
             if (!cat) {
-                openInfoDialog('اختر القسم الذي تريد إضافة المصروف فيه.');
+                openInfoDialog('اختر الالتزام الذي تريد إضافة المصروف فيه.');
                 return false;
             }
 
@@ -5454,7 +5716,7 @@
 
             const remaining = parseFloat(cat.allocated || 0) - getCategoryUsed(cat);
             if (newAmount > remaining) {
-                openInfoDialog(`عذرًا، لا يمكنك إضافة ${formatCurrency(newAmount)}. المتبقي في هذا القسم هو ${formatCurrency(remaining)} فقط.`);
+                openInfoDialog(`عذرًا، لا يمكنك إضافة ${formatCurrency(newAmount)}. المتبقي في هذا الالتزام هو ${formatCurrency(remaining)} فقط.`);
                 return false;
             }
 
@@ -5470,7 +5732,7 @@
 
             syncData();
             updateUI();
-            logAction('add', `${note} (${newAmount})`, `قسم ${cat.name}`, 'add_category_amount');
+            logAction('add', `${note} (${newAmount})`, `التزام ${cat.name}`, 'add_category_amount');
             return true;
         }
 
@@ -5582,7 +5844,7 @@
                             <button class="cat-btn" style="color: var(--success-color);" title="تم دفع الدين" onclick="payDebt('${debt.id}')"><i class="fa-solid fa-circle-check"></i></button>
                             <button class="cat-btn delete" onclick="requestDeleteDebt('${debt.id}')"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
-                        ` : '<span style="font-size: 0.7rem; color: var(--text-muted);">مؤرشف</span>'}
+                        ` : `<span style="font-size: 0.7rem; color: var(--text-muted);">${getReadOnlyMonthLabel()}</span>`}
                     </div>
                 `;
                 debtsList.appendChild(card);
@@ -5965,10 +6227,10 @@
                         </div>
                         <div class="cat-actions">
                             ${isEditableMonth ? `
-                            <button class="cat-btn pin ${cat.pinned ? 'active' : ''}" title="${cat.pinned ? 'إلغاء تثبيت القسم من الشهور القادمة' : 'تثبيت القسم للشهور القادمة'}" onclick="toggleCategoryPin('${cat.id}')"><i class="fa-solid fa-thumbtack"></i></button>
-                            <button class="cat-btn edit" title="تعديل اسم أو مخصص القسم" onclick="requestEditCategory('${cat.id}')"><i class="fa-solid fa-pen"></i></button>
-                            <button class="cat-btn delete" title="حذف القسم بالكامل" onclick="requestDeleteCategory('${cat.id}')"><i class="fa-solid fa-trash"></i></button>
-                            ` : `<span style="font-size: 0.7rem; color: var(--text-muted); border: 1px solid; padding: 2px 5px; border-radius: 4px;">مؤرشف</span>`}
+                            <button class="cat-btn pin ${cat.pinned ? 'active' : ''}" title="${cat.pinned ? 'إلغاء تثبيت الالتزام من الشهور القادمة' : 'تثبيت الالتزام للشهور القادمة'}" onclick="toggleCategoryPin('${cat.id}')"><i class="fa-solid fa-thumbtack"></i></button>
+                            <button class="cat-btn edit" title="تعديل اسم أو مخصص الالتزام" onclick="requestEditCategory('${cat.id}')"><i class="fa-solid fa-pen"></i></button>
+                            <button class="cat-btn delete" title="حذف الالتزام بالكامل" onclick="requestDeleteCategory('${cat.id}')"><i class="fa-solid fa-trash"></i></button>
+                            ` : `<span style="font-size: 0.7rem; color: var(--text-muted); border: 1px solid; padding: 2px 5px; border-radius: 4px;">${getReadOnlyMonthLabel()}</span>`}
                         </div>
                     </div>
                     <div class="cat-body">
@@ -6090,9 +6352,23 @@
             item.addEventListener('click', () => showSettingsPanel(item.dataset.settingsTarget));
         });
 
+        document.querySelectorAll('.notif-settings-group').forEach(group => {
+            const toggle = group.querySelector('.notif-settings-toggle');
+            const options = group.querySelector('.notif-settings-options');
+            if (!toggle || !options) return;
+
+            toggle.addEventListener('click', () => {
+                const isOpen = group.classList.toggle('is-open');
+                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+        });
+
         function loadSettingsToUI() {
             // Personal Info
-            profileNameInput.value = localStorage.getItem('profile_name') || '';
+            const profileNameParts = getProfileNamePartsFromStorage();
+            profileFirstNameInput.value = profileNameParts.firstName;
+            profileMiddleNameInput.value = profileNameParts.middleName;
+            profileFamilyNameInput.value = profileNameParts.familyName;
             profilePhoneInput.value = localStorage.getItem('profile_phone') || '';
             profileEmailInput.value = localStorage.getItem('profile_email') || '';
 
@@ -6129,16 +6405,36 @@
 
         // Sync Profile and Notification Settings from Firestore on load
         async function syncSettingsFromFirestore() {
-            if (!db) return;
+            if (!db) {
+                updateHeaderGreeting();
+                return;
+            }
             try {
                 await authReady;
                 // Profile
                 const profileSnap = await db.collection('budgets').doc("my_budget").collection('system').doc('profile').get();
                 if (profileSnap.exists) {
                     const data = profileSnap.data();
+                    const hasSplitName = ['firstName', 'middleName', 'familyName'].some(key => data[key] !== undefined);
+                    if (hasSplitName) {
+                        localStorage.setItem('profile_first_name', data.firstName || '');
+                        localStorage.removeItem('profile_father_name');
+                        localStorage.setItem('profile_middle_name', data.middleName || '');
+                        localStorage.setItem('profile_family_name', data.familyName || '');
+                    } else if (data.name) {
+                        const legacyNameParts = data.name.trim().split(/\s+/).filter(Boolean);
+                        localStorage.setItem('profile_first_name', legacyNameParts[0] || '');
+                        localStorage.removeItem('profile_father_name');
+                        localStorage.setItem('profile_middle_name', legacyNameParts[1] || '');
+                        localStorage.setItem('profile_family_name', legacyNameParts.slice(2).join(' ') || '');
+                    }
                     if (data.name) localStorage.setItem('profile_name', data.name);
                     if (data.phone) localStorage.setItem('profile_phone', data.phone);
                     if (data.email) localStorage.setItem('profile_email', data.email);
+                    if (!data.name) {
+                        const syncedName = buildProfileFullName(getProfileNamePartsFromStorage());
+                        if (syncedName) localStorage.setItem('profile_name', syncedName);
+                    }
                 }
                 // Notification Settings
                 const notifSnap = await db.collection('budgets').doc("my_budget").collection('system').doc('notifSettings').get();
@@ -6149,25 +6445,36 @@
             } catch(e) {
                 console.error("Error syncing settings from Firestore:", e);
             }
+            updateHeaderGreeting();
         }
         syncSettingsFromFirestore();
 
         // Submit Personal Info Form
         personalInfoForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = profileNameInput.value.trim();
+            const profileNameParts = {
+                firstName: profileFirstNameInput.value.trim(),
+                middleName: profileMiddleNameInput.value.trim(),
+                familyName: profileFamilyNameInput.value.trim()
+            };
+            const name = buildProfileFullName(profileNameParts);
             const phone = profilePhoneInput.value.trim();
             const email = profileEmailInput.value.trim();
 
-            localStorage.setItem('profile_name', name);
+            saveProfileNamePartsLocal(profileNameParts);
             localStorage.setItem('profile_phone', phone);
             localStorage.setItem('profile_email', email);
+            updateHeaderGreeting();
 
             if (db) {
                 try {
                     await authReady;
                     await db.collection('budgets').doc("my_budget").collection('system').doc('profile').set({
                         name,
+                        firstName: profileNameParts.firstName,
+                        fatherName: firebase.firestore.FieldValue.delete(),
+                        middleName: profileNameParts.middleName,
+                        familyName: profileNameParts.familyName,
                         phone,
                         email,
                         lastUpdated: new Date().toISOString()
@@ -6254,7 +6561,7 @@
         function renderFixedCategoriesSettings() {
             fixedCategoriesList.innerHTML = '';
             if (pinnedCategories.length === 0) {
-                fixedCategoriesList.innerHTML = '<div style="padding: 15px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">لا توجد أقسام ثابتة مخصصة بعد.</div>';
+                fixedCategoriesList.innerHTML = '<div style="padding: 15px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">لا توجد التزامات ثابتة مخصصة بعد.</div>';
                 return;
             }
 
@@ -6284,7 +6591,7 @@
         addFixedCatBtn.addEventListener('click', () => {
             fixedCategoryForm.reset();
             fixedCatIdInput.value = '';
-            fixedModalTitle.textContent = 'إضافة قسم ثابت جديد';
+            fixedModalTitle.textContent = 'إضافة التزام ثابت جديد';
             fixedCategoryModal.classList.remove('hidden');
         });
 
@@ -6299,20 +6606,20 @@
                 fixedCatNameInput.value = cat.name;
                 fixedCatAllocatedInput.value = cat.allocated;
                 fixedCatIconInput.value = cat.icon || 'auto';
-                fixedModalTitle.textContent = 'تعديل بيانات القسم الثابت';
+                fixedModalTitle.textContent = 'تعديل بيانات الالتزام الثابت';
                 fixedCategoryModal.classList.remove('hidden');
             }
         };
 
         // Delete Fixed Category
         window.requestDeleteFixedCategory = (id) => {
-            openConfirmDialog('هل أنت متأكد من إزالة هذا القسم الثابت؟ لن يظهر تلقائيًا في الأشهر الجديدة.', () => {
+            openConfirmDialog('هل أنت متأكد من إزالة هذا الالتزام الثابت؟ لن يظهر تلقائيًا في الأشهر الجديدة.', () => {
                 pinnedCategories = pinnedCategories.filter(c => c.id !== id);
                 syncGlobalData();
                 renderFixedCategoriesSettings();
                 mergePinnedCategoriesIntoCategories();
                 refreshAmountDisplays();
-                logAction('delete', 'قسم ثابت', 'إعدادات الموقع');
+                logAction('delete', 'التزام ثابت', 'إعدادات الموقع');
             }, {
                 title: 'تأكيد الحذف',
                 confirmText: 'نعم، احذف',
