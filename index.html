@@ -2961,18 +2961,21 @@
         }
 
         #shopping-section .section-header h2,
+        #debts-section .section-header h2,
+        #savings-section .section-header h2 {
+            color: rgba(255, 255, 255, 0.95);
+        }
+
         #shopping-section .shopping-date i,
         #shopping-section .item-text {
             color: var(--section-shopping);
         }
 
-        #debts-section .section-header h2,
         #debts-section .debt-total,
         #debts-section .debt-name {
             color: var(--section-debts);
         }
 
-        #savings-section .section-header h2,
         #savings-section .savings-total,
         #savings-section .savings-note,
         .savings-amount {
@@ -3145,6 +3148,346 @@
             display: none !important;
             background: none !important;
             animation: none !important;
+        }
+
+        .categories-grid {
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 16px;
+            align-items: start;
+        }
+
+        .category-card {
+            --cat-accent: var(--primary-color);
+            min-height: 252px;
+            padding: 18px 16px 16px;
+            gap: 13px;
+            align-items: stretch;
+            border-radius: 26px;
+            background:
+                linear-gradient(150deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.035)),
+                rgba(20, 24, 31, 0.82);
+            border-color: rgba(255, 255, 255, 0.1);
+            box-shadow:
+                0 16px 34px rgba(0, 0, 0, 0.36),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .category-card::before {
+            opacity: 0.52;
+        }
+
+        .category-card::after {
+            content: "";
+            position: absolute;
+            inset: auto 12% -34px 12%;
+            height: 70px;
+            border-radius: 999px;
+            background: var(--cat-accent);
+            opacity: 0.08;
+            filter: blur(28px);
+            pointer-events: none;
+        }
+
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 20px 42px rgba(0, 0, 0, 0.42),
+                inset 0 1px 0 rgba(255, 255, 255, 0.14);
+        }
+
+        .category-card .cat-actions {
+            position: absolute;
+            top: 10px;
+            inset-inline-start: 10px;
+            z-index: 3;
+            gap: 2px;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+        }
+
+        .category-card .cat-actions .cat-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            font-size: 0.82rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.72);
+            opacity: 0.86;
+        }
+
+        .category-card .cat-actions .cat-btn i {
+            color: rgba(255, 255, 255, 0.72) !important;
+        }
+
+        .category-card .cat-actions .cat-btn:hover,
+        .category-card .cat-actions .cat-btn:focus-visible {
+            opacity: 1;
+            color: #ffffff;
+        }
+
+        .category-card .cat-actions .cat-btn:hover i,
+        .category-card .cat-actions .cat-btn:focus-visible i {
+            color: #ffffff !important;
+        }
+
+        .cat-locked-badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 2px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.68rem;
+            background: rgba(255, 255, 255, 0.055);
+        }
+
+        .cat-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            padding: 4px 22px 0;
+            min-width: 0;
+        }
+
+        .cat-icon-bubble {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background:
+                radial-gradient(circle at 50% 38%, var(--cat-accent), rgba(255, 255, 255, 0) 72%),
+                rgba(255, 255, 255, 0.085);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow:
+                0 12px 28px rgba(0, 0, 0, 0.25),
+                0 0 28px rgba(255, 255, 255, 0.045);
+        }
+
+        .cat-icon-bubble i,
+        .category-card .cat-icon-bubble i {
+            min-width: 0;
+            width: auto;
+            height: auto;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+            color: #ffffff !important;
+            font-size: 1.48rem;
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
+        }
+
+        .category-card .cat-title {
+            display: block;
+            width: 100%;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 1.08rem;
+            font-weight: 800;
+            line-height: 1.35;
+            letter-spacing: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .cat-main-amount {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
+            color: #ffffff;
+            font-size: 1.18rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .cat-main-label {
+            color: rgba(255, 255, 255, 0.58);
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        .cat-progress-line {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: center;
+            gap: 10px;
+            direction: ltr;
+        }
+
+        .cat-percent {
+            min-width: 42px;
+            color: #ffcf54;
+            font-size: 0.94rem;
+            font-weight: 900;
+            text-align: end;
+            line-height: 1;
+        }
+
+        .category-card .cat-progress {
+            height: 7px;
+            margin: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.055);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.38);
+            overflow: hidden;
+        }
+
+        .category-card .cat-progress-fill {
+            border-radius: inherit;
+            background: var(--cat-accent);
+            box-shadow: 0 0 16px var(--cat-accent);
+        }
+
+        .cat-card-metrics {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .cat-metric {
+            min-width: 0;
+            padding: 8px 9px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.055);
+            border: 1px solid rgba(255, 255, 255, 0.085);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .cat-metric-label {
+            color: rgba(255, 255, 255, 0.55);
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        .cat-metric-value {
+            min-width: 0;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 0.86rem;
+            font-weight: 800;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .cat-metric-value.success {
+            color: #4ade80 !important;
+        }
+
+        .cat-metric-value.warning {
+            color: #facc15 !important;
+        }
+
+        .cat-metric-value.danger {
+            color: #fb7185 !important;
+        }
+
+        .cat-transactions-slot {
+            margin-top: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .categories-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .category-card {
+                min-height: 228px;
+                padding: 14px 11px 12px;
+                border-radius: 22px;
+                gap: 10px;
+            }
+
+            .category-card .cat-actions {
+                top: 8px;
+                inset-inline-start: 8px;
+            }
+
+            .category-card .cat-actions .cat-btn {
+                width: 26px;
+                height: 26px;
+                font-size: 0.76rem;
+            }
+
+            .cat-visual {
+                gap: 6px;
+                padding-inline: 18px;
+            }
+
+            .cat-icon-bubble {
+                width: 54px;
+                height: 54px;
+            }
+
+            .cat-icon-bubble i,
+            .category-card .cat-icon-bubble i {
+                font-size: 1.28rem;
+            }
+
+            .category-card .cat-title {
+                font-size: clamp(0.9rem, 4vw, 1.02rem);
+                min-height: 2.45em;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .cat-main-amount {
+                font-size: clamp(0.98rem, 4.4vw, 1.14rem);
+            }
+
+            .cat-progress-line {
+                gap: 7px;
+            }
+
+            .cat-percent {
+                min-width: 34px;
+                font-size: 0.82rem;
+            }
+
+            .cat-card-metrics {
+                gap: 6px;
+            }
+
+            .cat-metric {
+                padding: 7px 6px;
+                border-radius: 12px;
+            }
+
+            .cat-metric-label {
+                font-size: 0.62rem;
+            }
+
+            .cat-metric-value {
+                font-size: 0.76rem;
+            }
+
+            .cat-transactions-slot .toggle-trans-btn {
+                margin-top: 6px;
+                padding: 8px;
+                font-size: 0.78rem;
+                border-radius: 12px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .cat-card-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .category-card {
+                min-height: 252px;
+            }
         }
 
         @media (max-width: 768px), (hover: none), (pointer: coarse) {
@@ -4369,6 +4712,7 @@
         const confirmModalTitle = document.getElementById('confirm-modal-title');
         const deleteModalMessage = document.getElementById('delete-modal-message');
         const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+        const confirmCancelBtn = deleteModal ? deleteModal.querySelector('.btn-cancel') : null;
         const closeDeleteBtns = document.querySelectorAll('.close-delete-btn');
 
         const notifBtn = document.getElementById('notif-btn');
@@ -4838,10 +5182,48 @@
         }
 
         function getLogMillis(log) {
-            if (log.timestamp && typeof log.timestamp.toMillis === 'function') return log.timestamp.toMillis();
-            if (typeof log.timestamp === 'number') return log.timestamp;
-            if (log.createdAt) return new Date(log.createdAt).getTime();
-            return Date.now();
+            if (!log) return 0;
+            const timestamp = log.timestamp;
+            if (timestamp && typeof timestamp.toMillis === 'function') return timestamp.toMillis();
+            if (timestamp && typeof timestamp.toDate === 'function') return timestamp.toDate().getTime();
+            if (typeof timestamp === 'number') return timestamp;
+            if (timestamp && typeof timestamp === 'object') {
+                const seconds = Number(timestamp.seconds ?? timestamp._seconds);
+                const nanoseconds = Number(timestamp.nanoseconds ?? timestamp._nanoseconds ?? 0);
+                if (Number.isFinite(seconds)) return (seconds * 1000) + Math.floor(nanoseconds / 1000000);
+            }
+            if (log.createdAt) {
+                const createdAtTime = new Date(log.createdAt).getTime();
+                if (Number.isFinite(createdAtTime)) return createdAtTime;
+            }
+            if (log.time) {
+                const timeParts = String(log.time).match(/^(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+                if (timeParts) {
+                    const [, day, month, year, hour, minute, second = '0'] = timeParts;
+                    const legacyTime = new Date(+year, +month - 1, +day, +hour, +minute, +second).getTime();
+                    if (Number.isFinite(legacyTime)) return legacyTime;
+                }
+            }
+            return 0;
+        }
+
+        function getLatestLogMillis(logs = []) {
+            return (Array.isArray(logs) ? logs : []).reduce((latest, log) => {
+                return Math.max(latest, getLogMillis(log));
+            }, 0);
+        }
+
+        function getLastSeenNotifTime() {
+            const lastSeenTime = parseInt(localStorage.getItem('notif_last_seen_time') || '0', 10);
+            return Number.isFinite(lastSeenTime) ? lastSeenTime : 0;
+        }
+
+        function markNotificationsRead(logs = []) {
+            const latestLogMillis = getLatestLogMillis(logs);
+            if (latestLogMillis > getLastSeenNotifTime()) {
+                localStorage.setItem('notif_last_seen_time', latestLogMillis.toString());
+            }
+            return getLastSeenNotifTime();
         }
 
         function maskAmountText(text) {
@@ -4890,7 +5272,10 @@
         }
 
         function updateNotifUI(logs = []) {
-            const lastSeenTime = parseInt(localStorage.getItem('notif_last_seen_time') || '0');
+            let lastSeenTime = getLastSeenNotifTime();
+            if (notifPanel && notifPanel.classList.contains('active')) {
+                lastSeenTime = markNotificationsRead(logs);
+            }
             const unreadCount = logs.filter(l => getLogMillis(l) > lastSeenTime).length;
             
             if (unreadCount > 0) {
@@ -4943,9 +5328,7 @@
             notifOverlay.classList.add('active');
             header.classList.remove('active-notif');
             const logs = JSON.parse(localStorage.getItem('activity_logs') || '[]');
-            if (logs.length > 0) {
-                localStorage.setItem('notif_last_seen_time', getLogMillis(logs[0]).toString());
-            }
+            markNotificationsRead(logs);
             updateNotifUI(logs);
         }
 
@@ -5039,12 +5422,14 @@
             const {
                 title = 'تأكيد الحذف',
                 confirmText = 'نعم، احذف',
-                confirmClass = 'btn-danger'
+                confirmClass = 'btn-danger',
+                showCancel = true
             } = options;
             confirmModalTitle.textContent = title;
             deleteModalMessage.textContent = message;
             confirmDeleteBtn.className = confirmClass;
             confirmDeleteBtn.textContent = confirmText;
+            if (confirmCancelBtn) confirmCancelBtn.classList.toggle('hidden', !showCancel);
             pendingConfirmAction = action;
             deleteModal.classList.remove('hidden');
         }
@@ -5061,7 +5446,8 @@
             openConfirmDialog(message, action, {
                 title,
                 confirmText: 'حسنًا',
-                confirmClass: 'btn-primary'
+                confirmClass: 'btn-primary',
+                showCancel: false
             });
         }
 
@@ -5874,18 +6260,34 @@
             e.preventDefault();
             const id = expenseCatIdInput.value;
             const added = addExpenseToCategory(id, expenseAmountInput.value, expenseNoteInput.value);
-            if (added) expenseModal.classList.add('hidden');
+            if (added) {
+                expenseModal.classList.add('hidden');
+                openInfoDialog('تم حفظ المصروف بنجاح.', 'تم الحفظ');
+            }
         });
 
         // --- UI & Math ---
+        function getCategoryTotals(categoryList = []) {
+            return (Array.isArray(categoryList) ? categoryList : []).reduce((totals, cat) => {
+                const allocated = parseFloat(cat.allocated || 0);
+                totals.allocated += Number.isFinite(allocated) ? allocated : 0;
+
+                if (Array.isArray(cat.transactions)) {
+                    cat.transactions.forEach(t => {
+                        const amount = parseFloat(t.amount || 0);
+                        totals.used += Number.isFinite(amount) ? amount : 0;
+                    });
+                }
+
+                return totals;
+            }, { allocated: 0, used: 0 });
+        }
+
         function updateUI() {
-            let totalAllocated = 0, totalUsed = 0;
-            summaryCategories.forEach(cat => {
-                totalAllocated += parseFloat(cat.allocated || 0);
-                let catUsed = 0;
-                if (cat.transactions) cat.transactions.forEach(t => catUsed += t.amount);
-                totalUsed += catUsed;
-            });
+            const selectedMonthTotals = getCategoryTotals(categories);
+            const summaryTotals = getCategoryTotals(summaryCategories);
+            const totalAllocated = selectedMonthTotals.allocated;
+            const totalUsed = summaryTotals.used;
 
             // Calculate Total Debts for stats card
             let totalDebtsAmount = 0;
@@ -5995,6 +6397,7 @@
                 syncGlobalData();
                 updateUI();
                 logAction('add', `${debtData.person} (${debtData.amount})`, 'الديون', 'add_debt');
+                openInfoDialog('تم حفظ الدين بنجاح.', 'تم الحفظ');
             });
         }
 
@@ -6030,6 +6433,7 @@
             syncGlobalData();
             updateUI();
             debtModal.classList.add('hidden');
+            openInfoDialog('تم حفظ الدين بنجاح.', 'تم الحفظ');
         });
 
         window.requestEditDebt = (id) => {
@@ -6284,17 +6688,51 @@
             return 'fa-folder-open';
         }
 
+        function getCategoryAccent(cat, index = 0) {
+            const name = cat && cat.name ? cat.name : '';
+            const accents = {
+                'الإيجار': '#22c55e',
+                'الإنترنت': '#3b82f6',
+                'البنزين': '#14b8a6',
+                'الراشن': '#8b5cf6',
+                'الكهرباء': '#f59e0b',
+                'الماء': '#38bdf8',
+                'الصحة': '#ef4444',
+                'التعليم': '#6366f1',
+                'ترفيه': '#ec4899',
+                'مطاعم': '#f97316',
+                'أكل': '#f97316',
+                'تسوق': '#8b5cf6',
+                'سيارة': '#14b8a6',
+                'مواصلات': '#14b8a6',
+                'هاتف': '#06b6d4',
+                'قرض': '#ef4444',
+                'ديون': '#ef4444',
+                'ادخار': '#eab308'
+            };
+            for (let key in accents) {
+                if (name.includes(key)) return accents[key];
+            }
+            const palette = ['#8b5cf6', '#f97316', '#14b8a6', '#ef4444', '#22c55e', '#eab308', '#3b82f6', '#ec4899'];
+            return palette[index % palette.length];
+        }
+
         function renderCategories() {
             categoriesGrid.innerHTML = '';
-            categories.forEach(cat => {
+            categories.forEach((cat, index) => {
                 const allocated = parseFloat(cat.allocated || 0);
-                let used = 0;
-                if (cat.transactions) cat.transactions.forEach(t => used += t.amount);
+                const used = getCategoryUsed(cat);
                 const remaining = allocated - used;
 
-                let percentage = allocated > 0 ? Math.round((used / allocated) * 100) : 0;
+                let percentage = allocated > 0 ? Math.round((used / allocated) * 100) : (used > 0 ? 100 : 0);
                 let safePercentage = percentage > 100 ? 100 : percentage;
-                let progressColor = percentage >= 100 ? "var(--danger-color)" : (percentage >= 80 ? "var(--warning-color)" : "var(--primary-color)");
+                let progressColor = percentage >= 100 ? "var(--danger-color)" : (percentage >= 80 ? "var(--warning-color)" : "var(--cat-accent)");
+                const iconClass = cat.icon && cat.icon !== 'auto' ? cat.icon : getCategoryIcon(cat.name);
+                const remainingClass = remaining < 0 ? 'danger' : (remaining == 0 ? 'warning' : 'success');
+                const actionsHtml = canManageCategories ? `
+                    <button class="cat-btn edit" title="تعديل اسم أو مخصص الالتزام" onclick="requestEditCategory('${cat.id}')"><i class="fa-solid fa-pen"></i></button>
+                    <button class="cat-btn delete" title="حذف الالتزام بالكامل" onclick="requestDeleteCategory('${cat.id}')"><i class="fa-solid fa-trash"></i></button>
+                ` : `<span class="cat-locked-badge">${getReadOnlyMonthLabel()}</span>`;
 
                 let transHtml = '';
                 if (cat.transactions && cat.transactions.length > 0) {
@@ -6330,26 +6768,34 @@
 
                 const card = document.createElement('div');
                 card.className = 'category-card glass-card';
+                card.style.setProperty('--cat-accent', getCategoryAccent(cat, index));
                 card.innerHTML = `
-                    <div class="cat-header">
-                        <div class="cat-title">
-                            <i class="fa-solid ${cat.icon && cat.icon !== 'auto' ? cat.icon : getCategoryIcon(cat.name)}"></i>
-                            ${cat.name}
-                        </div>
-                        <div class="cat-actions">
-                            ${canManageCategories ? `
-                            <button class="cat-btn edit" title="تعديل اسم أو مخصص الالتزام" onclick="requestEditCategory('${cat.id}')"><i class="fa-solid fa-pen"></i></button>
-                            <button class="cat-btn delete" title="حذف الالتزام بالكامل" onclick="requestDeleteCategory('${cat.id}')"><i class="fa-solid fa-trash"></i></button>
-                            ` : `<span style="font-size: 0.7rem; color: var(--text-muted); border: 1px solid; padding: 2px 5px; border-radius: 4px;">${getReadOnlyMonthLabel()}</span>`}
+                    <div class="cat-actions cat-card-actions">
+                        ${actionsHtml}
+                    </div>
+                    <div class="cat-visual">
+                        <span class="cat-icon-bubble"><i class="fa-solid ${iconClass}"></i></span>
+                        <h3 class="cat-title">${cat.name}</h3>
+                        <div class="cat-main-amount${amountHiddenClass()}">
+                            <span class="cat-main-label">المخصص</span>
+                            ${formatCurrencyHtml(allocated)}
                         </div>
                     </div>
-                    <div class="cat-body">
-                        <div class="cat-row"><span class="label">المخصص:</span><span class="value${amountHiddenClass()}">${formatCurrencyHtml(allocated)}</span></div>
-                        <div class="cat-row"><span class="label">المستخدم (المجموع):</span><span class="value${amountHiddenClass()}">${formatCurrencyHtml(used)}</span></div>
-                        <div class="cat-row"><span class="label">المتبقي:</span><span class="value ${remaining < 0 ? 'danger' : (remaining == 0 ? 'warning' : 'success')}${amountHiddenClass()}">${formatCurrencyHtml(remaining)}</span></div>
+                    <div class="cat-progress-line">
+                        <span class="cat-percent">${percentage}%</span>
                         <div class="cat-progress"><div class="cat-progress-fill" style="width: ${safePercentage}%; background: ${progressColor};"></div></div>
-                        ${transHtml}
                     </div>
+                    <div class="cat-card-metrics">
+                        <div class="cat-metric">
+                            <span class="cat-metric-label">المصروف</span>
+                            <span class="cat-metric-value${amountHiddenClass()}">${formatCurrencyHtml(used)}</span>
+                        </div>
+                        <div class="cat-metric">
+                            <span class="cat-metric-label">المتبقي</span>
+                            <span class="cat-metric-value ${remainingClass}${amountHiddenClass()}">${formatCurrencyHtml(remaining)}</span>
+                        </div>
+                    </div>
+                    ${transHtml ? `<div class="cat-transactions-slot">${transHtml}</div>` : ''}
                 `;
                 categoriesGrid.appendChild(card);
             });
